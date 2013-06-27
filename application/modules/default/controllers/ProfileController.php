@@ -110,7 +110,7 @@ class ProfileController extends Zend_Controller_Action {
 	public function editAction() {
 		try{			
 			//echo "store/index/index";
-			//exit; 
+			//exit; exit;
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
