@@ -1,4 +1,5 @@
 
 .error{
     border:1px solid red !important;
+	margin:-1px;
 }

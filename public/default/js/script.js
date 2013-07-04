@@ -35,13 +35,66 @@
 	};
 })(jQuery);
 $(document).ready(function(){
-	$('#checkoutSteps ul li a').click(function(){
+	/*$('#checkoutSteps ul li a').click(function(){
 		$('#checkoutSteps ul li').removeClass('active');
 		$(this).parent().addClass('active');
 		 $('#checkoutSteps .container .cont').hide();
 		 var id = $(this).attr('rel');
 		 $(id).show();
-	})
+	});*/
+	
+	$("#registration").submit(function(e) {
+		e.preventDefault();
+	});
+		
+	$("#registration").validate({
+		rules : {
+			email_id : {
+				required : true,
+				email : true
+			},
+			password : {
+				required : true
+			},
+			mobile : {
+				required : true,
+				minlength : 10,
+				maxlength : 15
+			},
+			term_conditions : {
+				required : true
+			}
+		},
+		messages : {
+			email_id : {
+				required : "Email id is required.",
+				email : "Email id is invalid."
+			},
+			password : {
+				required : "Password is required."
+			},
+			mobile : {
+				required : "Mobile is required.",
+				minlength : "Minimum length should be 10 characters",
+				maxlength : "Maximum length allowed 15 characters"
+			},
+			term_conditions : {
+				required : "Check the terms and conditions."
+			}
+		},
+		submitHandler: function(form) {
+			
+			$.ajax({
+				type : "POST",
+				url : "http://localhost/mypro/signup/register",
+				data : "first_name=first&last_name=last&email_id=email&mobile=7898&password=shasjd&gender=Male",
+				success : function(data) {
+					alert(data);
+					return false;
+				}
+			});
+		}
+	});
 
 	$('#signup').live('click',function(){
 		$('#register_cont').show().fancyBox();

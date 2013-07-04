@@ -752,7 +752,7 @@ border-top: 1px solid #DDDDDD;
     display: block;
     font-size: 12px;
     line-height: 1.5;
-}
+}.register-form .row label span {	color: red;}
 .register-form .row input {
     border: solid 1px #ddd;
     padding: 5px;
