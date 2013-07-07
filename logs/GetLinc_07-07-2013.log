@@ -1,0 +1,3 @@
+07:16:00 (index) x_error_message=WebErrDB:sqlDatabase error [42000] Incorrect number of arguments for PROCEDURE pro_my.SPregisteruser; expected 8, got 7 driver error code is 1318
+07:16:00 (index) x_error_message=WebErrDB:sqlDatabase error [42000] Incorrect number of arguments for PROCEDURE pro_my.SPregisteruser; expected 8, got 7 driver error code is 1318
+07:16:00 (index) x_error_message=WebErrDB:sqlDatabase error [42000] Incorrect number of arguments for PROCEDURE pro_my.SPregisteruser; expected 8, got 7 driver error code is 1318

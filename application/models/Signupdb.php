@@ -61,14 +61,13 @@ class Application_Model_Signupdb extends Application_Model_Validation {
      * @param	boolean	$iupdate Flag for updation of user records
      * @return  object	Returns status message.	
      */
-	protected function saveUser($firstname, $lastname, $useremail, $phonenumber, $password, $gender){
+	protected function saveUser($firstname, $lastname, $useremail, $phonenumber, $password, $gender, $action){
 		try {
 			parent::SetDatabaseConnection();
 			$password = hash('sha256',$password);
-			//$query = "call SPapmcreateuser('" . $firstname . "', '" . $lastname . "', '" . $useremail . "', '" . $password . "', '" . $username . "', " . $phonenumber . "," . $role . ", '".$merchant_id."', '" . $action . "', " . $adminid . ")";
-			//exit;
-			return 1;
-			//return Application_Model_Db::getResult($query); 
+			$query = "call SPregisteruser('" . $firstname . "', '" . $lastname . "', '" . $useremail . "', '" . $password . "', '" . $phonenumber . "', '" . $gender . "','" . $action . "')";
+			print_r(Application_Model_Db::getResult($query));exit;
+			return Application_Model_Db::getResult($query);
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

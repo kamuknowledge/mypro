@@ -422,8 +422,8 @@
 	/*
 	 * Error messages for signup user action
 	 */
-	define('Error_signup_user_password_empty', 'Please Enter New Password');
-	define('Error_signup_user_password', 'Invalid New Password');
+	define('Error_signup_user_password_empty', 'Please Enter Password');
+	define('Error_signup_user_password', 'Invalid Password');
 	define('Error_signup_password_field_max', 'Enter maximum 16 characters');
 	define('Error_signup_password_field_min', 'Enter minimum 8 characters');
 	

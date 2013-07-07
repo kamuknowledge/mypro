@@ -286,7 +286,7 @@ class Application_Model_Validation extends Application_Model_DataBaseOperations{
 		return true;
 	}
 	
-public function validate_alphanumeric_special_password($str) 
+	public function validate_alphanumeric_special_password($str) 
 	{   
 		//return preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@!#$\_\*\]).{8,16}$/",$str);
 		$reuslt = preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@!#$\_\*\]).{8,16}$/",$str);

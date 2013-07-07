@@ -27,6 +27,7 @@ class SignupController extends Zend_Controller_Action {
 	public $session;	// used for managing session with NAMESPACE portal
 	public $error;		// used for managing session with NAMESPACE portalerror
 	private $signup;			// used for creating an instance of model, Access is with in the class
+	private $signupdb;			// used for creating an instance of model, Access is with in the class
 
 	/**
      * Purpose: Initiates sessions with Namespace 'portal' and 'portalerror' 
@@ -96,11 +97,11 @@ class SignupController extends Zend_Controller_Action {
 					//$this->_redirect('admin/merchant/register');
 					
 				} else {
-					return 0;
+					//return 0;
 				}
 			}else{			
 				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
-				return 0;
+				//return 0;
 			}
 			
 		} catch(Exception $e) {

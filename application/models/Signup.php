@@ -86,7 +86,8 @@ class Application_Model_Signup extends Application_Model_Signupdb {
 			$useremail = trim($params['email_id']);
 			$phonenumber = trim($params['mobile']);
 			$password = trim($params['password']);
-			$gender = trim($params['gender']);			
+			$gender = trim($params['gender']);	
+			$action = trim($params['reg_submit']);			
 
 			//echo $this->validate_alphanumeric_space($firstname);
 			/*
@@ -126,7 +127,10 @@ class Application_Model_Signup extends Application_Model_Signupdb {
             	$error = 1;
             	//return false;
             } else if(strlen($lastname) >20) {
-            	$this->error->error_createuser_firstname = Error_name_field;
+            	$this->error->error_createuser_lastname = Error_name_field;
+            	$error = 1;
+            } else if(strlen($lastname) < 3) {
+            	$this->error->error_createuser_lastname = Error_name_field_min;
             	$error = 1;
             }
             
@@ -141,6 +145,9 @@ class Application_Model_Signup extends Application_Model_Signupdb {
             	//return false;
             } else if(strlen($useremail) >50) {
             	$this->error->error_createuser_email = Error_email_field;
+            	$error = 1;
+            } else if(strlen($useremail) < 3) {
+            	$this->error->error_createuser_email = Error_name_field_min;
             	$error = 1;
             }
             
@@ -168,21 +175,17 @@ class Application_Model_Signup extends Application_Model_Signupdb {
 			if($password == '') {				//Validation for new password
             	$this->error->error_createuser_password = Error_signup_user_password_empty;
             	$error = 1;
-            } else if(!$this->validate_alphanumeric($password)) {
+            } /*else if(!$this->validate_alphanumeric_password($password)) {
             	$params['password'] = '';
             	$this->error->error_createuser_password = Error_signup_user_password;
             	$error = 1;
-            } else if(strlen($password) > 16) {
+            }*/ else if(strlen($password) > 16) {
             	$this->error->error_createuser_password = Error_signup_password_field_max;
             	$error = 1;
             } else if(strlen($password) < 8) {
             	$this->error->error_createuser_password = Error_signup_password_field_min;
             	$error = 1;
-            } else if(!$this->validate_alphanumeric_password($password)) {
-            	$params['password'] = '';
-            	$this->error->error_createuser_password = Error_signup_user_password;
-            	$error = 1;
-            }            
+            }
             
             if($error == 1) {
             	$this->error->error_createuser_values = $params;
@@ -197,7 +200,7 @@ class Application_Model_Signup extends Application_Model_Signupdb {
 				//$password = make_password(8);
 				//$password1=hash('sha256',$password);
 				
-				$outpt = $this->saveUser($firstname, $lastname, $useremail,$phonenumber, $password, $gender);
+				$outpt = $this->saveUser($firstname, $lastname, $useremail,$phonenumber, $password, $gender, $action);
 				
 				$outpt = $outpt[0];
 				$result = explode('#', $outpt['toutput']);

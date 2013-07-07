@@ -1,0 +1,65 @@
+<?php
+	$error = $this;
+?>
+<!-- Register -->
+			<div class="row">
+				<label>Email Id<span>*</span></label>
+				<input type="text" name="email_id" id="email_id" value="<?php if(is_array($error->error_createuser_values)) {echo $error->error_createuser_values['email_id'];} ?>" <?php if($error->error_createuser_email != '') { echo 'class="error"'; } ?>/>
+				<?php 
+					if($error->error_createuser_email != '') {
+						echo '<label for="email_id" generated="true" class="error" style="">' .$error->error_createuser_email . '</label>';
+						$error->error_createuser_email = '';
+					}
+			    ?>
+			</div>
+			<div class="row">
+				<div class="left width-50">
+					<label>First Name<span>*</span></label>
+					<input type="text" name="first_name" id="first_name" value="<?php if(is_array($error->error_createuser_values)) {echo $error->error_createuser_values['first_name'];} ?>" <?php if($error->error_createuser_firstname != '') { echo 'class="error"'; } ?>/>
+					<?php 
+						if($error->error_createuser_firstname != '') {
+							echo '<label for="first_name" generated="true" class="error" style="">' .$error->error_createuser_firstname . '</label>';
+							$error->error_createuser_firstname = '';
+						}
+					?>
+				</div>
+				<div class="right width-50">
+					<label>Last Name<span>*</span></label>
+					<input type="text" name="last_name" id="last_name" value="<?php if(is_array($error->error_createuser_values)) {echo $error->error_createuser_values['last_name'];} ?>" <?php if($error->error_createuser_lastname != '') { echo 'class="error"'; } ?>/>
+					<?php 
+						if($error->error_createuser_lastname != '') {
+							echo '<label for="last_name" generated="true" class="error" style="">' .$error->error_createuser_lastname . '</label>';
+							$error->error_createuser_lastname = '';
+						}
+					?>
+				</div>
+			</div>
+			<div class="row">
+				<label>Password<span>*</span></label>
+				<input type="password" name="password" id="password" value="" <?php if($error->error_createuser_password != '') { echo 'class="error"'; } ?>/>
+				<?php 
+					if($error->error_createuser_password != '') {
+						echo '<label for="password" generated="true" class="error" style="">' .$error->error_createuser_password . '</label>';
+						$error->error_createuser_password = '';
+					}
+				?>
+			</div>
+			<div class="row">
+				<label>Mobile<span>*</span></label>
+				<input type="text" name="mobile" id="mobile" value="<?php if(is_array($error->error_createuser_values)) {echo $error->error_createuser_values['mobile'];} ?>"<?php if($error->error_createuser_phonenumber != '') { echo 'class="error"'; } ?>/>
+				<?php 
+					if($error->error_createuser_phonenumber != '') {
+						echo '<label for="mobile" generated="true" class="error" style="">' .$error->error_createuser_phonenumber . '</label>';
+						$error->error_createuser_phonenumber = '';
+					}
+				?>
+			</div>
+			<div class="row radio">
+				<label>Gender</label>
+				<span><input type="radio" value="Male" <?php if(is_array($error->error_createuser_values)) { if($error->error_createuser_values['gender'] == "Male") { ?> checked="checked" <?php }} ?> name="gender"/> Male</span><span><input type="radio" name="gender" value="Female" <?php if(is_array($error->error_createuser_values)) { if($error->error_createuser_values['gender'] == "Female") { ?>" checked="checked" <?php }} ?>/> Female</span>
+			</div>
+			<div class="agree">
+				<input style="float:left" type="checkbox" name="term_conditions" id="term_conditions" checked="checked"/><div style="width:97%">I agree to <a href="javascript:void(0)">Terms & Privacy Policy </a>of use page</div>
+			</div>
+			<div class="btn-container"><input type="submit" id="reg_submit" name="reg_submit" value="Register"></div>
+<!-- end register-->

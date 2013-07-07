@@ -51,15 +51,30 @@ $(document).ready(function(){
 		rules : {
 			email_id : {
 				required : true,
-				email : true
+				email : true,
+				minlength : 3,
+				maxlength : 50
+			},
+			first_name : {
+				required : true,
+				minlength : 3,
+				maxlength : 20
+			},
+			last_name : {
+				required : true,
+				minlength : 3,
+				maxlength : 20
 			},
 			password : {
-				required : true
+				required : true,
+				minlength : 8,
+				maxlength : 16
 			},
 			mobile : {
 				required : true,
+				number : true,
 				minlength : 10,
-				maxlength : 15
+				maxlength : 10
 			},
 			term_conditions : {
 				required : true
@@ -68,28 +83,44 @@ $(document).ready(function(){
 		messages : {
 			email_id : {
 				required : "Email id is required.",
-				email : "Email id is invalid."
+				email : "Email id is invalid.",
+				minlength : "Minimum length should be 3 characters",
+				maxlength : "Maximum length allowed 50 characters"
+			},
+			first_name : {
+				required : "First Name is required.",
+				minlength : "Minimum length should be 3 characters",
+				maxlength : "Maximum length allowed 20 characters"
+			},
+			last_name : {
+				required : "Last Name is required.",
+				minlength : "Minimum length should be 3 characters",
+				maxlength : "Maximum length allowed 20 characters"
 			},
 			password : {
-				required : "Password is required."
+				required : "Password is required.",
+				minlength : "Minimum length should be 8 characters",
+				maxlength : "Maximum length allowed 16 characters"
 			},
 			mobile : {
 				required : "Mobile is required.",
+				number : "Enter only numbers.",
 				minlength : "Minimum length should be 10 characters",
-				maxlength : "Maximum length allowed 15 characters"
+				maxlength : "Maximum length allowed 10 characters"
 			},
 			term_conditions : {
 				required : "Check the terms and conditions."
 			}
 		},
 		submitHandler: function(form) {
-			
+			var str = $("#registration").serialize();
+			$("#registration").html("Loading...");
 			$.ajax({
 				type : "POST",
 				url : "http://localhost/mypro/signup/register",
-				data : "first_name=first&last_name=last&email_id=email&mobile=7898&password=shasjd&gender=Male",
+				data : str,
 				success : function(data) {
-					alert(data);
+					$("#registration").html(data);
 					return false;
 				}
 			});
@@ -97,6 +128,12 @@ $(document).ready(function(){
 	});
 
 	$('#signup').live('click',function(){
+		/*$.ajax({
+			url: "signup/register",
+			success: function(data) {
+				$(".fancybox").fancybox();
+			}
+		});*/
 		$('#register_cont').show().fancyBox();
 	});
 	$('#share').customDrop({containerID:'share-popup',content:'#share-content',right:'-55px'});
