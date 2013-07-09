@@ -427,4 +427,10 @@
 	define('Error_signup_password_field_max', 'Enter maximum 16 characters');
 	define('Error_signup_password_field_min', 'Enter minimum 8 characters');
 	
+	/*
+	 * Error messages for signup user action
+	 */
+	define('Error_login_password_empty', 'Please Enter Password');
+	define('Error_login_user_email_empty', 'Please Enter Email');
+	
 ?>

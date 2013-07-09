@@ -200,20 +200,19 @@ class Application_Model_Signup extends Application_Model_Signupdb {
 				//$password = make_password(8);
 				//$password1=hash('sha256',$password);
 				
-				$outpt = $this->saveUser($firstname, $lastname, $useremail,$phonenumber, $password, $gender, $action);
-				
+				$outpt = $this->saveUser($firstname, $lastname, $useremail,$phonenumber, $password, $gender, $action);				
 				$outpt = $outpt[0];
 				$result = explode('#', $outpt['toutput']);
 				
 				if($result[0] == 1) {
-					
+					/*
 					$toname = urlencode($firstname) . ' ' . urlencode($lastname);
 					$this->sendmail(urldecode($useremail), $firstname, $lastname, $result[1], NULL, $gender);
 					//$this->sendmailtemplate($useremail, $toname, User_Mail_Loginid, $username);				 	
 				 	sleep(4);
 				 	$this->sendmail(urldecode($useremail), $firstname, $lastname, $result[1], $password);					
-					//$this->sendmailtemplate($useremail, $toname, User_Mail_Password, $password);
-					$this->session->success = Success_user_creation . ' with Login ID ' . $gender ;
+					//$this->sendmailtemplate($useremail, $toname, User_Mail_Password, $password);*/
+					$this->session->success = Success_user_creation . ' with Login ID ' . $useremail ;
 					return true;
 				} else {
 					$this->error->error = Failure_user_creation . ' with Login ID ' . $useremail ;

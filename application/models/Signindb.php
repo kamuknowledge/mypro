@@ -24,7 +24,7 @@
 */
 
 //class Application_Model_Userdb extends Application_Model_DataBaseOperations {
-class Application_Model_Signupdb extends Application_Model_Validation {
+class Application_Model_Signindb extends Application_Model_Validation {
 	
 	public $session;
 	private $error;
@@ -61,11 +61,11 @@ class Application_Model_Signupdb extends Application_Model_Validation {
      * @param	boolean	$iupdate Flag for updation of user records
      * @return  object	Returns status message.	
      */
-	protected function saveUser($firstname, $lastname, $useremail, $phonenumber, $password, $gender, $action){
+	protected function LoginUserdb($useremail, $password){
 		try {
 			parent::SetDatabaseConnection();
 			$password = hash('sha256',$password);
-			$query = "call SPregisteruser('" . $firstname . "', '" . $lastname . "', '" . $useremail . "', '" . $password . "', '" . $phonenumber . "', '" . $gender . "','" . $action . "')";
+			$query = "call SPuserlogin('" . $useremail . "', '" . $password . "', '5', 'Login')";
 			return Application_Model_Db::getResult($query);
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());

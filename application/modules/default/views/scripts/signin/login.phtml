@@ -1,0 +1,22 @@
+<?php
+	$error = $this;
+?>
+<!-- Login -->
+	<div class="row"><label>Email Id</label><input type="text" id="email_id" name="email_id"  value="<?php if(is_array($error->error_loginuser_values)) {echo $error->error_loginuser_values['email_id'];} ?>" <?php if($error->error_user_email != '') { echo 'class="error"'; } ?> />
+	<?php 
+		if($error->error_user_email != '') {
+			echo '<label for="email_id" generated="true" class="error" style="">' .$error->error_user_email . '</label>';
+			$error->error_user_email = '';
+		}
+	?>
+	</div>
+	<div class="row"><label>Password</label><input type="text" id="password" name="password" value="" <?php if($error->error_user_password != '') { echo 'class="error"'; } ?>/>
+	<?php 
+		if($error->error_user_password != '') {
+			echo '<label for="password" generated="true" class="error" style="">' .$error->error_user_password . '</label>';
+			$error->error_user_password = '';
+		}
+	?>
+	</div>
+	<div class="btn-container"><input type="submit" id="sbt_login" name="sbt_login" value="Login"></div>
+<!-- end Login-->

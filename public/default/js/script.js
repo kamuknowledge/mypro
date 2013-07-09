@@ -43,6 +43,44 @@ $(document).ready(function(){
 		 $(id).show();
 	});*/
 	
+	$("#login_user").submit(function(ev) {
+		ev.preventDefault();
+	});
+		
+	$("#login_user").validate({
+		rules : {
+			email_id : {
+				/*required : true,
+				email : true*/
+			},
+			password : {
+				required : true
+			}
+		},
+		messages : {
+			email_id : {
+				required : "Email id is required.",
+				email : "Email id is invalid."
+			},
+			password : {
+				required : "Password is required."
+			}
+		},
+		submitHandler: function(form) {
+			var str = $("#login_user").serialize();
+			$("#login_user").html("Loading...");
+			$.ajax({
+				type : "POST",
+				url : "http://localhost/mypro/signin/login",
+				data : str,
+				success : function(data) {
+					$("#login_user").html(data);
+					return false;
+				}
+			});
+		}
+	});
+	
 	$("#registration").submit(function(e) {
 		e.preventDefault();
 	});

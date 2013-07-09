@@ -23,11 +23,11 @@
 *===================================================================================================================
 */
 
-class SignupController extends Zend_Controller_Action { 
+class SigninController extends Zend_Controller_Action { 
 	public $session;	// used for managing session with NAMESPACE portal
 	public $error;		// used for managing session with NAMESPACE portalerror
-	private $signup;			// used for creating an instance of model, Access is with in the class
-	private $signupdb;			// used for creating an instance of model, Access is with in the class
+	private $signin;			// used for creating an instance of model, Access is with in the class
+	private $signindb;			// used for creating an instance of model, Access is with in the class
 
 	/**
      * Purpose: Initiates sessions with Namespace 'portal' and 'portalerror' 
@@ -43,7 +43,7 @@ class SignupController extends Zend_Controller_Action {
 	public function init() { 
 		/*echo "store/index/init";
 		exit;  */
-		$this->signup = new Application_Model_Signup();
+		$this->signin = new Application_Model_Signin();
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('store/layout');		
 	}
@@ -83,28 +83,28 @@ class SignupController extends Zend_Controller_Action {
      * @return  
      */
 	
-	public function registerAction() {
+	public function loginAction() {
 		try{
-			$this->view->title = "Create User";
+			
+			$this->view->title = "Login User";
 			$params = $this->_getAllParams();	
 			$this->_helper->layout->setLayout('default/empty_layout');
 			$request = $this->getRequest();
-			$Request_Values = $request->getPost();
+			$Request_Values = $request->getPost();			
 			if ($request->isPost()) {
-				if(!$this->signup -> createUser($params)) {
-					echo "Registration Failed! Try Again.";
+				if(!$this->signin->loginUser($params)) {
+					// return 1;
 				} else {
-					echo "Successfully Registered. Please login with your account.";
-					exit;
+					//return 0;
 				}
 			}else{			
-				echo "Data not received from Origin Place.";exit;
+				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
+				//return 0;
 			}
 			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
-			exit;
 		}
 	}
 
