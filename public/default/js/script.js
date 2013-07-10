@@ -50,8 +50,8 @@ $(document).ready(function(){
 	$("#login_user").validate({
 		rules : {
 			email_id : {
-				/*required : true,
-				email : true*/
+				required : true,
+				email : true
 			},
 			password : {
 				required : true

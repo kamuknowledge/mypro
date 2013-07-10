@@ -215,6 +215,8 @@ class Application_Model_Signup extends Application_Model_Signupdb {
 					$this->session->success = Success_user_creation . ' with Login ID ' . $useremail ;
 					return true;
 				} else {
+					$this->error->error_createuser_db_value = $result[1];
+					$this->error->error_createuser_values = $params;
 					$this->error->error = Failure_user_creation . ' with Login ID ' . $useremail ;
 					return false;
 				}

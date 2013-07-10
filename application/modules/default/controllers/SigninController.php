@@ -6,11 +6,11 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	SignupController.php 
+* File		:	SigninController.php 
 * Module	:	Default Module
-* Owner		:	RAM's 
+* Owner		:	Bharath
 * Purpose	:	This class is used for common Profile operations for all user types
-* Date		:	02/07/2012
+* Date		:	10/07/2013
 
 
 * Modification History
@@ -41,8 +41,6 @@ class SigninController extends Zend_Controller_Action {
      */
 	
 	public function init() { 
-		/*echo "store/index/init";
-		exit;  */
 		
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
@@ -50,12 +48,8 @@ class SigninController extends Zend_Controller_Action {
 		$this->session->isLoggedIn = '';
 		$this->session->displayName = '';
 		$this->session->emailId = '';
-		
-		
-		
 		$this->signin = new Application_Model_Signin();
         $this->_helper->layout->setLayout('default/layout');
-		//$this->setLayoutAction('store/layout');		
 	}
 	
     
@@ -78,11 +72,6 @@ class SigninController extends Zend_Controller_Action {
 			throw new Exception($e->getMessage());
 		}
 	}
-	
-	
-
-	
-	
 	/**
      * Purpose: User registration page 
      *
@@ -92,10 +81,8 @@ class SigninController extends Zend_Controller_Action {
      * 
      * @return  
      */
-	
 	public function loginAction() {
 		try{
-			
 			$this->view->title = "Login User";
 			$params = $this->_getAllParams();	
 			$this->_helper->layout->setLayout('default/empty_layout');
@@ -111,7 +98,6 @@ class SigninController extends Zend_Controller_Action {
 				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
 				//return 0;
 			}
-			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -119,4 +105,3 @@ class SigninController extends Zend_Controller_Action {
 	}
 
 }
-?>

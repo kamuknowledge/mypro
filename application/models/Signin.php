@@ -6,11 +6,11 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Users.php 
-* Module	:	User Management Module
-* Owner		:	RAM's 
+* File		:	Signin.php 
+* Module	:	User Signin Module
+* Owner		:	Bharath
 * Purpose	:	This class is used for user management operations
-* Date		:	08/05/2012
+* Date		:	10/07/2013
 
 
 * Modification History
@@ -46,9 +46,8 @@ class Application_Model_Signin extends Application_Model_Signindb {
 	
 	public function __construct(){
 		//Assigning session
-		$this->session = new Zend_Session_Namespace('MyPortal');
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
                 
-
 		//Assigning a config registry
 		$this->config = Zend_Registry::get('config');
 		
@@ -67,68 +66,50 @@ class Application_Model_Signin extends Application_Model_Signindb {
 	}
 	
 	/**
-     * Purpose: Creates user and also used for updation of his profile and returns an a boolean value of status
+     * Purpose: User login
      *
      * Access is public
      *
-     * @param	Array	$params Create user parameters
+     * @param	Array	$params user parameters
      * 
      * @return  object	Returns a boolean of status.
      */
 	
-	public function loginAction(Array $params) {
+	public function login(Array $params) {
 		try{
-			/*echo "<pre>";
-			print_r($params);
-			exit;*/
 			$useremail = trim($params['email_id']);
 			$password = trim($params['password']);
-			$action = trim($params['sbt_login']); // current action $controller = $this->getRequest()->getControllerName(); $action = $this->getRequest()->getActionName();		
-
-			//echo $this->validate_alphanumeric_space($firstname);
-			/*
-			 * Validation for firstname(Alpha numeric), lastname(Alpha Numeric), useremail(Email), phonenumber (Numeric)
-			 * 				  username(Email), role(Numeric), action(alpha)
-			 */
-			
-			
+			$action = "Login"; // current action $controller = $this->getRequest()->getControllerName(); $action = $this->getRequest()->getActionName();		
 			$error = 0;
-            
 			if($useremail == '') {				//Validation for user email
             	$this->error->error_user_email = Error_login_user_email_empty;
             	$error = 1;
-            	//return false;
             }
-			
 			if($password == '') {				//Validation for new password
             	$this->error->error_user_password = Error_login_password_empty;
             	$error = 1;
             }
-            
             if($error == 1) {
             	$this->error->error_loginuser_values = $params;
             	$error = 0;
             	return false;
-            }
-          
+            }         
             /*
              * Validation ends here
              */
-          		
-				//$password = make_password(8);
-				//$password1=hash('sha256',$password);
-				
-				$outpt = $this->LoginUserdb($useremail, $password);
-				$outpt = $outpt[0];
-				$result = explode('#', $outpt['toutput']);
-				
-				if($result[0] == 1) {
-					$this->session->success = Success_user_creation . ' with Login ID ' . $gender ;
-					return true;
-				} else {
-					$this->error->error = Failure_user_creation . ' with Login ID ' . $useremail ;
-					return false;
-				}
+			$outpt = $this->LoginUserdb($useremail, $password, $action);				
+			$outpt = $outpt[0];
+			$result = explode('#', $outpt['omess']);				
+			if($result[0] == 1) {
+				// create session here
+				$this->session->success = Title_Successful_login . ' with Login ID ' . $gender ;
+				return true;
+			} else {				
+				$this->error->error_loginuser_db_value = $result[1];
+				$this->error->error_loginuser_values = $params;
+				$this->error->error = Failure_user_creation . ' with Login ID ' . $useremail ;
+				return false;
+			}
 			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
@@ -136,4 +117,3 @@ class Application_Model_Signin extends Application_Model_Signindb {
 		}
 	}
 }
-?>

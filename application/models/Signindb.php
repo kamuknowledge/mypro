@@ -6,11 +6,11 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Userdb.php 
-* Module	:	User Management Module
-* Owner		:	RAM's 
+* File		:	Signindb.php 
+* Module	:	User Signin Module
+* Owner		:	Bharath 
 * Purpose	:	This class is used for user management related database operations
-* Date		:	08/05/2012
+* Date		:	10/07/2013
 
 
 * Modification History
@@ -40,7 +40,7 @@ class Application_Model_Signindb extends Application_Model_Validation {
 	
 		
 	public function __construct(){
-		$this->session = new Zend_Session_Namespace('MyPortal');
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyPortalerror');
 	}
 	
@@ -50,22 +50,16 @@ class Application_Model_Signindb extends Application_Model_Validation {
      *
      * Access is limited to class and extended classes
      *
-     * @param   varchar $ifirstname First name
-     * @param   varchar $ilastname Last name
-     * @param	int 	$iusertype User type id
-     * @param	varchar	$iemailid Email id
-     * @param	int 	$irole Role id
-     * @param	int		$istatus Status Id
-     * @param	int		$icreator User Creator Id
-     * @param	varchar $icreatoraction User saving action
-     * @param	boolean	$iupdate Flag for updation of user records
+     * @param   varchar $useremail User email
+     * @param   varchar $password Password
+     * @param	varchar action action
      * @return  object	Returns status message.	
      */
-	protected function LoginUserdb($useremail, $password){
+	protected function LoginUserdb($useremail, $password, $action){
 		try {
 			parent::SetDatabaseConnection();
 			$password = hash('sha256',$password);
-			$query = "call SPuserlogin('" . $useremail . "', '" . $password . "', '5', 'Login')";
+			$query = "call SPuserlogin('" . $useremail . "', '" . $password . "', '5', '" . $action . "')";
 			return Application_Model_Db::getResult($query);
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
