@@ -43,6 +43,10 @@ class SignupController extends Zend_Controller_Action {
 	public function init() { 
 		/*echo "store/index/init";
 		exit;  */
+		
+		//Assigning session
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
+				
 		$this->signup = new Application_Model_Signup();
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('store/layout');		
@@ -94,6 +98,7 @@ class SignupController extends Zend_Controller_Action {
 				if(!$this->signup -> createUser($params)) {
 					echo "Registration Failed! Try Again.";
 				} else {
+					echo $this->session->success;
 					echo "Successfully Registered. Please login with your account.";
 					exit;
 				}

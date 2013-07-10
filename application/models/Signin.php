@@ -76,14 +76,14 @@ class Application_Model_Signin extends Application_Model_Signindb {
      * @return  object	Returns a boolean of status.
      */
 	
-	public  function loginUser(Array $params) {
+	public function loginAction(Array $params) {
 		try{
 			/*echo "<pre>";
 			print_r($params);
 			exit;*/
 			$useremail = trim($params['email_id']);
 			$password = trim($params['password']);
-			$action = trim($params['sbt_login']);			
+			$action = trim($params['sbt_login']); // current action $controller = $this->getRequest()->getControllerName(); $action = $this->getRequest()->getActionName();		
 
 			//echo $this->validate_alphanumeric_space($firstname);
 			/*

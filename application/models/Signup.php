@@ -46,7 +46,7 @@ class Application_Model_Signup extends Application_Model_Signupdb {
 	
 	public function __construct(){
 		//Assigning session
-		$this->session = new Zend_Session_Namespace('MyPortal');
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
                 
 
 		//Assigning a config registry
