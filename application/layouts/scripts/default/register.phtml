@@ -1,3 +1,8 @@
+<?php
+$this->session = new Zend_Session_Namespace('MyClientPortal');
+$isSignedIn = $this->session->isSignedIn;
+if($isSignedIn!=1){
+?>
 <!-- Register -->
 <div id="register_cont" class="" style="display:none;">
 	<div class="register-form containerbox">
@@ -48,9 +53,9 @@
 			<div class="row"><label>Password</label><input type="text" id="password" name="password"/></div>
 			<div class="btn-container"><input type="submit" id="sbt_login" name="sbt_login" value="Login"></div>
 			</form>
-		</div>
-		
+		</div>		
 		<div class="clear"></div>
 	</div>
 </div>
 <!-- end register-->
+<?php }?>

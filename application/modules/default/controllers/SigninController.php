@@ -43,11 +43,7 @@ class SigninController extends Zend_Controller_Action {
 	public function init() { 
 		
 		//Assigning session
-		$this->session = new Zend_Session_Namespace('MyClientPortal');
-		$this->session->userId = '';
-		$this->session->isLoggedIn = '';
-		$this->session->displayName = '';
-		$this->session->emailId = '';
+		$this->session = new Zend_Session_Namespace('MyClientPortal');		
 		$this->signin = new Application_Model_Signin();
         $this->_helper->layout->setLayout('default/layout');
 	}
@@ -91,6 +87,8 @@ class SigninController extends Zend_Controller_Action {
 			if ($request->isPost()) {
 				if(!$this->signin->login($params)) {
 					// return 1;
+					// redirect to current url
+					$this->_redirect('/');
 				} else {
 					//return 0;
 				}

@@ -1,3 +1,7 @@
+<?php
+$this->session = new Zend_Session_Namespace('MyClientPortal');
+$isSignedIn = $this->session->isSignedIn;
+?>
 <script type="text/javascript">
 $(document).ready(function() {
  validatelogin();
@@ -7,6 +11,8 @@ $(document).ready(function() {
 <div class="header-top">
 			<div class="wrapper">
 				<div id="logo"><a href="<?php echo $this->baseUrl(); ?>"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/Logo.png" title="GetLinc.com" alt="getLinc.com"/></a></div>
+				
+				
 				<div id="links">
 					<ul>
 						<li class="subitems">
@@ -34,17 +40,21 @@ $(document).ready(function() {
 					</ul>
 				</div>
 				
+				
+				<?php
+				if($isSignedIn!=1){
+				?>
 				<div id="login-header">
-                                    <form action="login.php" method="post" name="login" id="login">	
-                                    <ul>
+					<form action="login.php" method="post" name="login" id="login">	
+					<ul>
 						<li><input type="text" name="username" id="username" class="" /><span>New Customer? <a href="javascript:void(0)">Start Here</a></span></li>
 						<li><input type="password" name="password" id="password" class="" /><span><a href="javascript:void(0)" >Forgot Password ?</a></span></li>
 						<li class="button"><input type="submit" value="login" /></li>
 					</ul>
-                                    </form>
+                    </form>
 					<div class="clear"></div>
 				</div>
-				
+				<?php }else{?>				
 				<div id="profile">
 					<h5>Prifile Name</h5>
 					<div class="cont_an"><a href="javascript:void(0)" class="button" id="show_all">ShowAll</a></div>
@@ -56,6 +66,7 @@ $(document).ready(function() {
 					<textarea></textarea>
 					<input type="button" value="share"/>
 				</div>
+				<?php }?>
 				<div class="clear"></div>
 			</div>
 		</div>

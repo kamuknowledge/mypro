@@ -97,12 +97,18 @@ class Application_Model_Signin extends Application_Model_Signindb {
             /*
              * Validation ends here
              */
-			$outpt = $this->LoginUserdb($useremail, $password, $action);				
+			$outpt = $this->LoginUserdb($useremail, $password, $action);
+			//print_r($outpt);exit;
 			$outpt = $outpt[0];
 			$result = explode('#', $outpt['omess']);				
 			if($result[0] == 1) {
-				// create session here
-				$this->session->success = Title_Successful_login . ' with Login ID ' . $gender ;
+				$this->session->isSignedIn = 1;
+				$this->session->role = $outpt['role'] ;
+				$this->session->roleid = $outpt['roleid'] ;
+				$this->session->userid = $outpt['userid'] ;				
+				$this->session->email = $outpt['email'] ;
+				$this->session->name = $outpt['name'] ;				
+				//$this->session->success = Title_Successful_login . ' with Login ID ' . $gender ;
 				return true;
 			} else {				
 				$this->error->error_loginuser_db_value = $result[1];
