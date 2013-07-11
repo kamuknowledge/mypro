@@ -1,3 +1,6 @@
+<?php
+	$config=Zend_Registry::get('config');
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -6,6 +9,7 @@
 </head>
 <link href="<?php echo $this->baseUrl('public/default'); ?>/css/style.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo $this->baseUrl('public/default'); ?>/css/dev_style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">var baseUrl='<?php echo $config->site->baseurl;?>';</script>
 <script src="<?php echo $this->baseUrl('public/default'); ?>/js/jQuery.js"></script>
 <script src="<?php echo $this->baseUrl('public/default'); ?>/js/jqueryvalidate.js"></script>
 <script src="<?php echo $this->baseUrl('public/default'); ?>/js/frontend.js"></script>

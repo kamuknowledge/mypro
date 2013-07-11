@@ -41,7 +41,6 @@ class SigninController extends Zend_Controller_Action {
      */
 	
 	public function init() { 
-		
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyClientPortal');		
 		$this->signin = new Application_Model_Signin();
@@ -88,9 +87,11 @@ class SigninController extends Zend_Controller_Action {
 				if(!$this->signin->login($params)) {
 					// return 1;
 					// redirect to current url
-					$this->_redirect('/');
+					
 				} else {
 					//return 0;
+					echo "<script>window.location.reload();</script>";
+					exit;
 				}
 			}else{			
 				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
@@ -101,5 +102,22 @@ class SigninController extends Zend_Controller_Action {
 			throw new Exception($e->getMessage());
 		}
 	}
-
+	/**
+     * Purpose: User registration page 
+     *
+     * Access is public
+     *
+     * @param	
+     * 
+     * @return  
+     */
+	public function logoutAction() {
+		try{
+			$this->session->unsetAll();
+			$this->_redirect($_SERVER['HTTP_REFERER']);
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}	
 }

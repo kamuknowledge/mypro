@@ -11,7 +11,7 @@
 		}
 	?>
 	</div>
-	<div class="row"><label>Password</label><input type="text" id="password" name="password" value="" <?php if($error->error_user_password != '') { echo 'class="error"'; } ?>/>
+	<div class="row"><label>Password</label><input type="password" id="password" name="password" value="" <?php if($error->error_user_password != '') { echo 'class="error"'; } ?>/>
 	<?php 
 		if($error->error_user_password != '') {
 			echo '<label for="password" generated="true" class="" style="color:#FF0000;">' .$error->error_user_password . '</label>';

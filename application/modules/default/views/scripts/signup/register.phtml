@@ -4,7 +4,7 @@
 <!-- Register -->
 	<label for="db_error" generated="true" class="" style="color:#FF0000;"><?php echo ($error->error_createuser_db_value) ? $error->error_createuser_db_value : ""; ?></label>
 	<div class="row">
-		<label>Email Id<span>*</span></label>
+		<label>Email Id<span class="error_class">*</span></label>
 		<input type="text" name="email_id" id="email_id" value="<?php if(is_array($error->error_createuser_values)) {echo $error->error_createuser_values['email_id'];} ?>" <?php if($error->error_createuser_email != '') { echo 'class="error"'; } ?>/>
 		<?php 
 			if($error->error_createuser_email != '') {
@@ -15,7 +15,7 @@
 	</div>
 	<div class="row">
 		<div class="left width-50">
-			<label>First Name<span>*</span></label>
+			<label>First Name<span class="error_class">*</span></label>
 			<input type="text" name="first_name" id="first_name" value="<?php if(is_array($error->error_createuser_values)) {echo $error->error_createuser_values['first_name'];} ?>" <?php if($error->error_createuser_firstname != '') { echo 'class="error"'; } ?>/>
 			<?php 
 				if($error->error_createuser_firstname != '') {
@@ -25,7 +25,7 @@
 			?>
 		</div>
 		<div class="right width-50">
-			<label>Last Name<span>*</span></label>
+			<label>Last Name<span class="error_class">*</span></label>
 			<input type="text" name="last_name" id="last_name" value="<?php if(is_array($error->error_createuser_values)) {echo $error->error_createuser_values['last_name'];} ?>" <?php if($error->error_createuser_lastname != '') { echo 'class="error"'; } ?>/>
 			<?php 
 				if($error->error_createuser_lastname != '') {
@@ -36,7 +36,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<label>Password<span>*</span></label>
+		<label>Password<span class="error_class">*</span></label>
 		<input type="password" name="password" id="password" value="" <?php if($error->error_createuser_password != '') { echo 'class="error"'; } ?>/>
 		<?php 
 			if($error->error_createuser_password != '') {
@@ -46,7 +46,7 @@
 		?>
 	</div>
 	<div class="row">
-		<label>Mobile<span>*</span></label>
+		<label>Mobile<span class="error_class">*</span></label>
 		<input type="text" name="mobile" id="mobile" value="<?php if(is_array($error->error_createuser_values)) {echo $error->error_createuser_values['mobile'];} ?>"<?php if($error->error_createuser_phonenumber != '') { echo 'class="error"'; } ?>/>
 		<?php 
 			if($error->error_createuser_phonenumber != '') {

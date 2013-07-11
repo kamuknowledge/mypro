@@ -33,13 +33,13 @@ $isSignedIn = $this->session->isSignedIn;
 			  <span class="top">Hello, <span class="height">Shiva</span></span>
 			  <span class="label">Your Account</span>
 			</a>
-			<div id="myac-options" style="display:none">
+			<div id="myac-options" style="display:none;z-index:1000;">
 				<ul >
 					<li class="top_arrow"></li>
 					<li><a href="<?php echo $this->baseUrl('profile/view/');?>">My profile</a></li>
 					<li><a href="javascript:void(0)">Settings</a></li>
 					<li><a href="javascript:void(0)">Privacy Options</a></li>
-					<li><a href="javascript:void(0)">Sign Out</a></li>
+					<li><a href="<?php echo $this->baseUrl('signin/logout/');?>">Sign Out</a></li>
 				</ul>
 			</div>
 			<span class="line"></span>

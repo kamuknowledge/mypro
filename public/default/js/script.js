@@ -1,3 +1,4 @@
+var ajax_loader = '<div align="center"><img src="'+baseUrl+'/public/default/images/ajax-loader.gif" /></div>';
 (function($) {
 	// jQuery plugin definition
 	$.fn.customDrop = function(params){
@@ -68,11 +69,14 @@ $(document).ready(function(){
 		},
 		submitHandler: function(form) {
 			var str = $("#login_user").serialize();
-			$("#login_user").html("Loading...");
+			//$("#login_user").html("Loading...");
 			$.ajax({
 				type : "POST",
-				url : "http://localhost/mypro/signin/login",
+				url : baseUrl+"/signin/login",
 				data : str,
+				beforeSend : function() {
+					$("#login_user").html(ajax_loader);
+				},
 				success : function(data) {
 					$("#login_user").html(data);
 					return false;
@@ -152,11 +156,14 @@ $(document).ready(function(){
 		},
 		submitHandler: function(form) {
 			var str = $("#registration").serialize();
-			$("#registration").html("Loading...");
+			//$("#registration").html("Loading...");
 			$.ajax({
 				type : "POST",
-				url : "http://localhost/mypro/signup/register",
+				url : baseUrl+"/signup/register",
 				data : str,
+				beforeSend : function() {
+					$("#registration").html(ajax_loader);
+				},
 				success : function(data) {
 					$("#registration").html(data);
 					return false;
