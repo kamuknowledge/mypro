@@ -21,6 +21,8 @@ $isSignedIn = $this->session->isSignedIn;
 			
 			
 			<?php
+			$this->session = new Zend_Session_Namespace('MyClientPortal');
+			$displayName = $this->session->name;
 			if($isSignedIn!=1){
 			?>
 			<a alt="Your Account" class="" href="javascript:void(0)" id="signup">
@@ -30,7 +32,7 @@ $isSignedIn = $this->session->isSignedIn;
 			<span class="line"></span>
 			<?php }else{?>
 			<a alt="Your Account" class="" href="javascript:void(0)" id="myaccount">
-			  <span class="top">Hello, <span class="height">Shiva</span></span>
+			  <span class="top">Hello, <span class="height"><?php echo $displayName;?></span></span>
 			  <span class="label">Your Account</span>
 			</a>
 			<div id="myac-options" style="display:none;z-index:1000;">

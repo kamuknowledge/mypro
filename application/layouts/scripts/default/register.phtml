@@ -46,6 +46,7 @@ if($isSignedIn!=1){
 			</div>
 			<div class="btn-container"><input type="submit" id="reg_submit" name="reg_submit" value="Register"></div>
 			</form>
+			<div id="reg_loading" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div>
 		</div>
 		<div class="login-part">
 			<form name="login_user" id="login_user">
@@ -53,6 +54,7 @@ if($isSignedIn!=1){
 			<div class="row"><label>Password</label><input type="password" id="password" name="password"/></div>
 			<div class="btn-container"><input type="submit" id="sbt_login" name="sbt_login" value="Login"></div>
 			</form>
+			<div id="login_loading" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div>
 		</div>		
 		<div class="clear"></div>
 	</div>

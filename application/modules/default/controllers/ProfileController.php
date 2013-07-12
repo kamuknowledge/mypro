@@ -42,7 +42,7 @@ class ProfileController extends Zend_Controller_Action {
 	public function init() { 
 		/*echo "store/index/init";
 		exit;  */
-        $this->_helper->layout->setLayout('default/layout');
+        $this->_helper->layout->setLayout('default/profile_layout');
 		//$this->setLayoutAction('store/layout');		
 	}
 	

@@ -1,0 +1,57 @@
+<?php
+	$config=Zend_Registry::get('config');
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GetLinc.com</title>
+</head>
+<link href="<?php echo $this->baseUrl('public/default'); ?>/css/style.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl('public/default'); ?>/css/dev_style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">var baseUrl='<?php echo $config->site->baseurl;?>';</script>
+<script src="<?php echo $this->baseUrl('public/default'); ?>/js/jQuery.js"></script>
+<script src="<?php echo $this->baseUrl('public/default'); ?>/js/jqueryvalidate.js"></script>
+<script src="<?php echo $this->baseUrl('public/default'); ?>/js/frontend.js"></script>
+<script src="<?php echo $this->baseUrl('public/default'); ?>/js/validationmethods.js"></script>
+<script src="<?php echo $this->baseUrl('public/default'); ?>/js/script.js"></script>
+<!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+<body>
+<div id="main-wrapper">
+	<div id="header">
+		<?php echo $this->action('index', 'headerlogin', 'default', array('a_parameter'=>'a_value'));?>
+		<?php echo $this->action('index', 'headermenu', 'default', array('a_parameter'=>'a_value'));?>		
+	</div>
+	<!-- Header -end -->
+	
+	
+	
+		<div style="float:left; width:80%; margin:10px 0px 10px 15px;">
+		<?php  echo $this->layout()->content ?>
+		</div>
+	
+		<!-- <div class="wrapper"> -->	
+						
+			<div style="float:right; width:17%; margin:10px 15px 10px 0px;">			
+			<?php echo $this->action('index', 'chat', 'default', array('a_parameter'=>'a_value'));?>
+			<?php echo $this->action('index', 'friendsuggestion', 'default', array('a_parameter'=>'a_value'));?>
+			<?php echo $this->action('index', 'eventnotifications', 'default', array('a_parameter'=>'a_value'));?>			
+			</div>
+					
+			
+	
+		
+	
+	<!-- end main_body_wrapper-->
+	<?php echo $this->render('default/footer.phtml'); ?>	
+</div>
+<?php echo $this->render('default/register.phtml'); ?>
+<!--/div-->
+</body>
+</html>

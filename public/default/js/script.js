@@ -1,4 +1,3 @@
-var ajax_loader = '<div align="center"><img src="'+baseUrl+'/public/default/images/ajax-loader.gif" /></div>';
 (function($) {
 	// jQuery plugin definition
 	$.fn.customDrop = function(params){
@@ -75,10 +74,13 @@ $(document).ready(function(){
 				url : baseUrl+"/signin/login",
 				data : str,
 				beforeSend : function() {
-					$("#login_user").html(ajax_loader);
+					$("#login_loading").show();
+					$("#login_user").hide();
 				},
 				success : function(data) {
+					$("#login_loading").hide();
 					$("#login_user").html(data);
+					$("#login_user").show();
 					return false;
 				}
 			});
@@ -162,10 +164,13 @@ $(document).ready(function(){
 				url : baseUrl+"/signup/register",
 				data : str,
 				beforeSend : function() {
-					$("#registration").html(ajax_loader);
+					$("#registration").hide();
+					$("#reg_loading").show();
 				},
 				success : function(data) {
+					$("#reg_loading").hide();
 					$("#registration").html(data);
+					$("#registration").show();
 					return false;
 				}
 			});
