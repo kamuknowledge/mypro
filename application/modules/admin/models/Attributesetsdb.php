@@ -23,8 +23,8 @@
 *===================================================================================================================
 */
 
-//class Application_Model_Attributesgroupsdb extends Application_Model_DataBaseOperations {
-class Application_Model_Attributesgroupsdb extends Application_Model_Validation {
+//class Application_Model_Attributesetsdb extends Application_Model_DataBaseOperations {
+class Admin_Model_Attributesetsdb extends Application_Model_Validation {
 	
 	public $session;
 	private $error;
@@ -47,45 +47,22 @@ class Application_Model_Attributesgroupsdb extends Application_Model_Validation 
 
 
 
-
 	/**
-     * Purpose: Creates Attribute and returns status of the user creation process 
+     * Purpose: Fetching Attributesets list except existing user name and returns array of list of users 
      *
      * Access is limited to class and extended classes
-     *    
-     * @return  object	Returns status message.	
-     */
-	public function saveAttribute($attributes_group_title, $action, $adminid){
-		try {
-			parent::SetDatabaseConnection();			
-			$query = "call SPattributegroupadd('" . $attributes_group_title . "', '" . $action . "', " . $adminid . ")";
-			//exit;			
-			return Application_Model_Db::getResult($query); 
-		} catch(Exception $e) {
-			Application_Model_Logging::lwrite($e->getMessage());
-			throw new Exception($e->getMessage());
-		}
-	}
-
-
-
-
-
-	/**
-     * Purpose: Fetching user list except existing user name and returns array of list of users 
      *
-     * Access is limited to class and extended classes
-     *    
+     * @param   int		$iuserid User Id
      * @param	int		$istart Start value
      * @param	int		$ilimit Limit value for fetching result set
      * @param	varchar	$cond Search condition
      * @return  object	Returns status message.	
      */
 	
-	public function getAttributeList($iattribute_title, $istart, $ilimit){
+	public function getAttributesetsList($iattributes_set_title, $istart, $ilimit){
 		try {
 			parent::SetDatabaseConnection();		
-			$query = "call SPattributegrouplist('" . $iattribute_title . "', " . $istart . ", " . $ilimit . ")";
+			$query = "call SPattributesetslist('" . $iattributes_set_title . "', " . $istart . ", " . $ilimit . ")";
 			//exit;
 			return Application_Model_Db::getResult($query);
 			
@@ -100,19 +77,20 @@ class Application_Model_Attributesgroupsdb extends Application_Model_Validation 
 	
 	
 	/**
-     * Purpose: Get total count of registered users 
+     * Purpose: Get total count of registered attributesets 
      *
      * Access is limited to class and extended classes
      *
+     * @param	int		$usertypeid User type id of the logged in user
      * @param	varchar	$cond Search condition
      * @param	int		$iuserid Present logged in userid
      * @return  object 	user details of supplied userid.	
      */
 	
-	public function getAttributeCount($iattribute_title){
+	public function getAttributesetsCount($iattributes_set_title){
 		try {
 			parent::SetDatabaseConnection();			
-			$query = "call SPattributecount('" . $iattribute_title . "')";
+			$query = "call SPattributesetscount('" . $iattributes_set_title . "')";
 			//exit;
 			return Application_Model_Db::getValue($query);
 			
@@ -120,15 +98,39 @@ class Application_Model_Attributesgroupsdb extends Application_Model_Validation 
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
-	}
-
-
-
-
-
-
+	}	
+	
+	
+	
+	
+	
 	/**
-     * Purpose: Used to change the attribute status like Active, Locked and Deleted 
+     * Purpose: Creates Attributesets and returns status of the user creation process 
+     *
+     * Access is limited to class and extended classes
+     *    
+     * @return  object	Returns status message.	
+     */
+	public function saveAttributesets($attributes_group_id, $attributes_set_title, $attribute_ids_string, $action, $adminid){
+		try {
+			parent::SetDatabaseConnection();			
+			//$query = "call SPattributestesadd('" . $attributes_group_id . "', '" . $attributes_set_title . "', '" . $attribute_ids_string . "', '" . $action . "', " . $adminid . ")";
+			$query = "call SPattributestesadd('" . $attributes_group_id . "', '" . $attributes_set_title . "', '', '" . $action . "', " . $adminid . ")";
+			//exit;			
+			return Application_Model_Db::getResult($query); 
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Used to change the category status like Active, Locked and Deleted 
      *
      * Access is limited to class and extended classes
      *
@@ -139,7 +141,7 @@ class Application_Model_Attributesgroupsdb extends Application_Model_Validation 
      * Under testing phase
      */
 	
-	public function changeStatus($attributeId, $iaction, $iadminuserid, $ilockstatus=0, $iunlockstatus=0, $ideletestatus=0){
+	public function changeStatus($attributes_set_id, $iaction, $iadminuserid, $ilockstatus=0, $iunlockstatus=0, $ideletestatus=0){
 		try {
 			parent::SetDatabaseConnection();			
 			
@@ -151,7 +153,7 @@ class Application_Model_Attributesgroupsdb extends Application_Model_Validation 
 			 *  To Delete the user, $ideletestatus must be set to 1
 			 */
 			
-			$query = "call SPattributegroupchangestatus(" . $attributeId . ", " . $ilockstatus . ", " . $iunlockstatus . ", " . $ideletestatus . ", '" . $iaction . "', " . $iadminuserid . ", @omess)";
+			$query = "call SPattributesetschangestatus(" . $attributes_set_id . ", " . $ilockstatus . ", " . $iunlockstatus . ", " . $ideletestatus . ", '" . $iaction . "', " . $iadminuserid . ", @omess)";
 			//exit;
 			Application_Model_Db::execute($query);
 		 	return Application_Model_Db::getRow("select @omess");
@@ -165,21 +167,18 @@ class Application_Model_Attributesgroupsdb extends Application_Model_Validation 
 
 
 
-
-
-
 	/**
-     * Purpose: Fetching attribute info
+     * Purpose: Fetching attributesets info
      *
      * Access is limited to class and extended classes     *
      
      * @return  object	Returns status message.	
      */
 	
-	public function getAttributeGroupDetails($attribute_group_id){
+	public function getAttributesetsDetails($attributes_set_id){
 		try {
 			parent::SetDatabaseConnection();		
-			$query = "call SPattributegroupdetails('".$attribute_group_id."')";
+			$query = "call SPattributesetsdetails('".$attributes_set_id."')";
 			//exit;
 			return Application_Model_Db::getRow($query);
 			
@@ -193,19 +192,21 @@ class Application_Model_Attributesgroupsdb extends Application_Model_Validation 
 
 
 
+	
+	
 	/**
-     * Purpose: Update attribute details
+     * Purpose: Update attributesets details
      *
      * Access is limited to class and extended classes
      *
      * @return  object	Returns an object of status.
      */
 	 
-	public function attributeDetailsUpdate($attributes_group_id, $action, $attributes_group_title, $adminid) {
+	public function attributesetsDetailsUpdate($attributes_set_id, $action, $attributes_group_id , $attributes_set_title, $attribute_ids_string, $adminid) {
 		try{
 			
 			parent::SetDatabaseConnection();
-			$query = "call SPattributegroupedit(" . $attributes_group_id . ", '" . $attributes_group_title .  "', '" . $action .  "', " . $adminid . ")";
+			$query = "call SPattributesetsedit(" . $attributes_set_id . ", '" . $attributes_group_id .  "', '" . $attributes_set_title .  "', '" . $attribute_ids_string . "', '" . $action .  "', " . $adminid . ")";
 			//exit;
 			
 			return Application_Model_Db::getResult($query);
@@ -213,7 +214,7 @@ class Application_Model_Attributesgroupsdb extends Application_Model_Validation 
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
-	}	
+	}
 	
 	
 	
@@ -229,23 +230,10 @@ class Application_Model_Attributesgroupsdb extends Application_Model_Validation 
      * @return  object	Returns status message.	
      */
 	
-	public function getActiveAttributesList($attributes_group_id){
+	public function getActiveAttributesList(){
 		try {
 			parent::SetDatabaseConnection();		
-			//$query = "call SPattributesetslistactive()";
-			$query = "SELECT * FROM store_products_attributes pa where statusid=1 AND pa.attribute_id NOT IN (SELECT
-						ps.attribute_id
-						FROM
-						store_products_attributes_groups pag,
-						store_products_attributes_sets pas,
-						store_products_attributes_sets_mapping asm,
-						store_products_attributes ps
-						where
-						asm.attributes_set_id = pas.attributes_set_id
-						AND asm.attribute_id = ps.attribute_id
-						AND pag.attributes_group_id = pas.attributes_group_id
-						AND pag.attributes_group_id=".$attributes_group_id."
-						ORDER BY pas.attributes_set_title ASC);";
+			$query = "call SPattributesetslistactive()";
 			//exit;
 			return Application_Model_Db::getResult($query);
 			
@@ -254,6 +242,10 @@ class Application_Model_Attributesgroupsdb extends Application_Model_Validation 
 			throw new Exception($e->getMessage());
 		}
 	}
+	
+	
+	
+	
 	
 	
 	
@@ -282,84 +274,19 @@ class Application_Model_Attributesgroupsdb extends Application_Model_Validation 
 	
 	
 	
+	
 	/**
-     * Purpose: Fetching parent active attribute sets list
+     * Purpose: Fetching parent active attribute sets mapping list
      *
      * Access is limited to class and extended classes     *
      
      * @return  object	Returns status message.	
      */
 	
-	public function getActiveAttributesSetsList($attributes_group_id){
+	public function getAttributesetsMappingList($attributes_set_id){
 		try {
 			parent::SetDatabaseConnection();		
-			$query = "SELECT * FROM store_products_attributes_sets where statusid=1 AND attributes_group_id=".$attributes_group_id." ORDER BY attributes_set_title ASC;";
-			//exit;
-			return Application_Model_Db::getResult($query);
-			
-		} catch(Exception $e) {
-			Application_Model_Logging::lwrite($e->getMessage());
-			throw new Exception($e->getMessage());
-		}
-	}
-	
-	
-	
-	
-	
-	
-	/**
-     * Purpose: save attribute set map
-     *
-     * Access is limited to class and extended classes     *
-     
-     * @return  object	Returns status message.	
-     */
-	
-	public function saveAttributeGroupMap($gid,$str_one){
-		try {
-			parent::SetDatabaseConnection();		
-			$query = "call SPattributegroupmapsave('".$gid."','".$str_one."',@omessage)";			
-			Application_Model_Db::execute($query); 
-			return Application_Model_Db::getRow('select @omessage');
-			
-		} catch(Exception $e) {
-			Application_Model_Logging::lwrite($e->getMessage());
-			throw new Exception($e->getMessage());
-		}
-	}
-	
-	
-	
-	
-	
-	
-	/**
-     * Purpose: Fetching parent active attribute sets list
-     *
-     * Access is limited to class and extended classes     *
-     
-     * @return  object	Returns status message.	
-     */
-	
-	public function getActiveAttributesSetsMapList($attributes_group_id){
-		try {
-			parent::SetDatabaseConnection();		
-			$query = "SELECT
-						pag.attributes_group_id, pag.attributes_group_title,
-						pas.attributes_set_id, pas.attributes_set_title,
-						ps.attribute_id, ps.attribute_title
-						FROM
-						store_products_attributes_groups pag,
-						store_products_attributes_sets pas,
-						store_products_attributes_sets_mapping asm,
-						store_products_attributes ps
-						where
-						asm.attributes_set_id = pas.attributes_set_id
-						AND asm.attribute_id = ps.attribute_id
-						AND pag.attributes_group_id = pas.attributes_group_id
-						AND pag.attributes_group_id=".$attributes_group_id."
-						ORDER BY pas.attributes_set_title ASC;";
+			$query = "call SPattributesetsmappingList('".$attributes_set_id."')";
 			//exit;
 			return Application_Model_Db::getResult($query);
 			

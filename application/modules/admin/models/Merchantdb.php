@@ -23,11 +23,13 @@
 *===================================================================================================================
 */
 
-//class Application_Model_Attributesetsdb extends Application_Model_DataBaseOperations {
-class Application_Model_Attributesetsdb extends Application_Model_Validation {
+//class Application_Model_Merchantdb extends Application_Model_DataBaseOperations {
+class Admin_Model_Merchantdb extends Application_Model_Validation {
 	
 	public $session;
 	private $error;
+	public $viewobj;
+	
 	
 	/**
      * Purpose: Constructor sets sessions for portal and portalerror
@@ -43,12 +45,12 @@ class Application_Model_Attributesetsdb extends Application_Model_Validation {
 		$this->session = new Zend_Session_Namespace('MyPortal');
 		$this->error = new Zend_Session_Namespace('MyPortalerror');
 	}
+	
+	
 
-
-
-
+	
 	/**
-     * Purpose: Fetching Attributesets list except existing user name and returns array of list of users 
+     * Purpose: Fetching user list except existing user name and returns array of list of users 
      *
      * Access is limited to class and extended classes
      *
@@ -59,12 +61,37 @@ class Application_Model_Attributesetsdb extends Application_Model_Validation {
      * @return  object	Returns status message.	
      */
 	
-	public function getAttributesetsList($iattributes_set_title, $istart, $ilimit){
+	public function getMerchantList($istart,$ilimit,$imerchant_title,$imerchant_email,$imerchant_mobile){
 		try {
-			parent::SetDatabaseConnection();		
-			$query = "call SPattributesetslist('" . $iattributes_set_title . "', " . $istart . ", " . $ilimit . ")";
+			parent::SetDatabaseConnection();			
+			//SPapmgetusers(userid,start,limit,username,firstname,lastname,roleid);
+			$query = "call SPmerchantslist(" . $istart . ", " . $ilimit . ", '', '', '')";
 			//exit;
 			return Application_Model_Db::getResult($query);
+			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	/**
+     * Purpose: Get total count of registered users 
+     *
+     * Access is limited to class and extended classes
+     *
+     * @param	int		$usertypeid User type id of the logged in user
+     * @param	varchar	$cond Search condition
+     * @param	int		$iuserid Present logged in userid
+     * @return  object 	user details of supplied userid.	
+     */
+	
+	public function getMerchantCount($imerchant_title,$imerchant_email,$imerchant_mobile){
+		try {
+			parent::SetDatabaseConnection();			
+			$query = "call SPmerchantscount('','','')";
+			//exit;
+			return Application_Model_Db::getValue($query);
 			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
@@ -75,48 +102,20 @@ class Application_Model_Attributesetsdb extends Application_Model_Validation {
 	
 	
 	
-	
 	/**
-     * Purpose: Get total count of registered attributesets 
-     *
-     * Access is limited to class and extended classes
-     *
-     * @param	int		$usertypeid User type id of the logged in user
-     * @param	varchar	$cond Search condition
-     * @param	int		$iuserid Present logged in userid
-     * @return  object 	user details of supplied userid.	
-     */
-	
-	public function getAttributesetsCount($iattributes_set_title){
-		try {
-			parent::SetDatabaseConnection();			
-			$query = "call SPattributesetscount('" . $iattributes_set_title . "')";
-			//exit;
-			return Application_Model_Db::getValue($query);
-			
-		} catch(Exception $e) {
-			Application_Model_Logging::lwrite($e->getMessage());
-			throw new Exception($e->getMessage());
-		}
-	}	
-	
-	
-	
-	
-	
-	/**
-     * Purpose: Creates Attributesets and returns status of the user creation process 
+     * Purpose: Creates user and returns status of the user creation process 
      *
      * Access is limited to class and extended classes
      *    
      * @return  object	Returns status message.	
      */
-	public function saveAttributesets($attributes_group_id, $attributes_set_title, $attribute_ids_string, $action, $adminid){
+	public function saveMerchant($merchant_title,$merchant_email,$merchant_mobile,$merchant_phone,$merchant_fax,$merchant_city,$merchant_state,$merchant_country,$merchant_address1,$merchant_address2,$merchant_postcode,$merchant_description, $action, $adminid){
 		try {
-			parent::SetDatabaseConnection();			
-			//$query = "call SPattributestesadd('" . $attributes_group_id . "', '" . $attributes_set_title . "', '" . $attribute_ids_string . "', '" . $action . "', " . $adminid . ")";
-			$query = "call SPattributestesadd('" . $attributes_group_id . "', '" . $attributes_set_title . "', '', '" . $action . "', " . $adminid . ")";
-			//exit;			
+			parent::SetDatabaseConnection();
+			
+			$query = "call SPmerchantadd('" . $merchant_title . "', '" . $merchant_email . "', '" . $merchant_mobile . "', '" . $merchant_phone . "', '" . $merchant_fax . "', '" . $merchant_city . "', '" . $merchant_state . "', '" . $merchant_country . "', '" . $merchant_address1 . "', '" . $merchant_address2 . "', '" . $merchant_postcode . "', '" . $merchant_description . "', '" .  $action . "', '" .  $adminid . "')";
+			//exit;
+			
 			return Application_Model_Db::getResult($query); 
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
@@ -127,21 +126,42 @@ class Application_Model_Attributesetsdb extends Application_Model_Validation {
 	
 	
 	
+	/**
+     * Purpose: Returns all countries list 
+     *
+     * Access is limited to class and extended classes
+     *    
+     * @return  object	Returns All Countries List.	
+     */
+	public function getCountriesList(){
+		try {
+			parent::SetDatabaseConnection();			
+			$query = "call SPgetcountries()";			
+			$opt = Application_Model_Db::getResult($query);
+			return $opt;			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
 	
 	
 	/**
-     * Purpose: Used to change the category status like Active, Locked and Deleted 
+     * Purpose: Used to change the merchant status like Active, Locked and Deleted 
      *
      * Access is limited to class and extended classes
      *
      * @param
-     * @return  object 	user details of supplied userid.	
+     * @return  object 	merchant details of supplied userid.	
      * 
      * 
      * Under testing phase
      */
 	
-	public function changeStatus($attributes_set_id, $iaction, $iadminuserid, $ilockstatus=0, $iunlockstatus=0, $ideletestatus=0){
+	public function changeStatus($merchantid, $iaction, $iadminuserid, $ilockstatus=0, $iunlockstatus=0, $ideletestatus=0){
 		try {
 			parent::SetDatabaseConnection();			
 			
@@ -153,7 +173,7 @@ class Application_Model_Attributesetsdb extends Application_Model_Validation {
 			 *  To Delete the user, $ideletestatus must be set to 1
 			 */
 			
-			$query = "call SPattributesetschangestatus(" . $attributes_set_id . ", " . $ilockstatus . ", " . $iunlockstatus . ", " . $ideletestatus . ", '" . $iaction . "', " . $iadminuserid . ", @omess)";
+			$query = "call SPmerchantchangestatus(" . $merchantid . ", " . $ilockstatus . ", " . $iunlockstatus . ", " . $ideletestatus . ", '" . $iaction . "', " . $iadminuserid . ", @omess)";
 			//exit;
 			Application_Model_Db::execute($query);
 		 	return Application_Model_Db::getRow("select @omess");
@@ -163,22 +183,25 @@ class Application_Model_Attributesetsdb extends Application_Model_Validation {
 			throw new Exception($e->getMessage());
 		}
 	}
-
-
-
-
+	
+	
+	
+	
+	
+	
+	
 	/**
-     * Purpose: Fetching attributesets info
+     * Purpose: Fetching merchant info
      *
      * Access is limited to class and extended classes     *
      
      * @return  object	Returns status message.	
      */
 	
-	public function getAttributesetsDetails($attributes_set_id){
+	public function getMerchatDetails($merchant_id){
 		try {
 			parent::SetDatabaseConnection();		
-			$query = "call SPattributesetsdetails('".$attributes_set_id."')";
+			$query = "call SPmerchantdetails('".$merchant_id."')";
 			//exit;
 			return Application_Model_Db::getRow($query);
 			
@@ -187,26 +210,25 @@ class Application_Model_Attributesetsdb extends Application_Model_Validation {
 			throw new Exception($e->getMessage());
 		}
 	}
-
-
-
-
-
+	
+	
+	
+	
 	
 	
 	/**
-     * Purpose: Update attributesets details
+     * Purpose: Update merchant details
      *
      * Access is limited to class and extended classes
      *
      * @return  object	Returns an object of status.
      */
 	 
-	public function attributesetsDetailsUpdate($attributes_set_id, $action, $attributes_group_id , $attributes_set_title, $attribute_ids_string, $adminid) {
+	public function merchantDetailsUpdate($merchantId, $action, $merchant_title, $merchant_email, $merchant_mobile, $merchant_phone, $merchant_fax, $merchant_city, $merchant_state, $merchant_country, $merchant_address1, $merchant_address2, $merchant_postcode, $merchant_description, $adminid) {
 		try{
 			
 			parent::SetDatabaseConnection();
-			$query = "call SPattributesetsedit(" . $attributes_set_id . ", '" . $attributes_group_id .  "', '" . $attributes_set_title .  "', '" . $attribute_ids_string . "', '" . $action .  "', " . $adminid . ")";
+			$query = "call SPmerchantedit(" . $merchantId . ", '" . $merchant_title .  "', '" . $merchant_email . "', '" . $merchant_mobile . "','" . $merchant_phone . "','" . $merchant_fax . "','" . $merchant_city . "','" . $merchant_state . "','" . $merchant_country . "','" . $merchant_address1 . "','" . $merchant_address2 . "','" . $merchant_postcode . "','" . $merchant_description . "', '" . $action .  "', " . $adminid . ")";
 			//exit;
 			
 			return Application_Model_Db::getResult($query);
@@ -215,52 +237,45 @@ class Application_Model_Attributesetsdb extends Application_Model_Validation {
 			throw new Exception($e->getMessage());
 		}
 	}
-	
-	
 	
 	
 	
 	
 	
 	/**
-     * Purpose: Fetching parent active attribute sets list
+     * Purpose: Creates Category and returns status of the user creation process 
      *
-     * Access is limited to class and extended classes     *
-     
+     * Access is limited to class and extended classes
+     *    
      * @return  object	Returns status message.	
      */
-	
-	public function getActiveAttributesList(){
+	public function updateLogoRecord($merchant_id, $filename, $action, $adminid){
 		try {
-			parent::SetDatabaseConnection();		
-			$query = "call SPattributesetslistactive()";
-			//exit;
-			return Application_Model_Db::getResult($query);
-			
+			parent::SetDatabaseConnection();			
+			$query = "call SPmerchantaddimage('" . $merchant_id . "', '" . $filename . "', '" . $action . "', " . $adminid . ")";
+			//exit;			
+			return Application_Model_Db::getResult($query); 
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
 	}
-	
-	
-	
 	
 	
 	
 	
 	/**
-     * Purpose: Fetching parent active attribute sets list
+     * Purpose: Fetching category images
      *
      * Access is limited to class and extended classes     *
      
      * @return  object	Returns status message.	
      */
 	
-	public function getActiveAttributesGroupsList(){
+	public function getMerchantImages($merchant_id){
 		try {
 			parent::SetDatabaseConnection();		
-			$query = "SELECT * FROM store_products_attributes_groups where statusid=1 ORDER BY attributes_group_title ASC;";
+			$query = "call SPmerchantdetailsimages('".$merchant_id."')";
 			//exit;
 			return Application_Model_Db::getResult($query);
 			
@@ -269,24 +284,26 @@ class Application_Model_Attributesetsdb extends Application_Model_Validation {
 			throw new Exception($e->getMessage());
 		}
 	}
-	
-	
 	
 	
 	
 	
 	/**
-     * Purpose: Fetching parent active attribute sets mapping list
+     * Purpose: Used to change the merchant image status like Active, Locked and Deleted 
      *
-     * Access is limited to class and extended classes     *
-     
-     * @return  object	Returns status message.	
+     * Access is limited to class and extended classes
+     *
+     * @param
+     * @return  object 	user details of supplied userid.	
+     * 
+     * 
+     * Under testing phase
      */
 	
-	public function getAttributesetsMappingList($attributes_set_id){
+	public function changeStatusToDelete($merchant_id, $merchant_image_id, $action, $iadminuserid){
 		try {
-			parent::SetDatabaseConnection();		
-			$query = "call SPattributesetsmappingList('".$attributes_set_id."')";
+			parent::SetDatabaseConnection();			
+			$query = "call SPmerchantdeleteimage(" . $merchant_id . ", " . $merchant_image_id . ", '" . $action . "', " . $iadminuserid . ")";
 			//exit;
 			return Application_Model_Db::getResult($query);
 			
@@ -295,5 +312,7 @@ class Application_Model_Attributesetsdb extends Application_Model_Validation {
 			throw new Exception($e->getMessage());
 		}
 	}
+	
+	
 }
 ?>

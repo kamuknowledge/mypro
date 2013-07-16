@@ -24,7 +24,7 @@
 */
 
 //class Application_Model_Products extends Application_Model_Validation {
-class Application_Model_Products extends Application_Model_Productsdb {
+class Admin_Model_Products extends Admin_Model_Productsdb {
 	
 	public $session;
 	private $error;
@@ -44,7 +44,7 @@ class Application_Model_Products extends Application_Model_Productsdb {
 	
 	public function __construct(){
 	
-		$this->productsdb = new Application_Model_Productsdb();
+		$this->productsdb = new Admin_Model_Productsdb();
 		
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyPortal');

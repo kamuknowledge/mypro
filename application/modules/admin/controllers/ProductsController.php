@@ -48,10 +48,10 @@ class Admin_ProductsController extends Zend_Controller_Action {
 		$this->session = new Zend_Session_Namespace('MyPortal');               
 		//$this->error = new Zend_Session_Namespace('MyPortalerror');
 		
-		$this->products = new Application_Model_Products();
-		$this->productsdb = new Application_Model_Productsdb();		
+		$this->products = new Admin_Model_Products();
+		$this->productsdb = new Admin_Model_Productsdb();		
 		
-		$user = new Application_Model_Users();
+		$user = new Usermanagement_Model_Users();
 		$user->check();		
 		//print_r($this->session);
 				

@@ -192,14 +192,14 @@ $MerchantImages = $this->MerchantImages;
 				
 								
 				<div class="control-group">
-				  <label class="control-label" for="typeahead">Merchant Country</label>
+				  <label class="control-label" for="typeahead">Merchant Country<?php echo $MerchantDetails['merchant_country'];?></label>
 				  <div class="controls">
 					<div class="mid_Control-profile float-left">
 					<?php //echo $MerchantDetails['merchant_country'];?>
 					<select id="merchant_country" name="merchant_country">
 						<option value="">-Select Country-</option>
 						<?php foreach($this->countrieslist as $each_country){?>
-						<option value="<?php if(is_array($error->error_updatemerchant_values)) { echo strip_tags($error->error_updatemerchant_values['merchant_country']);}else{ echo strip_tags($MerchantDetails['merchant_country']);}?>" <?php if(is_array($error->error_updatemerchant_values) && $error->error_updatemerchant_values['merchant_country']==$each_country['country_id']) { ?>selected="selected"<?php }else if($MerchantDetails['merchant_country']==$each_country['country_id']){?>selected="selected"<?php }?>><?php echo $each_country['country_name'];?></option>
+						<option value="<?php echo strip_tags($each_country['country_id']);?>" <?php if(is_array($error->error_updatemerchant_values) && $error->error_updatemerchant_values['merchant_country']==$each_country['country_id']) { ?>selected="selected"<?php }else if($MerchantDetails['merchant_country']==$each_country['country_id']){?>selected="selected"<?php }?>><?php echo $each_country['country'];?></option>
 						<?php }?>
 					</select>
 					

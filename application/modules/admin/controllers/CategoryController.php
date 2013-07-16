@@ -48,10 +48,10 @@ class Admin_CategoryController extends Zend_Controller_Action {
 		$this->session = new Zend_Session_Namespace('MyPortal');               
 		//$this->error = new Zend_Session_Namespace('MyPortalerror');
 		
-		$this->category = new Application_Model_Category();
-		$this->categorydb = new Application_Model_Categorydb();		
+		$this->category = new Admin_Model_Category();
+		$this->categorydb = new Admin_Model_Categorydb();		
 		
-		$user = new Application_Model_Users();
+		$user = new Usermanagement_Model_Users();
 		$user->check();
 				
 		if(!$this->session->loggedIn) {

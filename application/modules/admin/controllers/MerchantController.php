@@ -48,10 +48,10 @@ class Admin_MerchantController extends Zend_Controller_Action {
 		$this->session = new Zend_Session_Namespace('MyPortal');               
 		//$this->error = new Zend_Session_Namespace('MyPortalerror');
 		
-		$this->merchant = new Application_Model_Merchant();
-		$this->merchantdb = new Application_Model_Merchantdb();		
+		$this->merchant = new Admin_Model_Merchant();
+		$this->merchantdb = new Admin_Model_Merchantdb();		
 		
-		$user = new Application_Model_Users();
+		$user = new Usermanagement_Model_Users();
 		$user->check();
 				
 		if(!$this->session->loggedIn) {

@@ -48,10 +48,10 @@ class Admin_AttributesController extends Zend_Controller_Action {
 		$this->session = new Zend_Session_Namespace('MyPortal');               
 		//$this->error = new Zend_Session_Namespace('MyPortalerror');
 		
-		$this->attributes = new Application_Model_Attributes();
-		$this->attributesdb = new Application_Model_Attributesdb();		
+		$this->attributes = new Admin_Model_Attributes();
+		$this->attributesdb = new Admin_Model_Attributesdb();		
 		
-		$user = new Application_Model_Users();
+		$user = new Usermanagement_Model_Users();
 		$user->check();
 				
 		if(!$this->session->loggedIn) {

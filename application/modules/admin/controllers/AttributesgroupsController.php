@@ -48,10 +48,10 @@ class Admin_AttributesgroupsController extends Zend_Controller_Action {
 		$this->session = new Zend_Session_Namespace('MyPortal');               
 		//$this->error = new Zend_Session_Namespace('MyPortalerror');
 		
-		$this->attributesgroups = new Application_Model_Attributesgroups();
-		$this->attributesgroupsdb = new Application_Model_Attributesgroupsdb();		
+		$this->attributesgroups = new Admin_Model_Attributesgroups();
+		$this->attributesgroupsdb = new Admin_Model_Attributesgroupsdb();		
 		
-		$user = new Application_Model_Users();
+		$user = new Usermanagement_Model_Users();
 		$user->check();
 				
 		if(!$this->session->loggedIn) {

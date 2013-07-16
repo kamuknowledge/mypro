@@ -47,8 +47,8 @@ class Usermanagement_UserController extends Zend_Controller_Action {
            
 		$this->session = new Zend_Session_Namespace('MyPortal');               
 		//$this->error = new Zend_Session_Namespace('MyPortalerror');		
-		$this->users = new Application_Model_Users();
-		$this->userdb = new Application_Model_Userdb();
+		$this->users = new Usermanagement_Model_Users();
+		$this->userdb = new Usermanagement_Model_Userdb();
 				
 		$this->users->check();	
 		
@@ -178,7 +178,7 @@ class Usermanagement_UserController extends Zend_Controller_Action {
 				return false;
 			}
 			
-			$this->merchant = new Application_Model_Merchant();
+			$this->merchant = new Admin_Model_Merchant();
 			//$this->merchantdb = new Application_Model_Merchantdb();
             $this->merchant->getMerchantSearch($params);       
                         //echo "hi";exit;

@@ -45,7 +45,7 @@ class Usermanagement_IndexController extends Zend_Controller_Action {
 	
 		$this->session = new Zend_Session_Namespace('MyPortal');
 		//$this->error = new Zend_Session_Namespace('MyPortalerror');
-		$this->users = new Application_Model_Users();
+		$this->users = new Usermanagement_Model_Users();
 		
 		$this->users->check();
 		

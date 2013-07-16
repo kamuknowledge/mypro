@@ -48,10 +48,10 @@ class Admin_UseractivitylogController extends Zend_Controller_Action {
 		$this->session = new Zend_Session_Namespace('MyPortal');               
 		//$this->error = new Zend_Session_Namespace('MyPortalerror');
 		
-		$this->useractivitylog = new Application_Model_Useractivitylog();
-		$this->useractivitylogdb = new Application_Model_Useractivitylogdb();		
+		$this->useractivitylog = new Admin_Model_Useractivitylog();
+		$this->useractivitylogdb = new Admin_Model_Useractivitylogdb();		
 		
-		$user = new Application_Model_Users();
+		$user = new Usermanagement_Model_Users();
 		$user->check();
 				
 		if(!$this->session->loggedIn) {

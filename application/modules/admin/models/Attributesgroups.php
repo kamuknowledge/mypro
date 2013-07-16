@@ -24,7 +24,7 @@
 */
 
 //class Application_Model_Attributesgroups extends Application_Model_Validation {
-class Application_Model_Attributesgroups extends Application_Model_Attributesgroupsdb {
+class Admin_Model_Attributesgroups extends Admin_Model_Attributesgroupsdb {
 	
 	public $session;
 	private $error;
@@ -44,7 +44,7 @@ class Application_Model_Attributesgroups extends Application_Model_Attributesgro
 	
 	public function __construct(){
 	
-		$this->attributesgroupsdb = new Application_Model_Attributesgroupsdb();
+		$this->attributesgroupsdb = new Admin_Model_Attributesgroupsdb();
 
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyPortal');

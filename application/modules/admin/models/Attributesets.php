@@ -24,7 +24,7 @@
 */
 
 //class Application_Model_Attributesets extends Application_Model_Validation {
-class Application_Model_Attributesets extends Application_Model_Attributesetsdb {
+class Admin_Model_Attributesets extends Admin_Model_Attributesetsdb {
 	
 	public $session;
 	private $error;
@@ -44,7 +44,7 @@ class Application_Model_Attributesets extends Application_Model_Attributesetsdb 
 	
 	public function __construct(){
 	
-		$this->attributesetsdb = new Application_Model_Attributesetsdb();	
+		$this->attributesetsdb = new Admin_Model_Attributesetsdb();	
 	
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyPortal');

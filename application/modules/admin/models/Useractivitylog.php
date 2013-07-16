@@ -24,7 +24,7 @@
 */
 
 //class Application_Model_Useractivitylog extends Application_Model_Validation {
-class Application_Model_Useractivitylog extends Application_Model_Useractivitylogdb {
+class Admin_Model_Useractivitylog extends Admin_Model_Useractivitylogdb {
 	
 	public $session;
 	private $error;
@@ -44,7 +44,7 @@ class Application_Model_Useractivitylog extends Application_Model_Useractivitylo
 	
 	public function __construct(){
 	
-		$this->useractivitylogdb = new Application_Model_Useractivitylogdb();
+		$this->useractivitylogdb = new Admin_Model_Useractivitylogdb();
 
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyPortal');

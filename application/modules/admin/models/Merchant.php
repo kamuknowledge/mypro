@@ -24,7 +24,7 @@
 */
 
 //class Application_Model_Merchant extends Application_Model_Validation {
-class Application_Model_Merchant extends Application_Model_Merchantdb {
+class Admin_Model_Merchant extends Admin_Model_Merchantdb {
 	
 	public $session;
 	private $error;
@@ -43,7 +43,7 @@ class Application_Model_Merchant extends Application_Model_Merchantdb {
      */
 	
 	public function __construct(){
-		$this->merchantdb = new Application_Model_Merchantdb();
+		$this->merchantdb = new Admin_Model_Merchantdb();
 		
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyPortal');

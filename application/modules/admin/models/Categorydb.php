@@ -24,7 +24,7 @@
 */
 
 //class Application_Model_Categorydb extends Application_Model_DataBaseOperations {
-class Application_Model_Categorydb extends Application_Model_Validation {
+class Admin_Model_Categorydb extends Application_Model_Validation {
 	
 	public $session;
 	private $error;

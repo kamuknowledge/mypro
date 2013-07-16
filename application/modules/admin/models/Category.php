@@ -24,7 +24,7 @@
 */
 
 //class Application_Model_Category extends Application_Model_Validation {
-class Application_Model_Category extends Application_Model_Categorydb {
+class Admin_Model_Category extends Admin_Model_Categorydb {
 	
 	public $session;
 	private $error;
@@ -44,7 +44,7 @@ class Application_Model_Category extends Application_Model_Categorydb {
 	
 	public function __construct(){
 	
-		$this->categorydb = new Application_Model_Categorydb();	
+		$this->categorydb = new Admin_Model_Categorydb();	
 	
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyPortal');
