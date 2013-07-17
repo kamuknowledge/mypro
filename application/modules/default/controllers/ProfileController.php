@@ -26,11 +26,11 @@
 class ProfileController extends Zend_Controller_Action { 
 	public $session;	// used for managing session with NAMESPACE portal
 	public $error;		// used for managing session with NAMESPACE portalerror
-	private $events;		// used for creating an instance of model, Access is with in the class	
+	private $profile;		// used for creating an instance of model, Access is with in the class	
+	private $profiledb;
 
 	/**
      * Purpose: Initiates sessions with Namespace 'portal' and 'portalerror' 
-     * 			and creates an instance of the model class 'Application_Model_Users'
      *
      * Access is public
      *
@@ -41,7 +41,9 @@ class ProfileController extends Zend_Controller_Action {
 	
 	public function init() { 
 		/*echo "store/index/init";
-		exit;  */
+		exit;  */		
+		$this->profile = new Application_Model_Profile();
+		$this->profiledb = new Application_Model_Profiledb();
         $this->_helper->layout->setLayout('default/profile_layout');
 		//$this->setLayoutAction('store/layout');		
 	}
@@ -83,7 +85,13 @@ class ProfileController extends Zend_Controller_Action {
      */
 	
 	public function viewAction() {
-		try{			
+		try{		
+			//$this->_helper->layout->disableLayout();
+			$UserDetails["profile"] = $this->profiledb->getProfileDetails();
+			$UserDetails["address"] = $this->profiledb->getUserAddress();
+			$UserDetails["education"] = $this->profiledb->getUserEducation();
+			$UserDetails["experiance"] = $this->profiledb->getUserExperiance();
+			$this->view->UserDetails = $UserDetails;
 			//echo "store/index/index";
 			//exit; 
 		}catch (Exception $e){

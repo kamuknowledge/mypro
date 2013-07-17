@@ -1,3 +1,25 @@
+<?php 
+
+$profile = $this->UserDetails["profile"][0];
+$address = $this->UserDetails["address"];
+$experiance = $this->UserDetails["experiance"];
+$education = $this->UserDetails["education"];
+$present_cmp = "";
+$previous_cmp = "";
+$current_status = "";
+$recent_education = "";
+foreach($experiance as $key => $value) {
+	if($value["present_working"]) { 
+		$present_cmp = $value["company_name"]." - ".$value["country_id"];
+		$current_status = $value["job_title"]." at ".$value["company_name"];
+	}
+	else $previous_cmp = $value["company_name"]." - ".$value["country_id"];
+}
+foreach($education as $key => $value) {
+	$recent_education = $value["specialization"]." at ".$value["school_name"];
+}
+
+?>
 <div class="main_body" style="float:left;">
 <div class="left width-100">
 						<div class="breadcrumbs">
@@ -7,7 +29,7 @@
 						<div class="profile_page">
 							<div class="profile_main_page">
 								<div class="profile_page_image">
-									<img src="<?php echo $this->baseUrl('public/default'); ?>/images/user-images.png" title="GUNNAM CHOWDARY"/>
+									<img src="<?php echo $this->baseUrl('public/default').$profile["image_path"]; ?>" title="GUNNAM CHOWDARY"/>
 									<a class="button-light icon cam" href="javascript:void(0)"><span><span>Edit Profile Picture</span></span></a>
 									<a href="javascript:void(0)">Delete Photo</a>
 									<div class="clear">&nbsp;</div>
@@ -16,21 +38,21 @@
 									<a href="<?php echo $this->baseUrl('profile/edit/');?>" id="done-editing" class="button-big icon edit"><span><span>Done Editing</span></span></a>
 									<div class="left width-100">
 									<div class="title">
-										<h2 class="title_have_image">GUNNAM CHOWDARY<span class="icon"></span></h2>
-										<span class="caption">Sr Software Engineer at VIP IT Service</span>
+										<h2 class="title_have_image"><?php echo $profile["firstname"]." ".$profile["lastname"]; ?><span class="icon"></span></h2>
+										<span class="caption"><?php echo $current_status; ?></span>
 									</div>
-										<div class="timezone">Asia/Kolkata (GMT+5:30)</div>
+										<div class="timezone"><?php echo $profile["timezone_id"]; ?></div>
 										<div class="details">
-											<label>Current:</label><span class="blue">VIP IT Service - India</span>
-											<label>Previous:</label><span class="blue">Company Name - India</span>
+											<label>Current:</label><span class="blue"><?php echo $present_cmp; ?></span>
+											<label>Previous:</label><span class="blue"><?php echo $previous_cmp; ?></span>
 											<div class="clear">&nbsp;</div>
-											<label>Education:</label><span class="blue">B Tech at IACR Engg College</span>
+											<label>Education:</label><span class="blue"><?php echo $recent_education; ?></span>
 										</div>
 										<div class="clear">&nbsp;</div>
 										<div class="clear">
-											<a href="javascript:void(0)" class="button-light blue icon mail"><span><span>chowdary.gunnam@gmail.com</span></span></a>
+											<a href="javascript:void(0)" class="button-light blue icon mail"><span><span><?php echo $profile["emailid"]; ?></span></span></a>
 											<a href="javascript:void(0)" class="button-light blue icon skype"><span><span>vip.veera</span></span></a>
-											<a href="javascript:void(0)" class="button-light blue icon phone"><span><span>9908637763</span></span></a>
+											<a href="javascript:void(0)" class="button-light blue icon phone"><span><span><?php echo $profile["phonenumber"]; ?></span></span></a>
 										</div>
 									</div>
 									<div class="clear">&nbsp;</div>
@@ -56,10 +78,7 @@
 										<h2 class="title_have_image about">About<span class="icon"></span></h2>
 									</div>
 										<div class="desc">
-											<p>
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-<p>
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+											<?php echo $profile["about_us"]; ?>
 										</div>
 									
 								</div>
@@ -69,20 +88,21 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 										<a href="javascript:void(0)"><span>+</span>Add a Position</a>
 									</div>
 										<div class="desc">
-											<div>
-											<h2 class="title_have_image exprce">Sr Software Engineer<span class="icon"></span></h2>
-											<span class="caption">VIP IT Services</span>
-											<span class="information">March 2013 - To Present (0 years 3 months ) | Hyderabad</span>
-<p>
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-										</div>
+										<?php foreach($experiance as $key => $value) { ?>
 										<div>
+											<h2 class="title_have_image exprce"><?php echo $value["job_title"]; ?><span class="icon"></span></h2>
+											<span class="caption"><?php echo $value["company_name"]; ?></span>
+											<span class="information"><?php echo $value["from_month"]; ?> <?php echo $value["from_year"]; ?> - To <?php echo ($value["present_working"]) ? "Present" : $value["to_month"]." ".$value["to_year"]; ?> (0 years 3 months ) | <?php echo $value["job_location"]; ?></span>
+											<p><?php echo $value["company_description"]; ?></p>
+										</div>
+										<?php } ?>
+										<!--div>
 											<h2 class="title_have_image exprce">Sr Software Engineer<span class="icon"></span></h2>
 											<span class="caption">Company Name</span>
 											<span class="information">March 2013 - To Present (0 years 3 months ) | Hyderabad</span>
 <p>											
 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-										</div>
+										</div-->
 										</div>
 									
 								</div>
@@ -92,20 +112,21 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 										<a href="javascript:void(0)"><span>+</span>Add Education</a>
 									</div>
 										<div class="desc">
-											<div>
-											<h2 class="title_have_image exprce">IACR Engg College<span class="icon"></span></h2>
-											<span class="caption">B Tech,ECE</span>
-											<span class="information">2002-2006</span>
-<p>
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-										</div>
+										<?php foreach($education as $key => $value) { ?>
 										<div>
+											<h2 class="title_have_image exprce"><?php echo $value["school_name"]; ?><span class="icon"></span></h2>
+											<span class="caption"><?php echo $value["school_name"].", ".$value["specialization"]; ?></span>
+											<span class="information"><?php echo $value["from_year"]; ?>-<?php echo $value["to_year"]; ?></span>
+											<p><?php echo $value["education_notes"]; ?></p>
+										</div>
+										<?php } ?>
+										<!--div>
 											<h2 class="title_have_image exprce">School Name<span class="icon"></span></h2>
 											<span class="caption">Inter, MPC</span>
 											<span class="information">2001-2002</span>
 <p>											
 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-										</div>
+										</div-->
 										</div>
 									
 								</div>
@@ -116,12 +137,12 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 									</div>
 										<div class="desc">
 											<ul>
-												<li><label>Birthday : </label><span class="blue">December 20th, 1983</span></li>
-												<li><label>Marital Status : </label><span class="blue">Single</span></li>
-												<li><label>Interests : </label><span class="blue">Interests Interests</span></li>
+												<li><label>Birthday : </label><span class="blue"><?php echo $profile["date_of_birth"]; ?></span></li>
+												<li><label>Marital Status : </label><span class="blue"><?php echo $profile["marital_status"]; ?></span></li>
+												<li><label>Interests : </label><span class="blue"><?php echo $profile["interests"]; ?></span></li>
 												<li><label>Honors & Awards : </label><span class="blue">Honors & Awards Honors & Awards Honors & Awards</span></li>
 												<li><label>Contact For : </label><span class="blue">Contact For Contact For Contact For</span></li>
-												<li><label>Personal : </label><span class="blue">+919908637763</span></li>
+												<li><label>Personal : </label><span class="blue"><?php echo $profile["phonenumber"]; ?></span></li>
 												<li><label>Website : </label><span class="blue">http://www.telugump3lyrics.com</span></li>
 												<li><label>Skype : </label><span class="blue">vip.veera</span></li>	
 											</ul>
@@ -134,22 +155,17 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 										<a href="javascript:void(0)"><span>+</span>Add/Change</a>
 									</div>
 										<div class="desc">
-											<div class="left width-50">
-												<h3>Home</h3>
-												Begumper,<br/>
-												Hyderabad,<br/>
-												India,<br/>
-												Andra Pradesh,<br/>
-												500016.
-											</div>
-											<div class="left width-50">
-												<h3>Office</h3>
-												Begumper,<br/>
-												Hyderabad,<br/>
-												India,<br/>
-												Andra Pradesh,<br/>
-												500016.
-											</div>
+											<?php foreach($address as $key => $value) { ?>
+												<div class="left width-50">
+													<h3><?php echo $value["address_type"]; ?></h3>
+													<?php echo $value["address1"].", ".$value["address2"]; ?>,<br/>
+													<?php echo $value["street"]; ?>,<br/>
+													<?php echo $value["city"]; ?>,<br/>
+													<?php echo $value["state_id"]; ?>,<br/>
+													<?php echo $value["country_id"]; ?>,<br/>
+													<?php echo $value["postal_code"]; ?>.
+												</div>
+											<?php } ?>
 											<div class="clear"></div>
 										</div>
 								</div>
