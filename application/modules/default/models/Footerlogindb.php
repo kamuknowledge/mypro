@@ -6,10 +6,10 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Categoriesdb.php 
-* Module	:	Category Management Module
+* File		:	Headerlogindb.php 
+* Module	:	Header Login Module
 * Owner		:	RAM's 
-* Purpose	:	This class is used for category management related database operations
+* Purpose	:	This class is used for Header Login related database operations
 * Date		:	08/05/2012
 
 
@@ -23,11 +23,10 @@
 *===================================================================================================================
 */
 
-class Default_Model_Categoriesdb {
+class Default_Model_Footerlogindb {
 	
 	public $session;
 	private $error;
-	private $db;
 	public $viewobj;
 	
 	
@@ -44,36 +43,7 @@ class Default_Model_Categoriesdb {
 	public function __construct(){
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
-		$this->db=Zend_Registry::get('db'); 
 	}
-	
-	
-
-	
-	/**
-     * Purpose: Fetching category list
-     *
-     * Access is limited to class and extended classes
-     *
-     * @param   int		$iuserid User Id
-     * @param	int		$istart Start value
-     * @param	int		$ilimit Limit value for fetching result set
-     * @param	varchar	$cond Search condition
-     * @return  object	Returns status message.	
-     */
-	
-	public function getCategoriesList(){
-		try {	
-			//parent::SetDatabaseConnection();
-			$query = "SELECT category_id, parent_category_id, category_name FROM store_categories where statusid=1";
-			$res=$this->db->query($query);
-			return $res->fetchAll();			
-		} catch(Exception $e) {
-			Application_Model_Logging::lwrite($e->getMessage());
-			throw new Exception($e->getMessage());
-		}
-	}
-	
 	
 }
 ?>

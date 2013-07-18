@@ -6,10 +6,10 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Categories.php 
-* Module	:	Category Management Module
+* File		:	Headerlogin.php 
+* Module	:	Header Login Module
 * Owner		:	RAM's 
-* Purpose	:	This class is used for category management operations
+* Purpose	:	This class is used for header login operations
 * Date		:	08/05/2012
 
 
@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Default_Model_Categories extends Application_Model_Validation {
+class Default_Model_Footerlogin extends Application_Model_Validation {
 	
 	public $session;
 	private $error;
