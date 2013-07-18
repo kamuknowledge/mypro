@@ -26,7 +26,7 @@
 
 
 //class Application_Model_Users extends Application_Model_Validation {
-class Default_Model_Signin extends Default_Model_Signindb {
+class Default_Model_Signin extends Application_Model_Validation {
 	
 	public $session;
 	private $error;
@@ -45,9 +45,12 @@ class Default_Model_Signin extends Default_Model_Signindb {
      */
 	
 	public function __construct(){
+		
+		$this->signinDb=new Default_Model_Signindb();
+		
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
-        $this->signinDb=new Default_Model_Signindb();        
+                
 		//Assigning a config registry
 		$this->config = Zend_Registry::get('config');
 		

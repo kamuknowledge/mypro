@@ -24,7 +24,7 @@
 */
 
 //class Application_Model_Userdb extends Application_Model_DataBaseOperations {
-class Default_Model_Signupdb extends Application_Model_Validation {
+class Default_Model_Signupdb {
 	
 	public $session;
 	private $error;
@@ -42,6 +42,7 @@ class Default_Model_Signupdb extends Application_Model_Validation {
 	public function __construct(){
 		$this->session = new Zend_Session_Namespace('MyPortal');
 		$this->error = new Zend_Session_Namespace('MyPortalerror');
+		$this->db=Zend_Registry::get('db');
 	}
 	
 	
@@ -61,12 +62,17 @@ class Default_Model_Signupdb extends Application_Model_Validation {
      * @param	boolean	$iupdate Flag for updation of user records
      * @return  object	Returns status message.	
      */
-	protected function saveUser($firstname, $lastname, $useremail, $phonenumber, $password, $gender, $action){
+	public function saveUser($firstname, $lastname, $useremail, $phonenumber, $password, $gender, $action){
 		try {
-			parent::SetDatabaseConnection();
+			//parent::SetDatabaseConnection();
 			$password = hash('sha256',$password);
-			$query = "call SPregisteruser('" . $firstname . "', '" . $lastname . "', '" . $useremail . "', '" . $password . "', '" . $phonenumber . "', '" . $gender . "','" . $action . "')";
-			return Application_Model_Db::getResult($query);
+			
+			//$query = "call SPregisteruser('" . $firstname . "', '" . $lastname . "', '" . $useremail . "', '" . $password . "', '" . $phonenumber . "', '" . $gender . "','" . $action . "')";
+			//return Application_Model_Db::getResult($query);
+			
+			$stmt = $this->db->query("CALL SPregisteruser(?, ?, ? , ?, ?, ?, ?)", array($firstname,$lastname,$useremail,$password,$phonenumber,$gender,$action));			
+			return $stmt->fetchAll();			
+			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

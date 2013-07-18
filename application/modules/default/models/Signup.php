@@ -26,7 +26,7 @@
 
 
 //class Application_Model_Users extends Application_Model_Validation {
-class Default_Model_Signup extends Default_Model_Signupdb {
+class Default_Model_Signup extends Application_Model_Validation {
 	
 	public $session;
 	private $error;
@@ -45,6 +45,9 @@ class Default_Model_Signup extends Default_Model_Signupdb {
      */
 	
 	public function __construct(){
+	
+		$this->Signupdb=new Default_Model_Signupdb();
+		
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
                 
@@ -200,7 +203,7 @@ class Default_Model_Signup extends Default_Model_Signupdb {
 				//$password = make_password(8);
 				//$password1=hash('sha256',$password);
 				
-				$outpt = $this->saveUser($firstname, $lastname, $useremail,$phonenumber, $password, $gender, $action);				
+				$outpt = $this->Signupdb->saveUser($firstname, $lastname, $useremail,$phonenumber, $password, $gender, $action);				
 				$outpt = $outpt[0];
 				$result = explode('#', $outpt['toutput']);
 				

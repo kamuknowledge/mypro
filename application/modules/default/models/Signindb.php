@@ -25,7 +25,7 @@
 
 //class Application_Model_Userdb extends Application_Model_DataBaseOperations {
 
-class Default_Model_Signindb extends Application_Model_Validation {
+class Default_Model_Signindb {
 	
 	public $session;
 	public $db;
@@ -60,7 +60,7 @@ class Default_Model_Signindb extends Application_Model_Validation {
      * @param	varchar action action
      * @return  object	Returns status message.	
      */
-	protected function LoginUserdb($useremail, $password, $action){
+	public function LoginUserdb($useremail, $password, $action){
 		try {
 			//sparent::SetDatabaseConnection();
 			 $password = hash('sha256',$password);
