@@ -47,7 +47,7 @@ class Default_Model_Signin extends Default_Model_Signindb {
 	public function __construct(){
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
-                
+        $this->signinDb=new Default_Model_Signindb();        
 		//Assigning a config registry
 		$this->config = Zend_Registry::get('config');
 		
@@ -63,6 +63,7 @@ class Default_Model_Signin extends Default_Model_Signindb {
 		//Assigning renderer to access in the class
 		$this->error = $viewRenderer->view;
 		$this->viewobj= $viewRenderer->view;
+		$this->db=Zend_Registry::get('db');
 	}
 	
 	/**
@@ -97,7 +98,8 @@ class Default_Model_Signin extends Default_Model_Signindb {
             /*
              * Validation ends here
              */
-			$outpt = $this->LoginUserdb($useremail, $password, $action);
+			 
+			$outpt = $this->signinDb->LoginUserdb($useremail, $password, $action);
 			//print_r($outpt);exit;
 			$outpt = $outpt[0];
 			$result = explode('#', $outpt['omess']);				

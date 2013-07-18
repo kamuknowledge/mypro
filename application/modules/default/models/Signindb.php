@@ -24,9 +24,11 @@
 */
 
 //class Application_Model_Userdb extends Application_Model_DataBaseOperations {
+
 class Default_Model_Signindb extends Application_Model_Validation {
 	
 	public $session;
+	public $db;
 	private $error;
 	
 	/**
@@ -40,9 +42,11 @@ class Default_Model_Signindb extends Application_Model_Validation {
 	
 		
 	public function __construct(){
+	
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyPortalerror');
 		$this->db=Zend_Registry::get('db');
+		//print_r($this->db);
 	}
 	
 	
@@ -58,12 +62,14 @@ class Default_Model_Signindb extends Application_Model_Validation {
      */
 	protected function LoginUserdb($useremail, $password, $action){
 		try {
-			parent::SetDatabaseConnection();
-			$password = hash('sha256',$password);
+			//sparent::SetDatabaseConnection();
+			 $password = hash('sha256',$password);
+			
 			
 			//$query = "call SPuserlogin('" . $useremail . "', '" . $password . "', '5', '" . $action . "')";
 			//return Application_Model_Db::getResult($query);
-			
+			//echo "<pre>";print_r($this->db);
+			//exit;
 			$stmt = $this->db->query("CALL SPuserlogin(?, ?, ? , ?)", array($useremail,$password,'5',$action));			
 			return $stmt->fetchAll();
 			

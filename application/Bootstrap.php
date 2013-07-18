@@ -141,6 +141,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		if (!Zend_Registry::isRegistered('db')) {
 			Zend_Registry::set('db', $db);    
 		}		
+		//print_r(Zend_Registry::get('db'));
     }
 	
 
