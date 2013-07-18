@@ -15,6 +15,7 @@
 <script src="<?php echo $this->baseUrl('public/default'); ?>/js/frontend.js"></script>
 <script src="<?php echo $this->baseUrl('public/default'); ?>/js/validationmethods.js"></script>
 <script src="<?php echo $this->baseUrl('public/default'); ?>/js/script.js"></script>
+<script src="<?php echo $this->baseUrl('public/default'); ?>/js/dev_script.js"></script>
 <!--[if gte IE 9]>
   <style type="text/css">
     .gradient {
@@ -49,7 +50,7 @@
 		
 	
 	<!-- end main_body_wrapper-->
-	<?php echo $this->render('default/footer.phtml'); ?>	
+	<?php echo $this->action('index', 'footer', 'default', array('a_parameter'=>'a_value'));?>	
 </div>
 <?php echo $this->render('default/register.phtml'); ?>
 <!--/div-->

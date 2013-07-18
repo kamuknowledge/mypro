@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Default_Model_Profile extends Default_Model_Profiledb {
+class Default_Model_Profile extends Application_Model_Validation {
 	
 	public $session;
 	private $error;
@@ -43,6 +43,8 @@ class Default_Model_Profile extends Default_Model_Profiledb {
 	
 	public function __construct(){
 		//$this->merchantdb = new Application_Model_Merchantdb();
+		$this->Profiledb=new Default_Model_Profiledb();
+		
 		
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyPortal');

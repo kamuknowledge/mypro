@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Default_Model_Profiledb extends Application_Model_DataBaseOperations {
+class Default_Model_Profiledb  {
 	
 	public $session;
 	private $error;
@@ -44,6 +44,8 @@ class Default_Model_Profiledb extends Application_Model_DataBaseOperations {
 	public function __construct(){
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		$this->db=Zend_Registry::get('db');
+		
 		if(!$this->session->userid)
 		{
 			echo "Not logged in";
@@ -70,7 +72,7 @@ class Default_Model_Profiledb extends Application_Model_DataBaseOperations {
 	
 	public function getProfileDetails(){
 		try {	
-			parent::SetDatabaseConnection();
+			//parent::SetDatabaseConnection();
 			/*$query = "SELECT u.* FROM apmusers u
 						LEFT JOIN user_profile up ON up.userid = u.userid AND up.statusid = 1
 						LEFT JOIN user_address ua ON ua.userid = u.userid AND ua.statusid = 1
@@ -80,13 +82,18 @@ class Default_Model_Profiledb extends Application_Model_DataBaseOperations {
 						LEFT JOIN user_images ui ON ui.userid = u.userid AND ui.statusid = 1
 						LEFT JOIN user_skills_set uss ON uss.userid = u.userid AND uss.statusid = 1
 						WHERE u.userid = '".$this->userid."' AND u.statusid = 1";*/
-			$query = "SELECT u.firstname, u.lastname, u.emailid, u.phonenumber, up.display_name, up.date_of_birth, up.gender, up.about_us, up.marital_status, up.interests, up.timezone_id, ui.image_path FROM apmusers u
+			$query = "SELECT u.userid, u.firstname, u.lastname, u.emailid, u.phonenumber, u.display_name, u.date_of_birth, u.gender, u.marital_status, u.timezone_id, up.about_us, up.interests, ui.image_path, ue.job_title, ue.company_name, ued.degree, ued.school_name
+						FROM apmusers u
 						LEFT JOIN user_profile up ON up.userid = u.userid AND up.statusid = 1
 						LEFT JOIN user_images ui ON ui.userid = u.userid AND ui.statusid = 1
-						LEFT JOIN user_experience ue ON ue.userid = u.userid AND ue.experiance_id = (SELECT experiance_id FROM user_experience ue1 WHERE ue1.userid = u.userid AND ue1.statusid = 1)
+						LEFT JOIN user_experience ue ON ue.userid = u.userid AND ue.experience_id = (SELECT ue1.experience_id FROM user_experience ue1 WHERE ue1.userid = u.userid AND ((ue1.present_working = 1 AND ue1.to_year = 0 AND ue1.to_month = 0) OR (ue1.present_working = 0 AND ue1.to_year != 0 AND ue1.to_month != 0)) AND ue1.statusid = 1 ORDER BY ue1.to_year DESC, ue1.to_month DESC LIMIT 1)
+						LEFT JOIN user_education ued ON ued.userid = u.userid AND ued.education_id = (SELECT ued1.education_id FROM user_education ued1 WHERE ued1.userid = u.userid AND ued1.statusid = 1 ORDER BY ued1.to_year DESC, ued1.to_month DESC LIMIT 1)
 						WHERE u.userid = '".$this->userid."' AND u.statusid = 1;";
-			//exit;
-			return Application_Model_Db::getResult($query);
+			//exit;			
+			
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
+			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -95,10 +102,12 @@ class Default_Model_Profiledb extends Application_Model_DataBaseOperations {
 	
 	public function getUserAddress() {
 		try {	
-			parent::SetDatabaseConnection();
+			///parent::SetDatabaseConnection();
 			$query = "SELECT ua.address_type, ua.address1, ua.address2, ua.city, ua.street, ua.postal_code, ua.country_id, ua.state_id FROM user_address ua WHERE ua.userid = '".$this->userid."' AND ua.statusid = 1;";
 			//exit;
-			return Application_Model_Db::getResult($query);
+			
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -107,10 +116,14 @@ class Default_Model_Profiledb extends Application_Model_DataBaseOperations {
 	
 	public function getUserEducation() {
 		try {	
-			parent::SetDatabaseConnection();
+			//parent::SetDatabaseConnection();
 			$query = "SELECT ue.* FROM user_education ue WHERE ue.userid = '".$this->userid."' AND ue.statusid = 1;";
 			//exit;
-			return Application_Model_Db::getResult($query);
+			
+			
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
+			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -119,10 +132,11 @@ class Default_Model_Profiledb extends Application_Model_DataBaseOperations {
 	
 	public function getUserExperiance() {
 		try {	
-			parent::SetDatabaseConnection();
+			//parent::SetDatabaseConnection();
 			$query = "SELECT ue.* FROM user_experience ue WHERE ue.userid = '".$this->userid."' AND ue.statusid = 1;";
 			//exit;
-			return Application_Model_Db::getResult($query);
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

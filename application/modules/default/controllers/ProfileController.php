@@ -91,6 +91,7 @@ class ProfileController extends Zend_Controller_Action {
 			$UserDetails["address"] = $this->profiledb->getUserAddress();
 			$UserDetails["education"] = $this->profiledb->getUserEducation();
 			$UserDetails["experiance"] = $this->profiledb->getUserExperiance();
+			//print_r($UserDetails);
 			$this->view->UserDetails = $UserDetails;
 			//echo "store/index/index";
 			//exit; 
@@ -119,6 +120,15 @@ class ProfileController extends Zend_Controller_Action {
 		try{			
 			//echo "store/index/index";
 			//exit; exit;
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function updateAboutusAction() {
+		try{			
+			return 1;
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

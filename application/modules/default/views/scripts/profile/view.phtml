@@ -4,20 +4,10 @@ $profile = $this->UserDetails["profile"][0];
 $address = $this->UserDetails["address"];
 $experiance = $this->UserDetails["experiance"];
 $education = $this->UserDetails["education"];
-$present_cmp = "";
+$present_cmp = $profile["company_name"]." - "."country_name";
 $previous_cmp = "";
-$current_status = "";
-$recent_education = "";
-foreach($experiance as $key => $value) {
-	if($value["present_working"]) { 
-		$present_cmp = $value["company_name"]." - ".$value["country_id"];
-		$current_status = $value["job_title"]." at ".$value["company_name"];
-	}
-	else $previous_cmp = $value["company_name"]." - ".$value["country_id"];
-}
-foreach($education as $key => $value) {
-	$recent_education = $value["specialization"]." at ".$value["school_name"];
-}
+$current_status = $profile["job_title"]." at ".$profile["company_name"];
+$recent_education = $profile["degree"]." at ".$profile["school_name"];
 
 ?>
 <div class="main_body" style="float:left;">
@@ -44,7 +34,7 @@ foreach($education as $key => $value) {
 										<div class="timezone"><?php echo $profile["timezone_id"]; ?></div>
 										<div class="details">
 											<label>Current:</label><span class="blue"><?php echo $present_cmp; ?></span>
-											<label>Previous:</label><span class="blue"><?php echo $previous_cmp; ?></span>
+											<!--label>Previous:</label><span class="blue"><?php echo $previous_cmp; ?></span-->
 											<div class="clear">&nbsp;</div>
 											<label>Education:</label><span class="blue"><?php echo $recent_education; ?></span>
 										</div>
@@ -62,7 +52,7 @@ foreach($education as $key => $value) {
 									<div class="left width-20">
 										<strong style="position: relative; line-height: 2;">My Referral Id <img src="images/refferalicon.png" style="position: absolute; right: -2px; top: -1px;" valign="middle"/></strong>
 										<br/>
-										http://example.com/?refid=222
+										http://example.com/?refid=<?php echo $profile["userid"]; ?>
 									</div>
 									<div class="frnds_infor">
 										<img src="images/relation_icon.png" />
@@ -75,12 +65,27 @@ foreach($education as $key => $value) {
 								</div>
 								<div class="profile_info_block">
 									<div class="header">
-										<h2 class="title_have_image about">About<span class="icon"></span></h2>
+										<h2 class="title_have_image about">About<span class="edit_aboutus icon"></span></h2>
 									</div>
-										<div class="desc">
+										<div class="desc" id="view_about_us">
 											<?php echo $profile["about_us"]; ?>
 										</div>
-									
+										<div class="desc about" style="display:none;" id="edit_about_us">
+											<form name="form_about_us" id="form_about_us">
+												<textarea name="about_us"><?php echo $profile["about_us"]; ?></textarea>
+												<div class="clear">&nbsp;</div>
+												<div class="clear">
+													<div class="left">
+														<span class="blue">1922</span> Characters Ramaining
+													</div>
+													<div class="right">
+														<a class="button-dark add" href="javascript:void(0);" onclick="document.getElementById('form_about_us').submit();"><span><span>Save</span></span></a>
+														<a class="button-grey add" href="javascript:void(0)"><span><span>Cancel</span></span></a>
+													</div>
+												</div>
+											</form>
+										</div>
+										<div id="login_loading" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div>
 								</div>
 								<div class="profile_info_block">
 									<div class="header">
