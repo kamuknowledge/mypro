@@ -1,0 +1,1 @@
+ALTER TABLE `store_products` DROP FOREIGN KEY `FK_store_products_2`;

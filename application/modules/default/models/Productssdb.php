@@ -27,6 +27,7 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 	
 	public $session;
 	private $error;
+	public $db;
 	public $viewobj;
 	
 	
@@ -43,6 +44,7 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 	public function __construct(){
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		$this->db=Zend_Registry::get('db');
 	}
 	
 	
@@ -61,14 +63,22 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
      */
 	
 	public function getProductsList($params){
-		try {	
-			parent::SetDatabaseConnection();
-			$query = "select sp.*
-						from
-						store_products sp LEFT JOIN store_products_categories spc ON (sp.product_id=spc.product_id)
-						where spc.category_id = ".$params['id']." AND sp.statusid=1;";
+		try {			
+			$query = "select
+					sp.product_id, sp.attributes_group_id, sp.merchant_id, sp.product_sku, sp.product_title, sp.product_small_description,
+					(SELECT product_image FROM store_products_images spi
+					where spi.product_thumbnail=1 AND spi.statusid=1 AND spi.product_id=sp.product_id) AS product_image,
+
+					(select if(spp.product_discount_type='Amount' , (spp.product_price-spp.product_discount), (spp.product_price-(spp.product_price*product_discount)/100))
+					from store_products_price spp where spp.product_id=sp.product_id ORDER BY product_price ASC LIMIT 0,1) AS product_price_details
+
+					from store_products sp
+					LEFT JOIN store_products_categories spc ON (sp.product_id=spc.product_id)
+					where
+					spc.category_id = ".$params['id']." AND sp.statusid=1";
 			//exit;			
-			return Application_Model_Db::getResult($query);
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
 			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());

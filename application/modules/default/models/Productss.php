@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Default_Model_Productss extends Default_Model_Categoriesdb {
+class Default_Model_Productss extends Application_Model_Validation {
 	
 	public $session;
 	private $error;
@@ -42,8 +42,9 @@ class Default_Model_Productss extends Default_Model_Categoriesdb {
      */
 	
 	public function __construct(){
-		//$this->merchantdb = new Application_Model_Merchantdb();
-		
+	
+		$this->productssdb=new Default_Model_Productssdb();
+				
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyClientPortalerror');

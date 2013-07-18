@@ -103,5 +103,31 @@ class ProductsController extends Zend_Controller_Action {
 	}
 	
 	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     *
+     * Access is public
+     *
+     * @param	
+     * 
+     * @return  
+     */
+	
+	public function viewAction() {
+		try{
+			$this->view->title = 'Products Details';			
+			
+			
+			//exit;			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
 }
 ?>
