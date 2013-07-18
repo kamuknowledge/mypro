@@ -6,10 +6,10 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Chat.php 
-* Module	:	Chat Management Module
+* File		:	Productss.php 
+* Module	:	Product Management Module
 * Owner		:	RAM's 
-* Purpose	:	This class is used for chat management operations
+* Purpose	:	This class is used for product management operations
 * Date		:	08/05/2012
 
 
@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Application_Model_Chat extends Application_Model_Chatdb {
+class Default_Model_Productss extends Default_Model_Categoriesdb {
 	
 	public $session;
 	private $error;
@@ -45,8 +45,8 @@ class Application_Model_Chat extends Application_Model_Chatdb {
 		//$this->merchantdb = new Application_Model_Merchantdb();
 		
 		//Assigning session
-		$this->session = new Zend_Session_Namespace('MyPortal');
-                
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
+		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
 
 		//Assigning a config registry
 		$this->config = Zend_Registry::get('config');

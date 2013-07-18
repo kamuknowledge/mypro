@@ -6,10 +6,10 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Categoriesdb.php 
-* Module	:	Category Management Module
+* File		:	Friendsuggestiondb.php 
+* Module	:	Chat Management Module
 * Owner		:	RAM's 
-* Purpose	:	This class is used for category management related database operations
+* Purpose	:	This class is used for chat management related database operations
 * Date		:	08/05/2012
 
 
@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Application_Model_Categoriesdb extends Application_Model_DataBaseOperations {
+class Default_Model_Friendsuggestiondb extends Application_Model_DataBaseOperations {
 	
 	public $session;
 	private $error;
@@ -60,12 +60,12 @@ class Application_Model_Categoriesdb extends Application_Model_DataBaseOperation
      * @return  object	Returns status message.	
      */
 	
-	public function getCategoriesList(){
+	public function getFriendSuggestionList(){
 		try {	
-			parent::SetDatabaseConnection();
-			$query = "SELECT category_id, parent_category_id, category_name FROM store_categories where statusid=1";
+			//parent::SetDatabaseConnection();
+			//$query = "SELECT category_id, parent_category_id, category_name FROM store_categories where statusid=1";
 			//exit;			
-			return Application_Model_Db::getResult($query);
+			//return Application_Model_Db::getResult($query);
 			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());

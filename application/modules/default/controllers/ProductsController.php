@@ -40,8 +40,8 @@ class ProductsController extends Zend_Controller_Action {
      */
 	
 	public function init() { 	
-		$this->productss = new Application_Model_Productss();
-		$this->productssdb = new Application_Model_Productssdb();
+		$this->productss = new Default_Model_Productss();
+		$this->productssdb = new Default_Model_Productssdb();
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('default/layout');		
 	}

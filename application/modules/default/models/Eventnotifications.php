@@ -6,8 +6,8 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Friendsuggestion.php 
-* Module	:	Chat Friend Suggestion Module
+* File		:	Eventnotifications.php 
+* Module	:	Event Notifications Module
 * Owner		:	RAM's 
 * Purpose	:	This class is used for chat management operations
 * Date		:	08/05/2012
@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Application_Model_Friendsuggestion extends Application_Model_Friendsuggestiondb {
+class Default_Model_Eventnotifications extends Default_Model_Eventnotificationsdb {
 	
 	public $session;
 	private $error;

@@ -6,11 +6,11 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Signindb.php 
-* Module	:	User Signin Module
-* Owner		:	Bharath 
-* Purpose	:	This class is used for user management related database operations
-* Date		:	10/07/2013
+* File		:	Categoriesdb.php 
+* Module	:	Category Management Module
+* Owner		:	RAM's 
+* Purpose	:	This class is used for category management related database operations
+* Date		:	08/05/2012
 
 
 * Modification History
@@ -23,11 +23,13 @@
 *===================================================================================================================
 */
 
-//class Application_Model_Userdb extends Application_Model_DataBaseOperations {
-class Application_Model_Signindb extends Application_Model_Validation {
+class Default_Model_Categoriesdb extends Application_Model_DataBaseOperations {
 	
 	public $session;
 	private $error;
+	private $db;
+	public $viewobj;
+	
 	
 	/**
      * Purpose: Constructor sets sessions for portal and portalerror
@@ -41,30 +43,37 @@ class Application_Model_Signindb extends Application_Model_Validation {
 		
 	public function __construct(){
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
-		$this->error = new Zend_Session_Namespace('MyPortalerror');
+		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		$this->db=Zend_Registry::get('db'); 
 	}
 	
 	
+
+	
 	/**
-     * Purpose: Creates user and returns status of the user creation process 
+     * Purpose: Fetching category list
      *
      * Access is limited to class and extended classes
      *
-     * @param   varchar $useremail User email
-     * @param   varchar $password Password
-     * @param	varchar action action
+     * @param   int		$iuserid User Id
+     * @param	int		$istart Start value
+     * @param	int		$ilimit Limit value for fetching result set
+     * @param	varchar	$cond Search condition
      * @return  object	Returns status message.	
      */
-	protected function LoginUserdb($useremail, $password, $action){
-		try {
-			parent::SetDatabaseConnection();
-			$password = hash('sha256',$password);
-			$query = "call SPuserlogin('" . $useremail . "', '" . $password . "', '5', '" . $action . "')";
-			return Application_Model_Db::getResult($query);
+	
+	public function getCategoriesList(){
+		try {	
+			//parent::SetDatabaseConnection();
+			$query = "SELECT category_id, parent_category_id, category_name FROM store_categories where statusid=1";
+			$res=$this->db->query($query);
+			return $res->fetchAll();			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
 	}
+	
+	
 }
 ?>

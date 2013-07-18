@@ -40,8 +40,8 @@ class ChatController extends Zend_Controller_Action {
      */
 	
 	public function init() { 			
-		$this->chat = new Application_Model_Chat();
-		$this->chatdb = new Application_Model_Chatdb();
+		$this->chat = new Default_Model_Chat();
+		$this->chatdb = new Default_Model_Chatdb();
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('default/layout');		
 	}

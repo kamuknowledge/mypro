@@ -42,8 +42,8 @@ class CategoriesController extends Zend_Controller_Action {
 	public function init() { 
 		/*echo "store/index/init";
 		exit;  */		
-		$this->categories = new Application_Model_Categories();
-		$this->categoriesdb = new Application_Model_Categoriesdb();
+		$this->categories = new Default_Model_Categories();
+		$this->categoriesdb = new Default_Model_Categoriesdb();
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('store/layout');		
 	}

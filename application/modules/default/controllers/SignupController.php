@@ -47,7 +47,7 @@ class SignupController extends Zend_Controller_Action {
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
 				
-		$this->signup = new Application_Model_Signup();
+		$this->signup = new Default_Model_Signup();
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('store/layout');		
 	}

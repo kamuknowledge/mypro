@@ -43,7 +43,7 @@ class SigninController extends Zend_Controller_Action {
 	public function init() { 
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyClientPortal');		
-		$this->signin = new Application_Model_Signin();
+		$this->signin = new Default_Model_Signin();
         $this->_helper->layout->setLayout('default/layout');
 	}
 	

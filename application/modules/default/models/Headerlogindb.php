@@ -6,10 +6,10 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Headermenudb.php 
-* Module	:	Header Menu Module
+* File		:	Headerlogindb.php 
+* Module	:	Header Login Module
 * Owner		:	RAM's 
-* Purpose	:	This class is used for Header Menu related database operations
+* Purpose	:	This class is used for Header Login related database operations
 * Date		:	08/05/2012
 
 
@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Application_Model_Headermenudb extends Application_Model_DataBaseOperations {
+class Default_Model_Headerlogindb extends Application_Model_DataBaseOperations {
 	
 	public $session;
 	private $error;

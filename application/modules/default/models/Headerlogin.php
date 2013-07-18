@@ -6,10 +6,10 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Productss.php 
-* Module	:	Product Management Module
+* File		:	Headerlogin.php 
+* Module	:	Header Login Module
 * Owner		:	RAM's 
-* Purpose	:	This class is used for product management operations
+* Purpose	:	This class is used for header login operations
 * Date		:	08/05/2012
 
 
@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Application_Model_Productss extends Application_Model_Categoriesdb {
+class Default_Model_Headerlogin extends Default_Model_Headerlogindb {
 	
 	public $session;
 	private $error;
@@ -45,8 +45,8 @@ class Application_Model_Productss extends Application_Model_Categoriesdb {
 		//$this->merchantdb = new Application_Model_Merchantdb();
 		
 		//Assigning session
-		$this->session = new Zend_Session_Namespace('MyClientPortal');
-		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		$this->session = new Zend_Session_Namespace('MyPortal');
+                
 
 		//Assigning a config registry
 		$this->config = Zend_Registry::get('config');

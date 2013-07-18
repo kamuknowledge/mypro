@@ -6,11 +6,11 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Userdb.php 
-* Module	:	User Management Module
-* Owner		:	RAM's 
+* File		:	Signindb.php 
+* Module	:	User Signin Module
+* Owner		:	Bharath 
 * Purpose	:	This class is used for user management related database operations
-* Date		:	08/05/2012
+* Date		:	10/07/2013
 
 
 * Modification History
@@ -24,7 +24,7 @@
 */
 
 //class Application_Model_Userdb extends Application_Model_DataBaseOperations {
-class Application_Model_Signupdb extends Application_Model_Validation {
+class Default_Model_Signindb extends Application_Model_Validation {
 	
 	public $session;
 	private $error;
@@ -40,8 +40,9 @@ class Application_Model_Signupdb extends Application_Model_Validation {
 	
 		
 	public function __construct(){
-		$this->session = new Zend_Session_Namespace('MyPortal');
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyPortalerror');
+		$this->db=Zend_Registry::get('db');
 	}
 	
 	
@@ -50,23 +51,22 @@ class Application_Model_Signupdb extends Application_Model_Validation {
      *
      * Access is limited to class and extended classes
      *
-     * @param   varchar $ifirstname First name
-     * @param   varchar $ilastname Last name
-     * @param	int 	$iusertype User type id
-     * @param	varchar	$iemailid Email id
-     * @param	int 	$irole Role id
-     * @param	int		$istatus Status Id
-     * @param	int		$icreator User Creator Id
-     * @param	varchar $icreatoraction User saving action
-     * @param	boolean	$iupdate Flag for updation of user records
+     * @param   varchar $useremail User email
+     * @param   varchar $password Password
+     * @param	varchar action action
      * @return  object	Returns status message.	
      */
-	protected function saveUser($firstname, $lastname, $useremail, $phonenumber, $password, $gender, $action){
+	protected function LoginUserdb($useremail, $password, $action){
 		try {
 			parent::SetDatabaseConnection();
 			$password = hash('sha256',$password);
-			$query = "call SPregisteruser('" . $firstname . "', '" . $lastname . "', '" . $useremail . "', '" . $password . "', '" . $phonenumber . "', '" . $gender . "','" . $action . "')";
-			return Application_Model_Db::getResult($query);
+			
+			//$query = "call SPuserlogin('" . $useremail . "', '" . $password . "', '5', '" . $action . "')";
+			//return Application_Model_Db::getResult($query);
+			
+			$stmt = $this->db->query("CALL SPuserlogin(?, ?, ? , ?)", array($useremail,$password,'5',$action));			
+			return $stmt->fetchAll();
+			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

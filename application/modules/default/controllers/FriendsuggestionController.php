@@ -40,8 +40,8 @@ class FriendsuggestionController extends Zend_Controller_Action {
      */
 	
 	public function init() {			
-		$this->Friendsuggestion = new Application_Model_Friendsuggestion();
-		$this->Friendsuggestiondb = new Application_Model_Friendsuggestiondb();
+		$this->Friendsuggestion = new Default_Model_Friendsuggestion();
+		$this->Friendsuggestiondb = new Default_Model_Friendsuggestiondb();
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('default/layout');		
 	}

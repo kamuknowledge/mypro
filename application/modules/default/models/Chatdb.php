@@ -6,7 +6,7 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Friendsuggestiondb.php 
+* File		:	Chatdb.php 
 * Module	:	Chat Management Module
 * Owner		:	RAM's 
 * Purpose	:	This class is used for chat management related database operations
@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Application_Model_Friendsuggestiondb extends Application_Model_DataBaseOperations {
+class Default_Model_Chatdb extends Application_Model_DataBaseOperations {
 	
 	public $session;
 	private $error;
@@ -60,7 +60,7 @@ class Application_Model_Friendsuggestiondb extends Application_Model_DataBaseOpe
      * @return  object	Returns status message.	
      */
 	
-	public function getFriendSuggestionList(){
+	public function getChatList(){
 		try {	
 			//parent::SetDatabaseConnection();
 			//$query = "SELECT category_id, parent_category_id, category_name FROM store_categories where statusid=1";

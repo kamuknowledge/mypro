@@ -40,8 +40,8 @@ class HeaderloginController extends Zend_Controller_Action {
      */
 	
 	public function init() {			
-		$this->headerlogin = new Application_Model_Headerlogin();
-		$this->headerlogindb = new Application_Model_Headerlogindb();
+		$this->headerlogin = new Default_Model_Headerlogin();
+		$this->headerlogindb = new Default_Model_Headerlogindb();
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('default/layout');		
 	}

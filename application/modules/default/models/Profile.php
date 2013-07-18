@@ -6,10 +6,10 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Headermenu.php 
-* Module	:	Header Menu Module
+* File		:	Categories.php 
+* Module	:	Category Management Module
 * Owner		:	RAM's 
-* Purpose	:	This class is used for Header Menu operations
+* Purpose	:	This class is used for category management operations
 * Date		:	08/05/2012
 
 
@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Application_Model_Headermenu extends Application_Model_Headermenudb {
+class Default_Model_Profile extends Default_Model_Profiledb {
 	
 	public $session;
 	private $error;

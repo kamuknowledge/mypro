@@ -6,10 +6,10 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Categories.php 
-* Module	:	Category Management Module
+* File		:	Chat.php 
+* Module	:	Chat Management Module
 * Owner		:	RAM's 
-* Purpose	:	This class is used for category management operations
+* Purpose	:	This class is used for chat management operations
 * Date		:	08/05/2012
 
 
@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Application_Model_Profile extends Application_Model_Profiledb {
+class Default_Model_Chat extends Default_Model_Chatdb {
 	
 	public $session;
 	private $error;

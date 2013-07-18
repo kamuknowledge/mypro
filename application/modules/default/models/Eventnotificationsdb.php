@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Application_Model_Eventnotificationsdb extends Application_Model_DataBaseOperations {
+class Default_Model_Eventnotificationsdb extends Application_Model_DataBaseOperations {
 	
 	public $session;
 	private $error;

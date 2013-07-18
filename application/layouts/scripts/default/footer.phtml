@@ -62,3 +62,30 @@
 			<span>&copy; 1996-2013 GetLinc.com, Inc. or its affiliates</span>
 		</div>
 	</div>
+	
+<?php
+$db_profiler=Zend_Registry::get('db'); 
+$profiler = $db_profiler->getProfiler()->setEnabled(true);
+//$query123 = $profiler->getQueryProfiles();
+
+$totalTime    = $profiler->getTotalElapsedSecs();
+$queryCount   = $profiler->getTotalNumQueries();
+$longestTime  = 0;
+$longestQuery = null;
+
+foreach ($profiler->getQueryProfiles() as $query) {
+	if ($query->getElapsedSecs() > $longestTime) {
+	$longestTime  = $query->getElapsedSecs();
+	$longestQuery = $query->getQuery();	
+	}
+	echo "<br><b>Query : </b>".$query->getQuery()."<br>";
+	echo "<br><b>Query Time : </b>".$query->getElapsedSecs()."<br><br><br>";
+	
+}
+
+echo 'Executed ' . $queryCount . ' queries in ' . $totalTime .' seconds' . "\n<br><br>";
+echo 'Average query length: ' . $totalTime / $queryCount .' seconds' . "\n<br><br>";
+echo 'Queries per second: ' . $queryCount / $totalTime . "\n<br><br>";
+echo 'Longest query length: ' . $longestTime . "\n<br><br>";
+echo "Longest query: \n" . $longestQuery . "\n<br><br>";
+?>

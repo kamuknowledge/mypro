@@ -6,10 +6,10 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Chatdb.php 
-* Module	:	Chat Management Module
+* File		:	Productssdb.php 
+* Module	:	Product Management Module
 * Owner		:	RAM's 
-* Purpose	:	This class is used for chat management related database operations
+* Purpose	:	This class is used for product management related database operations
 * Date		:	08/05/2012
 
 
@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Application_Model_Chatdb extends Application_Model_DataBaseOperations {
+class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 	
 	public $session;
 	private $error;
@@ -49,7 +49,7 @@ class Application_Model_Chatdb extends Application_Model_DataBaseOperations {
 
 	
 	/**
-     * Purpose: Fetching category list
+     * Purpose: Fetching product list
      *
      * Access is limited to class and extended classes
      *
@@ -60,12 +60,15 @@ class Application_Model_Chatdb extends Application_Model_DataBaseOperations {
      * @return  object	Returns status message.	
      */
 	
-	public function getChatList(){
+	public function getProductsList($params){
 		try {	
-			//parent::SetDatabaseConnection();
-			//$query = "SELECT category_id, parent_category_id, category_name FROM store_categories where statusid=1";
+			parent::SetDatabaseConnection();
+			$query = "select sp.*
+						from
+						store_products sp LEFT JOIN store_products_categories spc ON (sp.product_id=spc.product_id)
+						where spc.category_id = ".$params['id']." AND sp.statusid=1;";
 			//exit;			
-			//return Application_Model_Db::getResult($query);
+			return Application_Model_Db::getResult($query);
 			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());

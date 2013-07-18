@@ -40,8 +40,8 @@ class EventnotificationsController extends Zend_Controller_Action {
      */
 	
 	public function init() {			
-		$this->Eventnotifications = new Application_Model_Eventnotifications();
-		$this->Eventnotificationsdb = new Application_Model_Eventnotificationsdb();
+		$this->Eventnotifications = new Default_Model_Eventnotifications();
+		$this->Eventnotificationsdb = new Default_Model_Eventnotificationsdb();
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('default/layout');		
 	}

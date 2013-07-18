@@ -42,8 +42,8 @@ class ProfileController extends Zend_Controller_Action {
 	public function init() { 
 		/*echo "store/index/init";
 		exit;  */		
-		$this->profile = new Application_Model_Profile();
-		$this->profiledb = new Application_Model_Profiledb();
+		$this->profile = new Default_Model_Profile();
+		$this->profiledb = new Default_Model_Profiledb();
         $this->_helper->layout->setLayout('default/profile_layout');
 		//$this->setLayoutAction('store/layout');		
 	}

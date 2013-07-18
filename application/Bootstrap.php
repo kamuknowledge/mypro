@@ -120,6 +120,31 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			$front->registerPlugin(new My_Controller_Plugin_Acl());*/
 		}
         
-	}	
+	}
+
+
+	/*
+	 * Initializing plugins requiredsezsz
+	 */   
+    public function _initDb() {
+        $config = Zend_Registry::get('config');
+		$params = array(
+		'host'     => $config->db->params->host,
+		'username' => $config->db->params->username,
+		'password' => $config->db->params->password,
+		'dbname'   => $config->db->params->dbname,
+		'profiler' => TRUE  // turn on profiler
+		// set to false to disable (disabled by default)
+		);
+		$db = Zend_Db::factory('PDO_MYSQL', $params);		
+		$db->getConnection();		
+		if (!Zend_Registry::isRegistered('db')) {
+			Zend_Registry::set('db', $db);    
+		}		
+    }
+	
+
+	
+	
 }
 

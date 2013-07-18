@@ -40,8 +40,8 @@ class HeadermenuController extends Zend_Controller_Action {
      */
 	
 	public function init() { 			
-		$this->headermenu = new Application_Model_Headermenu();
-		$this->headermenudb = new Application_Model_Headermenudb();
+		$this->headermenu = new Default_Model_Headermenu();
+		$this->headermenudb = new Default_Model_Headermenudb();
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('default/layout');		
 	}

@@ -26,7 +26,7 @@
 
 
 //class Application_Model_Users extends Application_Model_Validation {
-class Application_Model_Signup extends Application_Model_Signupdb {
+class Default_Model_Signup extends Default_Model_Signupdb {
 	
 	public $session;
 	private $error;
