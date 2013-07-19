@@ -40,7 +40,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
     
     
-    
+    protected function _initPlaceholders()
+    {        
+		$view = new Zend_View();
+		$view->headTitle('Getlinc ')->setSeparator(' - ');	       
+    }
     
     
 	/*
@@ -144,6 +148,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		//print_r(Zend_Registry::get('db'));
     }
 	
+
 
 	
 	

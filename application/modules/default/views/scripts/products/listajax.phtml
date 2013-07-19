@@ -1,17 +1,6 @@
 <?php
 //echo "<pre>";
 //print_r($this->ProductsList);
-?>
-<div class="main_body">
-<div class="left width-100">
-
-
-<div class="product_list">
-<h4>Digital Cameras Best Sellers</h4>
-</div>
-<br>
-
-<?php
 $i=1; 
 $special_array   = array(" ",".",";","|","/",",","'","[","]","{","}","--",":","~","`","!","@","#","$","%","^","&","*","(",")","+","?");
 $replace = '-';
@@ -52,13 +41,7 @@ if($i%4==1){
 	<h4></h4>
 <?php }$i++; }?>
 
-<input type="hidden" name="cid" id="cid" value="<?php echo $this->id;?>" />
 <div class="more_box" id="<?php echo $this->start;?>">
 	<div class="view_more_loader" id="product_view_more_loading"><img src="<?php echo $this->baseUrl('public/default/images')."/ajax-loader.gif" ?>" ></div>
 	<div class="view_more_products" id="product_view_more">View More..</div>
-</div>
-	
-
-</div>
-<div class="clear"></div>
 </div>

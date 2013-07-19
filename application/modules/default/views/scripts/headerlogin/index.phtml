@@ -2,12 +2,6 @@
 $this->session = new Zend_Session_Namespace('MyClientPortal');
 $isSignedIn = $this->session->isSignedIn;
 ?>
-<script type="text/javascript">
-$(document).ready(function() {
- validatelogin();
-});
-
-</script>
 <div class="header-top">
 			<div class="wrapper">
 				<div id="logo"><a href="<?php echo $this->baseUrl(); ?>"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/Logo.png" title="GetLinc.com" alt="getLinc.com"/></a></div>

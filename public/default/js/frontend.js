@@ -8,11 +8,11 @@
  */
 function validatelogin() {
 	
-	 var form = jQuery("#login");
+	 var form = $("#login");
 		// validate signup form on keyup and submit
-	 jQuery.ajaxSetup({async:false});
+	 $.ajaxSetup({async:false});
 	 
-		var validator = jQuery("#login").validate({
+		var validator = $("#login").validate({
 			
 			rules: {
 				password:
@@ -37,14 +37,14 @@ function validatelogin() {
 			messages: {
 				password: {
 					required: "Please Enter Password",
-					minlength: jQuery.format("Please Enter at least {0} characters"),
-					maxlength: jQuery.format("Please Enter maximum {0} characters"),
+					minlength: $.format("Please Enter at least {0} characters"),
+					maxlength: $.format("Please Enter maximum {0} characters"),
 					pass: "Password must contain a minimum of one number and one uppercase letter",
 					nospecialcharacter: "No Special characters are allowed"
 				},
 				username: {
 					required: "Please Enter Username",
-					maxlength: jQuery.format("Please Enter maximum {0} characters"),
+					maxlength: $.format("Please Enter maximum {0} characters"),
 					email: "Please Enter valid Username",
 					emailparse: "Only Alpha numeric with .@_ are allowed",
 					//emailMX: "Please Enter valid Username"

@@ -10,3 +10,21 @@ label.error{
 .error_class{
 	color:#FF0000;
 }
+
+
+.view_more_loader{
+	width:10px;
+	margin-left:auto;
+	margin-right:auto; 
+	display:none;
+}
+
+.view_more_products{
+	width:200px;
+	margin:auto;
+	color:#000000;
+	font-size:14px;
+	font-weight:bold;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	text-align:center;
+}

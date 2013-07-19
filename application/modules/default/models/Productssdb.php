@@ -63,7 +63,9 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
      */
 	
 	public function getProductsList($params){
-		try {			
+		try {	
+			if(trim($params['start'])==''){ $start = 0; }else{ $start = $params['start'];}
+			
 			$query = "select
 					sp.product_id, sp.attributes_group_id, sp.merchant_id, sp.product_sku, sp.product_title, sp.product_small_description,
 					(SELECT product_image FROM store_products_images spi
@@ -75,7 +77,8 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 					from store_products sp
 					LEFT JOIN store_products_categories spc ON (sp.product_id=spc.product_id)
 					where
-					spc.category_id = ".$params['id']." AND sp.statusid=1";
+					sp.statusid=1 ORDER BY ".$params['orderby']." ".$params['ordertype']." LIMIT ".$start.", ".$params['limit']."";
+					//spc.category_id = ".$params['id']." AND sp.statusid=1";
 			//exit;			
 			$stmt = $this->db->query($query);			
 			return $stmt->fetchAll();

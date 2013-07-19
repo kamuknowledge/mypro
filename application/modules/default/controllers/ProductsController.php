@@ -83,15 +83,72 @@ class ProductsController extends Zend_Controller_Action {
      */
 	
 	public function listAction() {
-		try{
-			$this->view->title = 'Products List';			
+		try{				
+			$this->view->headTitle()->append('Products List');
+			//$this->view->headTitle()->prepend('.:');
+
+			//$this->view->headScript()->appendFile($this->view->baseUrl('public/default').'/js/jquery-1.2.6.pack.js','text/javascript'); //array('conditional' => 'lt IE 7')
+			$this->view->headScript()->appendFile($this->view->baseUrl('public/default').'/js/developer_products.js','text/javascript'); 
 			
-			$params = $this->_getAllParams();			
+			/*
+			$this->headScript()->appendFile('/js/prototype.js')
+								->appendScript($onloadScript);
+			*/
+								
+			
+			$params = $this->_getAllParams();
+			$params['limit'] = 8;
+			$params['orderby'] = 'product_title';
+			$params['ordertype'] = 'ASC';
+			
+			if(!isset($params['start'])){$params['start'] = '0';}
+			if(isset($params['start'])){$this->view->start = $params['start'];}
+			
+			$this->view->id = $params['id'];
+			
+			//print_r($params);
+			//Array ( [controller] => products [action] => list [id] => 6 [module] => default ) 
+			
 			/*
 			$request = $this->getRequest();
 			$Request_Values = $request->getGet();
 			print_r($Request_Values);
 			*/
+			
+			$ProductsList = $this->productssdb->getProductsList($params);			
+			$this->view->ProductsList = $ProductsList;
+			//exit;			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+		/**
+     * Purpose: Index action
+     *
+     * Access is public
+     *
+     * @param	
+     * 
+     * @return  
+     */
+	
+	public function listajaxAction() {
+		try{
+			$this->_helper->layout->disableLayout();
+			$params = $this->_getAllParams();
+			print_r($params);
+			$params['limit'] = 8;
+			$params['orderby'] = 'product_title';
+			$params['ordertype'] = 'ASC';
+			
+			if(isset($params['start'])){$params['start'] = $params['start']+$params['limit'];}
+			if(isset($params['start'])){$this->view->start = $params['start'];}
+			
+			$this->view->id = $params['id'];
 			
 			$ProductsList = $this->productssdb->getProductsList($params);			
 			$this->view->ProductsList = $ProductsList;
