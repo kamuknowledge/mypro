@@ -73,5 +73,29 @@ class Default_Model_Profile extends Application_Model_Validation {
 		$this->viewobj= $viewRenderer->view;
 	}
 	
+	public function edit_about_us(Array $params) {
+		try{
+			$about_us = trim($params['about_us']);
+			$error = 0;
+			if($about_us == '') {				// Validation for about us
+            	$this->error->error_about_us = Error_about_us_empty;
+            	$error = 1;
+            }
+            if($error == 1) {
+            	$this->error->error_aboutus_values = $params;
+            	$error = 0;
+            	return false;
+            }         
+            /*
+             * Validation ends here
+             */
+			$outpt = $this->Profiledb->updateAboutus($about_us);
+			return $outpt;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}	
+	}
+	
 }
 ?>

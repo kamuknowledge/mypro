@@ -151,7 +151,7 @@ $(document).ready(function(){
 			var str = $("#form_about_us").serialize();
 			$.ajax({
 				type : "POST",
-				url : baseUrl+"/profile/updateAboutus",
+				url : baseUrl+"/profile/editaboutus",
 				data : str,
 				beforeSend : function() {
 					$("#edit_about_us").hide();
@@ -159,11 +159,19 @@ $(document).ready(function(){
 				},
 				success : function(data) {
 					$("#loading_about_us").hide();
-					//$("#view_about_us").html(data);
-					$("#view_about_us").show();
+					if(data == 1) {						
+						$("#about_us").text(about_us);
+						$("#view_about_us").show();
+					} else {
+						$("#edit_about_us").html(data);
+						$("#edit_about_us").show();
+					}
 					return false;
 				}
 			});
 		}
 	});
-}) 
+});
+function submit_form(){
+$("#form_about_us").submit();
+}

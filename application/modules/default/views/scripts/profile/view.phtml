@@ -71,19 +71,20 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 											<?php echo $profile["about_us"]; ?>
 										</div>
 										<div class="desc about" style="display:none;" id="edit_about_us">
-											<form name="form_about_us" id="form_about_us">
-												<textarea name="about_us"><?php echo $profile["about_us"]; ?></textarea>
+											<form name="form_about_us" id="form_about_us" method="POST" action="#">
+												<textarea name="about_us" id="about_us"><?php echo $profile["about_us"]; ?></textarea>
 												<div class="clear">&nbsp;</div>
 												<div class="clear">
 													<div class="left">
-														<span class="blue">1922</span> Characters Ramaining
+														<span class="blue">1922</span> Characters Remaining
 													</div>
 													<div class="right">
-														<a class="button-dark add" href="javascript:void(0);" onclick="document.getElementById('form_about_us').submit();"><span><span>Save</span></span></a>
+														<a class="button-dark add" href="javascript:void(0);" onclick="submit_form()"><span><span>Save</span></span></a>
 														<a class="button-grey add" href="javascript:void(0)"><span><span>Cancel</span></span></a>
 													</div>
 												</div>
 											</form>
+											<div id="loading_about_us" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div>
 										</div>
 										<div id="login_loading" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div>
 								</div>

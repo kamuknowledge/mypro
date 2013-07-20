@@ -126,9 +126,25 @@ class ProfileController extends Zend_Controller_Action {
 		}
 	}
 	
-	public function updateAboutusAction() {
-		try{			
-			return 1;
+	public function editaboutusAction() {
+		try{
+			$params = $this->_getAllParams();	
+			$this->_helper->layout->setLayout('default/empty_layout');
+			$request = $this->getRequest();
+			$Request_Values = $request->getPost();			
+			if ($request->isPost()) {
+				if(!$this->profile->edit_about_us($params)) {
+					// return 1;
+					// redirect to current url
+					
+				} else {
+					echo 1;
+					exit;
+				}
+			}else{			
+				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
+				//return 0;
+			}
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

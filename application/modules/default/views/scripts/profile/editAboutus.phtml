@@ -1,16 +1,21 @@
-
-										<div class="desc about">
-											<textarea>
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</textarea>
-											<div class="clear">&nbsp;</div>
-											<div class="clear">
-												<div class="left">
-													<span class="blue">1922</span> Characters Ramaining
-												</div>
-												<div class="right">
-													<a class="button-dark add" href="javascript:void(0)"><span><span>Save</span></span></a>
-													<a class="button-grey add" href="javascript:void(0)"><span><span>Cancel</span></span></a>
-												</div>
-											</div>
-										</div>
+<?php
+	$error = $this;
+?>
+<textarea name="about_us" <?php if($error->error_about_us != '') { echo 'class="error"'; } ?>><?php if(is_array($error->error_aboutus_values)) {echo $error->error_aboutus_values['about_us'];} ?></textarea>
+<?php 
+		if($error->error_about_us != '') {
+			echo '<label for="about_us" generated="true" class="error">'.$error->error_about_us.'</label>';
+			//echo '<label for="email_id" generated="true" class="" style="color:#FF0000;">' .$error->error_user_email . '</label>';
+			$error->error_about_us = '';
+		}
+?>
+<div class="clear">&nbsp;</div>
+<div class="clear">
+	<div class="left">
+		<span class="blue">1922</span> Characters Remaining
+	</div>
+	<div class="right">
+		<a class="button-dark add" href="javascript:void(0);" onclick="submit_form()"><span><span>Save</span></span></a>
+		<a class="button-grey add" href="javascript:void(0)"><span><span>Cancel</span></span></a>
+	</div>
+</div>

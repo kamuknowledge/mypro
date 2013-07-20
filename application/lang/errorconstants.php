@@ -432,5 +432,8 @@
 	 */
 	define('Error_login_password_empty', 'Please Enter Password');
 	define('Error_login_user_email_empty', 'Please Enter Email');
-	
+	/* 
+	 *  Error messages for Profile edit
+	 */
+	define('Error_about_us_empty', 'About us should not empty');
 ?>
