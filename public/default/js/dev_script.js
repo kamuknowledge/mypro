@@ -148,7 +148,9 @@ $(document).ready(function(){
 			}
 		},
 		submitHandler: function(form) {
-			var str = $("#form_about_us").serialize();
+			var str = $("#form_about_us").serializeArray();
+			var input_data = postArray("#form_about_us");
+			var about_us = input_data.about_us;
 			$.ajax({
 				type : "POST",
 				url : baseUrl+"/profile/editaboutus",
@@ -159,8 +161,8 @@ $(document).ready(function(){
 				},
 				success : function(data) {
 					$("#loading_about_us").hide();
-					if(data == 1) {						
-						$("#about_us").text(about_us);
+					if(data == 1) {
+						$("#view_about_us").text(about_us);
 						$("#view_about_us").show();
 					} else {
 						$("#edit_about_us").html(data);
@@ -173,5 +175,11 @@ $(document).ready(function(){
 	});
 });
 function submit_form(){
-$("#form_about_us").submit();
+	$("#form_about_us").submit();
+}
+function postArray(form){ 
+	var data = {}; 
+	form = $(form).serializeArray(); 
+	for(var i in form) data[form[i].name] = form[i].value; 
+	return data; 
 }

@@ -95,20 +95,18 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 									</div>
 										<div class="desc">
 										<?php foreach($experiance as $key => $value) { ?>
-										<div>
+										<div class="experiance_view" id="experiance_view_<?php echo $key+1; ?>">
 											<h2 class="title_have_image exprce"><?php echo $value["job_title"]; ?><span class="icon"></span></h2>
 											<span class="caption"><?php echo $value["company_name"]; ?></span>
 											<span class="information"><?php echo $value["from_month"]; ?> <?php echo $value["from_year"]; ?> - To <?php echo ($value["present_working"]) ? "Present" : $value["to_month"]." ".$value["to_year"]; ?> (0 years 3 months ) | <?php echo $value["job_location"]; ?></span>
 											<p><?php echo $value["company_description"]; ?></p>
 										</div>
-										<?php } ?>
-										<!--div>
-											<h2 class="title_have_image exprce">Sr Software Engineer<span class="icon"></span></h2>
-											<span class="caption">Company Name</span>
-											<span class="information">March 2013 - To Present (0 years 3 months ) | Hyderabad</span>
-<p>											
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-										</div-->
+										<div class="experiance_edit" id="experiance_edit_<?php echo $key+1; ?>">
+											<form class="experiance_form" >
+												
+											</form>
+										</div>
+										<?php } ?>									
 										</div>
 									
 								</div>
@@ -119,20 +117,13 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 									</div>
 										<div class="desc">
 										<?php foreach($education as $key => $value) { ?>
-										<div>
+										<div class="education" id="">
 											<h2 class="title_have_image exprce"><?php echo $value["school_name"]; ?><span class="icon"></span></h2>
 											<span class="caption"><?php echo $value["school_name"].", ".$value["specialization"]; ?></span>
 											<span class="information"><?php echo $value["from_year"]; ?>-<?php echo $value["to_year"]; ?></span>
 											<p><?php echo $value["education_notes"]; ?></p>
 										</div>
 										<?php } ?>
-										<!--div>
-											<h2 class="title_have_image exprce">School Name<span class="icon"></span></h2>
-											<span class="caption">Inter, MPC</span>
-											<span class="information">2001-2002</span>
-<p>											
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-										</div-->
 										</div>
 									
 								</div>
