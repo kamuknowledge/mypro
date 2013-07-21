@@ -150,6 +150,36 @@ class ProfileController extends Zend_Controller_Action {
 			throw new Exception($e->getMessage());
 		}
 	}
+	
+	public function addeditexperianceAction() {
+		try{
+			$params = $this->_getAllParams();
+			$request = $this->getRequest();
+			$Request_Values = $request->getPost();
+			if ($request->isPost()) {
+				$this->_helper->layout->setLayout('default/empty_layout');
+				if(isset($params["type"]) && $params["type"] == "edit") {
+					$id = $params["id"];
+					if($id)
+					{
+						$this->view->UserDetails = $this->profiledb->getUserExperiance($id);
+						// return 1;
+						// redirect to current url
+						
+					} else {
+						echo 1;
+						exit;
+					}
+				}
+			}else{			
+				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
+				//return 0;
+			}
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 
 }
 ?>

@@ -94,7 +94,31 @@ class Default_Model_Profile extends Application_Model_Validation {
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
-		}	
+		}
+	}
+	
+	public function add_edit_experiance(Array $params) {
+		try{
+			$about_us = trim($params['about_us']);
+			$error = 0;
+			if($about_us == '') {				// Validation for about us
+            	$this->error->error_about_us = Error_about_us_empty;
+            	$error = 1;
+            }
+            if($error == 1) {
+            	$this->error->error_aboutus_values = $params;
+            	$error = 0;
+            	return false;
+            }
+            /*
+             * Validation ends here
+             */
+			$outpt = $this->Profiledb->updateAboutus($about_us);
+			return $outpt;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
 	}
 	
 }

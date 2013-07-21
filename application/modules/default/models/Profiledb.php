@@ -130,10 +130,13 @@ class Default_Model_Profiledb  {
 		}
 	}
 	
-	public function getUserExperiance() {
+	public function getUserExperiance($id) {
 		try {	
 			//parent::SetDatabaseConnection();
-			$query = "SELECT ue.* FROM user_experience ue WHERE ue.userid = '".$this->userid."' AND ue.statusid = 1;";
+			$query = "SELECT ue.* FROM user_experience ue WHERE ue.userid = '".$this->userid."'";
+			if($id)
+				$query .= " AND ue.experience_id = ".$id;
+			$query .= " AND ue.statusid = 1;";
 			//exit;
 			$stmt = $this->db->query($query);			
 			return $stmt->fetchAll();
