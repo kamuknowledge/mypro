@@ -245,7 +245,7 @@ class Admin_Model_Attributesgroupsdb extends Application_Model_Validation {
 						AND asm.attribute_id = ps.attribute_id
 						AND pag.attributes_group_id = pas.attributes_group_id
 						AND pag.attributes_group_id=".$attributes_group_id."
-						ORDER BY pas.attributes_set_title ASC);";
+						ORDER BY pas.attributes_set_title ASC) ORDER BY pa.attribute_title ASC";
 			//exit;
 			return Application_Model_Db::getResult($query);
 			

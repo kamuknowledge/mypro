@@ -28,7 +28,7 @@ $AttributeDetails = $this->AttributeDetails;
 				  <label class="control-label" for="typeahead">Attribute Title<span class="req">*</span></label>
 				  <div class="controls">
 					<div class="mid_Control-profile float-left">
-					<input class="field" tabindex="1" id="attribute_title" name="attribute_title" type="text" value="<?php if(is_array($error->error_updateattribute_values)) { echo strip_tags($error->error_updateattribute_values['attribute_title']);}else{ echo strip_tags($AttributeDetails['attribute_title']);}?>" maxlength="20" size="40" title=""/>
+					<input class="field" tabindex="1" id="attribute_title" name="attribute_title" type="text" value="<?php if(is_array($error->error_updateattribute_values)) { echo strip_tags($error->error_updateattribute_values['attribute_title']);}else{ echo strip_tags($AttributeDetails['attribute_title']);}?>" maxlength="255" size="40" title=""/>
 					</div>
 					<div class="error_message">
 					   <?php 

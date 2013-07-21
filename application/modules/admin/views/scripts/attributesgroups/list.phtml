@@ -91,12 +91,11 @@ $cn='';
 									<a class="btn btn-danger" href="<?php echo $this->baseUrl('admin/attributesgroups/delete/attributeId/') . $each_attribute['attributes_group_id'];?>" onClick="return confirm('Do you want to continue?')">
 										<i class="icon-trash icon-white"></i> 
 										Delete
-									</a>
+									</a>									
 									
-									
-									
+									<?php if($each_attribute['group_config']==1){?>
 									<a class="btn btn-small" href="<?php echo $this->baseUrl('admin/attributesgroups/attributeconfig/attributeId/') . $each_attribute['attributes_group_id'];?>"><i class="icon-cog"></i> Settings</a>
-									
+									<?php }?>
 								</td>
 							</tr>
 							<?php }?>

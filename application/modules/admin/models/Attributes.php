@@ -113,7 +113,7 @@ class Admin_Model_Attributes extends Admin_Model_Attributesdb {
             	$this->error->error_create_attribute_title = Error_Create_attribute_title_invalid;
             	$error = 1;
             	//return false;
-            } else if(strlen($attribute_title) >20) {
+            } else if(strlen($attribute_title) >255) {
             	$this->error->error_create_attribute_title = Error_Create_attribute_title_min;
             	$error = 1;
             } else if(strlen($attribute_title) < 3) {
@@ -380,7 +380,7 @@ class Admin_Model_Attributes extends Admin_Model_Attributesdb {
 					$params['attribute_title'] = '';
 					$this->error->error_updateattribute_title = Error_update_attribute_title_invalid;
 					$error = 1;
-				} else if(strlen($attribute_title) >20) {
+				} else if(strlen($attribute_title) >255) {
 					$this->error->error_updateattribute_title = Error_update_attribute_title_max;
 					$error = 1;
 				} else if($this->checkAllreadyExists('store_products_attributes','attribute_title',$attribute_title,'attribute_id',$attributeId,'')>=1) { 

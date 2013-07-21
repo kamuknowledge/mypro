@@ -168,7 +168,7 @@ class Admin_Model_Category extends Admin_Model_Categorydb {
             	$this->error->error_create_category_name = Error_Create_category_name_invalid;
             	$error = 1;
             	//return false;
-            } else if(strlen($category_name) >20) {
+            } else if(strlen($category_name) >255) {
             	$this->error->error_create_category_name = Error_Create_category_name_min;
             	$error = 1;
             } else if(strlen($category_name) < 3) {
@@ -397,11 +397,11 @@ class Admin_Model_Category extends Admin_Model_Categorydb {
 				if($category_name == '') {				//Validation for firstname
 					$this->error->error_updatecategory_name = Error_update_category_name_empty;
 					$error = 1;
-				} else if(!$this->validate_alphanumeric_space($category_name)) {
+				} else if(!$this->validate_alphanumeric_address($category_name)) {
 					$params['category_name'] = '';
 					$this->error->error_updatecategory_name = Error_update_category_name_invalid;
 					$error = 1;
-				} else if(strlen($category_name) >20) {
+				} else if(strlen($category_name) >255) {
 					$this->error->error_updatecategory_name = Error_update_category_name_max;
 					$error = 1;
 				} else if($this->checkAllreadyExists('store_categories','category_name',$category_name,'category_id',$categoryId,$conditionAllreadyExists)>=1) { 

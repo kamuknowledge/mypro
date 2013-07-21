@@ -98,7 +98,8 @@ class Admin_ProductsController extends Zend_Controller_Action {
 			$params = $this->_getAllParams();			
 			$this->view->title = 'Products List';                       
 			$this->products->getProductSearch($params);
-			$this->view->merchantlist = $this->productsdb->getMerchantList();			
+			$this->view->merchantlist = $this->productsdb->getMerchantList();
+			$this->view->brandlist = $this->productsdb->getBrandList();
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -137,6 +138,7 @@ class Admin_ProductsController extends Zend_Controller_Action {
 			}		
 			$this->view->attributegroupslist = $this->productsdb->getAttributeGroupsList();
 			$this->view->merchantlist = $this->productsdb->getMerchantList();
+			$this->view->brandlist = $this->productsdb->getBrandList();
 			
 			
 		} catch(Exception $e) {
@@ -171,125 +173,112 @@ class Admin_ProductsController extends Zend_Controller_Action {
 			
 			
 			
-			if ($request->isPost() && isset($Request_Values['product_general_submit']) && $Request_Values['product_general_submit']=='Save') {			
-				if(!$this->products -> updateProductGeneralInfo($params)) {					
-					//$this->_redirect('admin/products/edit/productId/'.$productId);					
-				} else {
-					$this->_redirect('admin/products/list');
-				}
-			}
-			
-			
-			
-			if ($request->isPost() && isset($Request_Values['product_image_submit']) && $Request_Values['product_image_submit']=='Save') {			
-				if(!$this->products -> updateProductImages($params)) {					
-					//$this->_redirect('admin/products/edit/productId/'.$productId);					
-				} else {
-					$this->_redirect('admin/products/list');
-				}
-			}
-			
-			
-			
-			if ($request->isPost() && isset($Request_Values['product_categories_submit']) && $Request_Values['product_categories_submit']=='Save') {			
-				$action 	= trim($params['action']);				
-				$productId 	= trim($params['productId']);
-				$product_category_str = implode("#",$params['product_category'])."#"; 
+			if ($request->isPost() && isset($Request_Values['product_update_submit']) && $Request_Values['product_update_submit']=='Save') {			
 				
 				
-				if(!$this->products -> updateProductCategories($productId,$product_category_str,$action)) {					
-					//$this->_redirect('admin/products/edit/productId/'.$productId);					
-				} else {
-					$this->_redirect('admin/products/list');
-				}
-			}
-			
-			
-			
-			
-			if ($request->isPost() && isset($Request_Values['product_prices_submit']) && $Request_Values['product_prices_submit']=='Save') {			
-				/*echo "<pre>";
-				print_r($params);exit;*/				
-				$product_price_id 			= implode('#',$params['product_price_id'])."#";
-				$product_price_description 	= implode('#',$params['product_price_description'])."#";
-				$product_price 				= implode('#',$params['product_price'])."#";
-				$product_discount 			= implode('#',$params['product_discount'])."#";
-				$product_discount_type 		= implode('#',$params['product_discount_type'])."#";
-				$product_stock 				= implode('#',$params['product_stock'])."#";
+				// GeneralInfo				
+					if(!$this->products -> updateProductGeneralInfo($params)) {					
+						Application_Model_Logging::lwrite("GeneralInfo Error: ".$e->getMessage());
+					} 
 				
-				//print_r($params['discount_start_date']);exit;
-				foreach($params['discount_start_date'] as $key=>$value){
-					if(trim($value)!=''){
-					$discount_start_date_array[] = date('Y-m-d', strtotime($value));
-					}else{
-					$discount_start_date_array[] ='';
+				
+				
+				// ProductImages
+					if(!$this->products -> updateProductImages($params)) {					
+						Application_Model_Logging::lwrite("ProductImages Error: ".$e->getMessage());
 					}
-				}				
-				$discount_start_date 		= implode('#',$discount_start_date_array)."#";
+					//exit;
 				
-				foreach($params['discount_end_date'] as $key=>$value){
-					if(trim($value)!=''){
-					$discount_end_date_array[] = date('Y-m-d', strtotime($value));
-					}else{
-					$discount_end_date_array[] ='';
+				
+				
+				// ProductCategories
+					$action 	= trim($params['action']);				
+					$productId 	= trim($params['productId']);
+					//if(count($params['product_category'])>=1){
+						$product_category_str = implode("#",$params['product_category'])."#"; 	
+					//}
+					if(!$this->products -> updateProductCategories($productId,$product_category_str,$action)) {					
+						Application_Model_Logging::lwrite("ProductCategories Error: ".$e->getMessage());
 					}
-				}
-				$discount_end_date 			= implode('#',$discount_end_date_array)."#";
 				
-				$action 	= trim($params['action']);				
-				$productId 	= trim($params['productId']);
 				
-				if(!$this->products -> updateProductPrices($productId,$action,$product_price_id,$product_price_description,$product_price,$product_discount,$product_discount_type,$product_stock,$discount_start_date,$discount_end_date)) {					
-					//$this->_redirect('admin/products/edit/productId/'.$productId);					
-				} else {
-					$this->_redirect('admin/products/list');
-				}
+				
+				// ProductPrices
+					$product_price_id 			= implode('#',$params['product_price_id'])."#";
+					$product_price_description 	= implode('#',$params['product_price_description'])."#";
+					$product_price 				= implode('#',$params['product_price'])."#";
+					$product_discount 			= implode('#',$params['product_discount'])."#";
+					$product_discount_type 		= implode('#',$params['product_discount_type'])."#";
+					$product_stock 				= implode('#',$params['product_stock'])."#";
+					
+					//print_r($params['discount_start_date']);exit;
+					foreach($params['discount_start_date'] as $key=>$value){
+						if(trim($value)!=''){
+						$discount_start_date_array[] = date('Y-m-d', strtotime($value));
+						}else{
+						$discount_start_date_array[] ='';
+						}
+					}				
+					$discount_start_date 		= implode('#',$discount_start_date_array)."#";
+					
+					foreach($params['discount_end_date'] as $key=>$value){
+						if(trim($value)!=''){
+						$discount_end_date_array[] = date('Y-m-d', strtotime($value));
+						}else{
+						$discount_end_date_array[] ='';
+						}
+					}
+					$discount_end_date 			= implode('#',$discount_end_date_array)."#";
+					
+					$action 	= trim($params['action']);				
+					$productId 	= trim($params['productId']);
+					
+					if(!$this->products -> updateProductPrices($productId,$action,$product_price_id,$product_price_description,$product_price,$product_discount,$product_discount_type,$product_stock,$discount_start_date,$discount_end_date)) {					
+						Application_Model_Logging::lwrite("ProductPrices Error: ".$e->getMessage());
+					}
+				
+				
+				// ProductAttributes
+					$attribute_key_str = '';
+					$attribute_value_str = '';
+					$attribute_value_id_str = '';
+					
+					$action 	= trim($params['action']);				
+					$productId 	= trim($params['productId']);
+					
+					foreach($params['attribute_value'] as $key=>$value){
+						$attribute_key_str .= $key.'@#@#@';
+						$attribute_value_str .= $value.'@#@#@';
+					}
+					foreach($params['attribute_value_id'] as $key=>$value){					
+						$attribute_value_id_str .= $value.'@#@#@';
+					}				
+					
+					if(!$this->products -> updateProductAttributes($productId,$action,$attribute_key_str,$attribute_value_str,$attribute_value_id_str)) {					
+						Application_Model_Logging::lwrite("ProductAttributes Error: ".$e->getMessage());
+					}
+								
+				$this->_redirect('admin/products/edit/productId/'.$productId);
 			}
 			
 			
 			
-			
-			if ($request->isPost() && isset($Request_Values['product_attributes_submit']) && $Request_Values['product_attributes_submit']=='Save') {			
-				//echo "<pre>";
-				//print_r($params);exit;
+				/* Dispaly Details */
+				$ProductDetails = $this->productsdb->getProductDetails($productId);
+				$ProductLargeDescription = $this->productsdb->getProductLargeDescription($productId);
+				$this->view->ProductDetails = $ProductDetails;
+				$this->view->ProductLargeDescription = $ProductLargeDescription;
+				$this->view->CategoryList = $this->productsdb->getCategoryList();			
+				$this->view->ProductImages = $this->productsdb->getProductImagesList($productId);
+				$this->view->ProductPrices = $this->productsdb->getProductPrices($productId);
+				$this->view->ProductCategories = $this->productsdb->getProductCategories($productId);
 				
-				$attribute_key_str = '';
-				$attribute_value_str = '';
+				$this->view->ProductAttributesTitles = $this->productsdb->getProductAttributesTitles($ProductDetails['attributes_group_id']);
+				$this->view->AllAttributesSetsTitles = $this->productsdb->getAllAttributesSetsTitles();
+				$this->view->ProductAttributesValues = $this->productsdb->getProductAttributesValues($productId);
 				
-				$action 	= trim($params['action']);				
-				$productId 	= trim($params['productId']);
-				
-				foreach($params['attribute_value'] as $key=>$value){
-					$attribute_key_str .= $key.'@#@#@';
-					$attribute_value_str .= $value.'@#@#@';
-				}
-				foreach($params['attribute_value_id'] as $key=>$value){					
-					$attribute_value_id_str .= $value.'@#@#@';
-				}
-				
-				
-				if(!$this->products -> updateProductAttributes($productId,$action,$attribute_key_str,$attribute_value_str,$attribute_value_id_str)) {					
-					//$this->_redirect('admin/products/edit/productId/'.$productId);					
-				} else {
-					$this->_redirect('admin/products/list');
-				}
-			}
-			
-			
-			/* Dispaly Details */
-			$ProductDetails = $this->productsdb->getProductDetails($productId);
-			$ProductLargeDescription = $this->productsdb->getProductLargeDescription($productId);
-			$this->view->ProductDetails = $ProductDetails;
-			$this->view->ProductLargeDescription = $ProductLargeDescription;
-			$this->view->CategoryList = $this->productsdb->getCategoryList();			
-			$this->view->ProductImages = $this->productsdb->getProductImagesList($productId);
-			$this->view->ProductPrices = $this->productsdb->getProductPrices($productId);
-			$this->view->ProductCategories = $this->productsdb->getProductCategories($productId);
-			$this->view->ProductAttributesTitles = $this->productsdb->getProductAttributesTitles($ProductDetails['attributes_group_id']);
-			$this->view->AllAttributesSetsTitles = $this->productsdb->getAllAttributesSetsTitles();
-			$this->view->ProductAttributesValues = $this->productsdb->getProductAttributesValues($productId);
-			$this->view->merchantlist = $this->productsdb->getMerchantList();
-			
+				$this->view->merchantlist = $this->productsdb->getMerchantList();
+				$this->view->brandlist = $this->productsdb->getBrandList();			
 			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());

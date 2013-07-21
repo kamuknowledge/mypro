@@ -3,10 +3,10 @@ $(document).ready(function(){
 	
 	$("#product_view_more").live('click',function() {
 	
-		var ID=$(".more_box").attr("id");
+		var ID=$(".more_box:last").attr("id");
 		var cid=$("#cid").val();
-		alert(cid);
-		alert("Handler for .click() called.");
+		//alert(ID);
+		//alert("Handler for .click() called.");
 		
 			$.ajax({
 				type : "POST",

@@ -1257,7 +1257,9 @@ legend + .control-group {
   margin-bottom: 0;
 }
 .form-horizontal .form-actions {
-  padding-left: 160px;
+  /*padding-left: 160px;*/
+  /*float:right;*/
+  text-align:right;
 }
 table {
   max-width: 100%;

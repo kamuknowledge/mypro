@@ -29,7 +29,7 @@
 				  <label class="control-label" for="typeahead">Product Title<span class="req">*</span></label>
 				  <div class="controls">
 					<div class="mid_Control-profile float-left">
-					<input class="field" tabindex="1" id="product_title" name="product_title" type="text" value="<?php if(is_array($error->error_createproduct_values)) {echo $error->error_createproduct_values['product_title'];}?>" maxlength="20" size="40" title=""/>
+					<input class="field" tabindex="1" id="product_title" name="product_title" type="text" value="<?php if(is_array($error->error_createproduct_values)) {echo $error->error_createproduct_values['product_title'];}?>" maxlength="255" size="40" title=""/>
 					</div>
 					<div class="error_message">
 					   <?php 
@@ -101,13 +101,47 @@
 				
 				
 				
+				<div class="control-group">
+				  <label class="control-label" for="typeahead">Brand</label>
+				  <div class="controls">
+					<div class="mid_Control-profile float-left">
+					
+					<select id="brand_id" name="brand_id">
+						<option value="">-Select Brand-</option>
+						<?php foreach($this->brandlist as $each_brandlist){						
+						if(is_array($error->error_createproduct_values) && $error->error_createproduct_values['brand_id'] == $each_brandlist['brand_id']) {
+						$select = ' selected="selected"';
+						} else {
+						$select = '';
+						}
+						?>
+						<option value="<?php echo $each_brandlist['brand_id'];?>" <?php echo $select; ?> ><?php echo $each_brandlist['brand_title'];?></option>
+						<?php }?>
+					</select>
+					
+					</div>
+					<div class="error_message">
+					   <?php 
+						if($error->error_create_brand_id!= '') {
+							echo '<label class="error">' .$error->error_create_brand_id . '</label>';
+							$error->error_create_brand_id = '';
+						}
+					   ?>
+					   </div>
+					   
+				  </div>
+				</div>
+				
+				
+				
+				
 				
 				
 				<div class="control-group">
 				  <label class="control-label" for="typeahead">Meta Title</label>
 				  <div class="controls">
 					<div class="mid_Control-profile float-left">
-					<input class="field" tabindex="1" id="product_meta_title" name="product_meta_title" type="text" value="<?php if(is_array($error->error_createproduct_values)) {echo $error->error_createproduct_values['product_meta_title'];}?>" maxlength="20" size="40" title=""/>
+					<input class="field" tabindex="1" id="product_meta_title" name="product_meta_title" type="text" value="<?php if(is_array($error->error_createproduct_values)) {echo $error->error_createproduct_values['product_meta_title'];}?>" maxlength="255" size="40" title=""/>
 					</div>
 					<div class="error_message">
 					   <?php 
@@ -146,7 +180,7 @@
 				  <label class="control-label" for="typeahead">Product Small Description</label>
 				  <div class="controls">
 					<div class="mid_Control-profile float-left">					
-					<textarea class="field" id="product_small_description" name="product_small_description" rows="5" cols="80"></textarea>
+					<textarea class="field" id="product_small_description" name="product_small_description" rows="5" cols="80"><?php if(is_array($error->error_createproduct_values)) {echo $error->error_createproduct_values['product_small_description'];}?></textarea>
 					</div>
 					<div class="error_message">
 					   <?php 
@@ -165,7 +199,7 @@
 				  <label class="control-label" for="typeahead">Product Large Description</label>
 				  <div class="controls">
 					<div class="mid_Control-profile float-left">					
-					<textarea class="cleditor" id="product_description" name="product_description" rows="3"></textarea>
+					<textarea class="cleditor" id="product_description" name="product_description" rows="3"><?php if(is_array($error->error_createproduct_values)) {echo $error->error_createproduct_values['product_description'];}?></textarea>
 					</div>
 					<div class="error_message">
 					   <?php 
@@ -189,8 +223,7 @@
 				  <div class="controls">
 					<div class="mid_Control-profile float-left">
 					
-					<select id="attributes_group_id" name="attributes_group_id">
-						<option value="">-Select Attribute Groups-</option>
+					<select id="attributes_group_id" name="attributes_group_id">						
 						<?php foreach($this->attributegroupslist as $each_attributegroup){						
 						if(is_array($error->error_createproduct_values) && $error->error_createproduct_values['attributes_group_id'] == $each_attributegroup['attributes_group_id']) {
 						$select = ' selected="selected"';

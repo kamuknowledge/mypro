@@ -55,7 +55,6 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
      *
      * Access is limited to class and extended classes
      *
-     * @param   int		$iuserid User Id
      * @param	int		$istart Start value
      * @param	int		$ilimit Limit value for fetching result set
      * @param	varchar	$cond Search condition
@@ -77,11 +76,52 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 					from store_products sp
 					LEFT JOIN store_products_categories spc ON (sp.product_id=spc.product_id)
 					where
-					sp.statusid=1 ORDER BY ".$params['orderby']." ".$params['ordertype']." LIMIT ".$start.", ".$params['limit']."";
-					//spc.category_id = ".$params['id']." AND sp.statusid=1";
+					sp.statusid=1 
+					AND spc.category_id = ".$params['id']." AND sp.statusid=1
+					GROUP BY sp.product_id
+					ORDER BY ".$params['orderby']." ".$params['ordertype']." LIMIT ".$start.", ".$params['limit']."";
+			
 			//exit;			
 			$stmt = $this->db->query($query);			
 			return $stmt->fetchAll();
+			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Fetching product Details
+     *
+     * Access is limited to class and extended classes
+     *
+     * @param	int		$istart Start value
+     * @param	int		$ilimit Limit value for fetching result set
+     * @param	varchar	$cond Search condition
+     * @return  object	Returns status message.	
+     */
+	
+	public function getProductDetails($params){
+		try {	
+			
+			//$query = "select * from store_products where product_id=".$params['id'];
+			
+			$query = "SELECT
+			sp.product_id, sp.attributes_group_id, sp.merchant_id, sp.brand_id, sp.product_sku, sp.product_title,
+			sp.product_small_description, sp.product_meta_title, sp.product_meta_description,
+			spd.description_id, spd.product_description
+			FROM store_products sp
+			LEFT JOIN store_products_description spd ON (sp.product_id=spd.product_id) where sp.product_id=".$params['id'];
+			
+			//exit;			
+			$stmt = $this->db->query($query);			
+			return $stmt->fetch();
 			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());

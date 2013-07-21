@@ -1,6 +1,7 @@
 <?php
 //echo "<pre>";
 //print_r($this->ProductsList);
+//echo count($this->ProductsList);
 ?>
 <div class="main_body">
 <div class="left width-100">
@@ -25,9 +26,9 @@ if($i%4==1){
 				<div class="product_image">
 					<a href="<?php echo $this->baseUrl('products/view/id')."/".$each_ProductsList['product_id']."/".str_replace($special_array, $replace,$each_ProductsList['product_title']);?>">					
 					<?php if($each_ProductsList['product_image']!=''){?>
-					<img src="<?php echo $this->baseUrl('public/uploads/product_images')."/".$each_ProductsList['product_image']; ?>" width="175" height="175">
+					<img src="<?php echo $this->baseUrl('public/uploads/product_images')."/".$each_ProductsList['product_image']; ?>" width="135" height="135">
 					<?php }else{?>
-					<img src="<?php echo $this->baseUrl('public/uploads/product_images/No_Image_Available.JPG'); ?>" width="175" height="175">
+					<img src="<?php echo $this->baseUrl('public/uploads/product_images/No_Image_Available.JPG'); ?>" width="135" height="135">
 					<?php }?>
 					</a></a>
 				</div>
@@ -53,10 +54,15 @@ if($i%4==1){
 <?php }$i++; }?>
 
 <input type="hidden" name="cid" id="cid" value="<?php echo $this->id;?>" />
+
+<div class="clear"></div>
+<?php 
+if(count($this->ProductsList)==$this->limit){?>
 <div class="more_box" id="<?php echo $this->start;?>">
 	<div class="view_more_loader" id="product_view_more_loading"><img src="<?php echo $this->baseUrl('public/default/images')."/ajax-loader.gif" ?>" ></div>
 	<div class="view_more_products" id="product_view_more">View More..</div>
 </div>
+<?php }?>
 	
 
 </div>

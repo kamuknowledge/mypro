@@ -98,9 +98,10 @@ class Admin_Model_Products extends Admin_Model_Productsdb {
 			$product_meta_title			= trim($params['product_meta_title']);
 			$product_meta_description	= trim($params['product_meta_description']);
 			$product_small_description	= trim($params['product_small_description']);
-			$product_description		= trim($params['product_description']);	
+			$product_description		= htmlentities(trim($params['product_description']), ENT_QUOTES);
 			$attributes_group_id		= trim($params['attributes_group_id']);
 			$merchant_id				= trim($params['merchant_id']);
+			$brand_id					= trim($params['brand_id']);
 			$action 					= trim($params['action']);
 			
 
@@ -115,11 +116,14 @@ class Admin_Model_Products extends Admin_Model_Productsdb {
             if($product_title == '') {				//Validation for product_title
 				$this->error->error_create_product_title = Error_create_product_title_empty;
 				$error = 1;
-			} else if(!$this->validate_alphanumeric_space($product_title)) {
+			} else if(!$this->validate_alphanumeric_address($product_title)) { 
+				//validate_alphanumeric_address
+				//validate_alphanumeric_space_apostrophe
+				//validate_alphanumeric_space
 				$params['product_title'] = '';
 				$this->error->error_create_product_title = Error_create_product_title_invalid;
 				$error = 1;
-			} else if(strlen($product_title) >20) {
+			} else if(strlen($product_title) >255) {
 				$this->error->error_create_product_title = Error_create_product_title_max;
 				$error = 1;
 			}
@@ -136,7 +140,7 @@ class Admin_Model_Products extends Admin_Model_Productsdb {
              * Validation ends here
              */
 	
-				$outpt = $this->productsdb->saveProduct($product_title,$product_sku,$product_meta_title,$product_meta_description,$product_small_description,$product_description, $attributes_group_id, $merchant_id, $action, $this->session->userid);
+				$outpt = $this->productsdb->saveProduct($product_title,$product_sku,$product_meta_title,$product_meta_description,$product_small_description,$product_description, $attributes_group_id, $merchant_id, $brand_id, $action, $this->session->userid);
 				$outpt = $outpt[0];
 				$result = explode('#', $outpt['toutput']);
 				
@@ -230,16 +234,21 @@ class Admin_Model_Products extends Admin_Model_Productsdb {
 								$upload = new Zend_File_Transfer();                                    
 								//$upload = new Zend_File_Transfer_Adapter_Http();                                
 								$files = $upload->getFileInfo();
-								//print_r($files);exit;
+								//echo "<pre>";
+								//print_r($files);
+								$j=1;
 								foreach ($files as $file => $info) {
 									if($upload->isValid($file)){
-										$filename = time().$info['name'];
+										$filename = $productId."_".$j."_".time().$info['name'];
 										$upload->addFilter('Rename', APPLICATION_PATH.'/../public/uploads/product_images/'.$filename, 1);
 										$upload->receive($file);
 										//$LogoSet = $this->productsdb->updateProductImagesRecord($productId,$filename, $action, $this->session->userid);
 										$filename_str .= $filename."#";
 									}
+									$j++;
 								}
+								//echo "hh";
+								//echo $filename_str;
 								
 								
 								
@@ -449,10 +458,11 @@ class Admin_Model_Products extends Admin_Model_Productsdb {
 				$product_meta_title = trim($params['product_meta_title']);
 				$product_meta_description = trim($params['product_meta_description']);
 				$product_small_description = trim($params['product_small_description']);
-				$product_large_description = trim($params['product_large_description']);
+				$product_large_description = htmlentities(trim($params['product_large_description']), ENT_QUOTES);
 				$merchant_id = trim($params['merchant_id']);
+				$brand_id = trim($params['brand_id']);
 								
-				$ProductImageSet = $this->productsdb->updateProductGeneralInfoRecord($productId, $product_title, $product_sku, $product_meta_title, $product_meta_description, $product_small_description, $product_large_description, $merchant_id, $action, $this->session->userid);
+				$ProductImageSet = $this->productsdb->updateProductGeneralInfoRecord($productId, $product_title, $product_sku, $product_meta_title, $product_meta_description, $product_small_description, $product_large_description, $merchant_id, $brand_id, $action, $this->session->userid);
 				//print_r($ProductImageSet);exit;
 				$result = explode('#',$ProductImageSet['0']['toutput']);
 				

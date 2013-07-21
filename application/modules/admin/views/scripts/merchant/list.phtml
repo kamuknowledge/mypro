@@ -71,7 +71,7 @@ $cn='';
 									<?php if($each_merchant['merchant_images']!=''){?>
 									<img src="<?php echo $this->baseUrl('public/uploads/merchant_images');?>/<?php echo $each_merchant['merchant_images'];?>" width="50" />									
 									<?php }else{?>
-									<img src="<?php echo $this->baseUrl('public/uploads/merchant_images');?>/default.jpg" width="50" />
+									<img src="<?php echo $this->baseUrl('public/uploads/merchant_images');?>/default.jpg" width="75" />
 									<?php }?>
 									<br><?php  echo $each_merchant['merchant_title']; ?>
 								</td>
@@ -104,7 +104,7 @@ $cn='';
 										Edit                                            
 									</a>
 									&nbsp;&nbsp;
-									<a class="btn btn-danger" href="<?php echo $this->baseUrl('admin/mercahnt/delete/merchantId/') . $each_merchant['merchant_id'];?>" onClick="return confirm('Do you want to continue?')">
+									<a class="btn btn-danger" href="<?php echo $this->baseUrl('admin/merchant/delete/merchantId/') . $each_merchant['merchant_id'];?>" onClick="return confirm('Do you want to continue?')">
 										<i class="icon-trash icon-white"></i> 
 										Delete
 									</a>								

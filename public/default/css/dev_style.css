@@ -27,4 +27,15 @@ label.error{
 	font-weight:bold;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	text-align:center;
+	cursor:pointer;
+}
+
+.no_result_found{
+	width:200px;
+	margin:auto;
+	color:#ED1C24;
+	font-size:14px;
+	font-weight:bold;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	text-align:center;	
 }

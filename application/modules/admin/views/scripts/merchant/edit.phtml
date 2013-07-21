@@ -80,7 +80,7 @@ $MerchantImages = $this->MerchantImages;
 				  <label class="control-label" for="typeahead">Merchant Email</label>
 				  <div class="controls">
 					<div class="mid_Control-profile float-left">
-					<input class="field" tabindex="1" id="merchant_email" name="merchant_email" type="text" value="<?php if(is_array($error->error_updatemerchant_values)) { echo strip_tags($error->error_updatemerchant_values['merchant_email']);}else{ echo strip_tags($MerchantDetails['merchant_email']);}?>" maxlength="20" size="40" title=""/>
+					<input class="field" tabindex="1" id="merchant_email" name="merchant_email" type="text" value="<?php if(is_array($error->error_updatemerchant_values)) { echo strip_tags($error->error_updatemerchant_values['merchant_email']);}else{ echo strip_tags($MerchantDetails['merchant_email']);}?>" maxlength="50" size="40" title=""/>
 					</div>
 					<div class="error_message">
 					   <?php 
@@ -192,7 +192,7 @@ $MerchantImages = $this->MerchantImages;
 				
 								
 				<div class="control-group">
-				  <label class="control-label" for="typeahead">Merchant Country<?php echo $MerchantDetails['merchant_country'];?></label>
+				  <label class="control-label" for="typeahead">Merchant Country</label>
 				  <div class="controls">
 					<div class="mid_Control-profile float-left">
 					<?php //echo $MerchantDetails['merchant_country'];?>

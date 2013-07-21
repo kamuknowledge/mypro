@@ -97,7 +97,8 @@ class ProductsController extends Zend_Controller_Action {
 								
 			
 			$params = $this->_getAllParams();
-			$params['limit'] = 8;
+			$params['limit'] = 4;
+			$this->view->limit = $params['limit'];
 			$params['orderby'] = 'product_title';
 			$params['ordertype'] = 'ASC';
 			
@@ -140,14 +141,16 @@ class ProductsController extends Zend_Controller_Action {
 		try{
 			$this->_helper->layout->disableLayout();
 			$params = $this->_getAllParams();
-			print_r($params);
-			$params['limit'] = 8;
+			
+			$params['limit'] = 4;
+			$this->view->limit = $params['limit'];
 			$params['orderby'] = 'product_title';
 			$params['ordertype'] = 'ASC';
 			
 			if(isset($params['start'])){$params['start'] = $params['start']+$params['limit'];}
-			if(isset($params['start'])){$this->view->start = $params['start'];}
+			if(isset($params['start'])){$this->view->start = $params['start'];}			
 			
+			//print_r($params);			
 			$this->view->id = $params['id'];
 			
 			$ProductsList = $this->productssdb->getProductsList($params);			
@@ -175,9 +178,11 @@ class ProductsController extends Zend_Controller_Action {
 	
 	public function viewAction() {
 		try{
-			$this->view->title = 'Products Details';			
-			
-			
+			$params = $this->_getAllParams();
+			//Print_r($params);			
+			$productdetails = $this->productssdb->getProductDetails($params);			
+			$this->view->headTitle()->append($productdetails['product_title']);
+			$this->view->productdetails = $productdetails;
 			//exit;			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());

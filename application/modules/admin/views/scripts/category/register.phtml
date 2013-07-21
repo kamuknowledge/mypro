@@ -27,7 +27,7 @@ $ParentCategories = $this->ParentCategories;
 				  <label class="control-label" for="typeahead">Category Title<span class="req">*</span></label>
 				  <div class="controls">
 					<div class="mid_Control-profile float-left">
-					<input class="field" tabindex="1" id="category_name" name="category_name" type="text" value="<?php if(is_array($error->error_createcategory_values)) {echo $error->error_createcategory_values['category_name'];}?>" maxlength="20" size="40" title=""/>
+					<input class="field" tabindex="1" id="category_name" name="category_name" type="text" value="<?php if(is_array($error->error_createcategory_values)) {echo $error->error_createcategory_values['category_name'];}?>" maxlength="255" size="80" title=""/>
 					</div>
 					<div class="error_message">
 					   <?php 
