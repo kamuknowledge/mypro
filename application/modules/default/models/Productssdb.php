@@ -130,5 +130,117 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 	}
 	
 	
+	
+	
+	
+	/**
+     * Purpose: Fetching product Attribute Details
+     *
+     * Access is limited to class and extended classes
+     *
+     * @param	int		$istart Start value
+     * @param	int		$ilimit Limit value for fetching result set
+     * @param	varchar	$cond Search condition
+     * @return  object	Returns status message.	
+     */
+	
+	public function getProductAttributesDetails($params){
+		try {	
+			
+			//$query = "select * from store_products where product_id=".$params['id'];
+			
+			$query = "SELECT
+						spav.product_id, spast.attributes_group_id, spast.attributes_set_id, spast.attributes_set_title,
+						spa.attribute_id, spa.attribute_title, spav.attribute_value
+						FROM
+						store_products_attributes spa,
+						store_products_attributes_values spav,
+						store_products_attributes_sets spast,
+						store_products_attributes_sets_mapping  spasm
+						where
+						spa.attribute_id = spav.attribute_id
+						AND spast.attributes_set_id = spasm.attributes_set_id
+						AND spa.attribute_id = spasm.attribute_id
+						AND spa.statusid=1
+						AND spav.statusid=1
+						AND spast.statusid=1
+						AND spasm.statusid=1
+						AND spav.product_id = ".$params['id'];
+			
+			//exit;			
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
+			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Fetching product Image Details
+     *
+     * Access is limited to class and extended classes
+     *
+     * @param	int		$istart Start value
+     * @param	int		$ilimit Limit value for fetching result set
+     * @param	varchar	$cond Search condition
+     * @return  object	Returns status message.	
+     */
+	
+	public function getProductImageDetails($params){
+		try {
+			$query = "SELECT * FROM store_products_images spi WHERE statusid=1 AND spi.product_id = ".$params['id'];			
+			//exit;			
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
+			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	/**
+     * Purpose: Fetching product Image Details
+     *
+     * Access is limited to class and extended classes
+     *
+     * @param	int		$istart Start value
+     * @param	int		$ilimit Limit value for fetching result set
+     * @param	varchar	$cond Search condition
+     * @return  object	Returns status message.	
+     */
+	
+	public function getProductReviewDetails($params){
+		try {
+			$query = "SELECT *
+						FROM
+						store_products_reviews spr LEFT JOIN apmusers au ON (spr.userid = au.userid AND au.statusid=1)
+						LEFT JOIN user_images ui ON (au.userid = ui.userid AND ui.statusid=1 AND is_primary=1)
+						WHERE
+						spr.userid = au.userid
+						AND
+						spr.statusid=1
+						AND product_id = ".$params['id']."
+						AND spr.userid=86";			
+			//exit;			
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
+			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
 }
 ?>

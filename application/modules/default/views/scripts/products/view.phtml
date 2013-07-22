@@ -11,7 +11,33 @@
 					
 					<div class="mprod-basic-info unit">
 						<div class="multi-images-section">
-							Image Thumb
+						
+							<?php
+							//print_r($this->ProductImageDetails);
+							?>
+							
+							<div style="float:right;width:300px;">					
+								<?php 			
+								foreach($this->ProductImageDetails as $each_ProductImages){			
+								if(trim($each_ProductImages['product_thumbnail'])==1){?>
+								<div class="targetarea diffheight">
+								<img id="multizoom2" style="float:right;" src="<?php echo $this->baseUrl('public/uploads/product_images')."/".$each_ProductImages['product_image']; ?>" width="300" height="225">
+								</div>
+								<?php }}?>
+								
+								<div class="multizoom2 thumbs">
+								<?php
+								if(count($this->ProductImageDetails)>1){
+								foreach($this->ProductImageDetails as $each_ProductImages){			
+								if(trim($each_ProductImages['product_default_image'])==0){?>
+								<a href="<?php echo $this->baseUrl('public/uploads/product_images')."/".$each_ProductImages['product_image']; ?>" data-large="<?php echo $this->baseUrl('public/uploads/product_images')."/".$each_ProductImages['product_image']; ?>" data-title="Image" data-dims="300, 225">
+								<img style="float:right;margin:2px;" src="<?php echo $this->baseUrl('public/uploads/product_images')."/".$each_ProductImages['product_image']; ?>"  width="55">
+								</a>
+								<?php }}}?>
+								</div>
+							</div>
+							
+							
 						</div>
 						
 						
@@ -167,20 +193,46 @@
 							<h3 class="item_desc_title">
 								<b> Specifications of <?php echo $this->productdetails['product_title'];?></b>
 							</h3>
+							
+							<?php
+							//echo "<pre>";
+							//print_r($this->ProductAttributesDetails);
+							foreach($this->ProductAttributesDetails as $each_ProductAttributesDetails){								
+								$ProductAttributesDetails_array[$each_ProductAttributesDetails['attributes_set_id']]['attributes_set_title'] = $each_ProductAttributesDetails['attributes_set_title'];
+								$ProductAttributesDetails_array[$each_ProductAttributesDetails['attributes_set_id']][$each_ProductAttributesDetails['attribute_id']]['attribute_title'] = $each_ProductAttributesDetails['attribute_title'];
+								$ProductAttributesDetails_array[$each_ProductAttributesDetails['attributes_set_id']][$each_ProductAttributesDetails['attribute_id']]['attribute_value'] = $each_ProductAttributesDetails['attribute_value'];													
+							}							
+							//print_r($ProductAttributesDetails_array);
+							//exit;
+							?>
 
 							<table cellspacing="0" class="fk-specs-type2">
 							<tbody>
+							<?php foreach($ProductAttributesDetails_array as $key=>$value){
+							//print_r($key);
+							//print_r($value);
+							?>
 							<tr>
-								<th class="group-head" colspan="2">GENERAL FEATURES</th>
+								<th class="group-head" colspan="2">
+								<?php 
+								echo $value['attributes_set_title'];
+								unset($ProductAttributesDetails_array[$key]['attributes_set_title']);
+								unset($value['attributes_set_title']);
+								?>
+								</th>
 							</tr>
-								<tr>
-									<td class="specs-key">In Sales Package</td>
-									<td class="specs-value fk-data">Handset, Battery, Charger, Headset, Data Cable, Screen Protector</td>
-								</tr>
-								<tr>
-									<td class="specs-key">Form</td>
-									<td class="specs-value fk-data">Bar</td>
-								</tr>
+							<?php
+							foreach($value as $key=>$each_value){							
+							?>
+							<tr>
+								<td class="specs-key"><?php echo $each_value['attribute_title'];?></td>
+								<td class="specs-value fk-data" style="word-wrap: break-word;"><?php echo $each_value['attribute_value'];?></td>
+							</tr>							
+							<?php }?>
+							<tr>
+								<td class="specs-key" colspan="2" height="35"></td>								
+							</tr>
+							<?php }?>
 							</tbody>
 							</table>
 						</div>
