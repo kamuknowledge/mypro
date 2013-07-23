@@ -53,6 +53,28 @@ class Application_Model_DataBaseOperations  {
 			throw new Exception($e->getMessage());
 		}
 	}
+	 /**
+     * Purpose: sets up connection object and returns it
+     *
+     * Access is with in the class and extended classes only
+     *
+     * @param   
+     * @return  object Database Connection string
+     */
+	public static function GetDatabaseConnection() {
+		try {
+			$db=Zend_Registry::get('db');			
+			return $db;		
+				
+			/** calls setConnectionInfo  method fromdb wrapper class **/
+			
+			
+		}
+		catch (Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 	
 	
 

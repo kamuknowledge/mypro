@@ -59,8 +59,25 @@ class Wall_IndexController extends Zend_Controller_Action {
 	
 	public function indexAction() {
 		try{			
-			//echo "store/index/index";
-			//exit; 
+                    // CSS Start
+                   
+                     $this->view->headLink()->setStylesheet($this->view->baseUrl('public/wall').'/css/facebox.css');
+                     $this->view->headLink()->appendStylesheet($this->view->baseUrl('public/wall').'/css/tipsy.css');
+                     $this->view->headLink()->appendStylesheet($this->view->baseUrl('public/wall').'/css/lightbox.css');
+                     $this->view->headLink()->appendStylesheet($this->view->baseUrl('public/wall').'/css/wall.css');
+                    // CSS End
+                   
+                    // javascript start
+                     
+                    $this->view->headScript()->appendFile($this->view->baseUrl('public/wall').'/js/jquery.wallform.js','text/javascript');
+                    $this->view->headScript()->appendFile($this->view->baseUrl('public/wall').'/js/jquery.webcam.js','text/javascript');
+                    $this->view->headScript()->appendFile($this->view->baseUrl('public/wall').'/js/jquery.color.js','text/javascript');
+                    $this->view->headScript()->appendFile($this->view->baseUrl('public/wall').'/js/jquery.livequery.js','text/javascript');
+                    $this->view->headScript()->appendFile($this->view->baseUrl('public/wall').'/js/jquery.timeago.js','text/javascript');
+                    $this->view->headScript()->appendFile($this->view->baseUrl('public/wall').'/js/jquery.tipsy.js','text/javascript');
+                    $this->view->headScript()->appendFile($this->view->baseUrl('public/wall').'/js/facebox.js','text/javascript');
+                    $this->view->headScript()->appendFile($this->view->baseUrl('public/wall').'/js/wall.js','text/javascript');
+                    
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
