@@ -183,6 +183,19 @@ class ProductsController extends Zend_Controller_Action {
 			$productdetails = $this->productssdb->getProductDetails($params);			
 			$this->view->headTitle()->append($productdetails['product_title']);
 			$this->view->productdetails = $productdetails;
+			
+			$ProductImageDetails = $this->productssdb->getProductImageDetails($params);
+			$this->view->ProductImageDetails = $ProductImageDetails;
+			
+			$ProductReviewDetails = $this->productssdb->getProductReviewDetails($params);
+			$this->view->ProductReviewDetails = $ProductReviewDetails;
+			
+			$ProductAttributesDetails = $this->productssdb->getProductAttributesDetails($params);
+			$this->view->ProductAttributesDetails = $ProductAttributesDetails;
+			
+			$ProductPriceDetails = $this->productssdb->getProductPriceDetails($params);
+			$this->view->ProductPriceDetails = $ProductPriceDetails;
+			
 			//exit;			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());

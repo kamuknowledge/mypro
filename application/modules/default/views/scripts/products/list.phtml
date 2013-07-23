@@ -36,7 +36,12 @@ if($i%4==1){
 					<a href="javascript:void(0)"><?php echo $each_ProductsList['product_title'];?></a>
 					<span class="rating rating-1"></span>
 					<div class="price">
-						<span class="old">$150.00</span><span class="new">$<?php echo $each_ProductsList['product_price_details'];?></span>
+						<?php if($each_ProductsList['product_discount_details']!='0'){?>
+						<span class="old">Rs.<?php echo $each_ProductsList['product_price'];?></span>
+						<span class="new">Rs.<?php echo $each_ProductsList['product_price_details'];?></span>
+						<?php }else{?>
+						<span class="new">Rs.<?php echo $each_ProductsList['product_price_details'];?></span>
+						<?php }?>
 					</div>
 				</div>
 			</li>
