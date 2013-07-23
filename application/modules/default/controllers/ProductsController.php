@@ -43,7 +43,9 @@ class ProductsController extends Zend_Controller_Action {
 		$this->productss = new Default_Model_Productss();
 		$this->productssdb = new Default_Model_Productssdb();
         $this->_helper->layout->setLayout('default/layout');
-		//$this->setLayoutAction('default/layout');		
+		//$this->setLayoutAction('default/layout');	
+
+		$this->view->headScript()->appendFile($this->view->baseUrl('public/default').'/js/dev_store.js','text/javascript');		
 	}
 	
     
@@ -84,17 +86,7 @@ class ProductsController extends Zend_Controller_Action {
 	
 	public function listAction() {
 		try{				
-			$this->view->headTitle()->append('Products List');
-			//$this->view->headTitle()->prepend('.:');
-
-			//$this->view->headScript()->appendFile($this->view->baseUrl('public/default').'/js/jquery-1.2.6.pack.js','text/javascript'); //array('conditional' => 'lt IE 7')
-			$this->view->headScript()->appendFile($this->view->baseUrl('public/default').'/js/developer_products.js','text/javascript'); 
-			
-			/*
-			$this->headScript()->appendFile('/js/prototype.js')
-								->appendScript($onloadScript);
-			*/
-								
+			$this->view->headTitle()->append('Products List');		
 			
 			$params = $this->_getAllParams();
 			$params['limit'] = 4;
@@ -105,16 +97,7 @@ class ProductsController extends Zend_Controller_Action {
 			if(!isset($params['start'])){$params['start'] = '0';}
 			if(isset($params['start'])){$this->view->start = $params['start'];}
 			
-			$this->view->id = $params['id'];
-			
-			//print_r($params);
-			//Array ( [controller] => products [action] => list [id] => 6 [module] => default ) 
-			
-			/*
-			$request = $this->getRequest();
-			$Request_Values = $request->getGet();
-			print_r($Request_Values);
-			*/
+			$this->view->id = $params['id'];			
 			
 			$ProductsList = $this->productssdb->getProductsList($params);			
 			$this->view->ProductsList = $ProductsList;

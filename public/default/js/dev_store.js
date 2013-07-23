@@ -1,3 +1,5 @@
+/* Store Module JS */
+
 $(document).ready(function(){
 
 	
