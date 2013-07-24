@@ -25,16 +25,19 @@ class Wall_Model_Walldb {
         } else {
             $query = $this->db->query("SELECT uid FROM users WHERE email='$username_email' ");
         }
-
-        return $query->count();
+        $result=$query->fetchAll();
+        $data=  sizeof($result);
+        return $data;
     }
 
     public function User_ID($username) {
          $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
         $username = mysql_real_escape_string($username);
-        $query =  $this->db->query("SELECT uid FROM users WHERE username='$username' AND status='1'");
-        if ($query->count() == 1) {
+        $query =  $this->db->query("SELECT userid FROM apmusers WHERE email='$username' AND status='1'");
+        $result=$query->fetchAll();
+        $data=  sizeof($result);
+        if ($data == 1) {
             $row = $query->fetch();
             return $row['uid'];
         } else {
@@ -68,11 +71,11 @@ class Wall_Model_Walldb {
         // More Button
         $morequery = "";
         if ($lastid)
-            $morequery = " and M.msg_id<'" . $lastid . "' ";
+            $morequery = " and M.wall_message_id<'" . $lastid . "' ";
         // More Button End
         $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("SELECT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.email,M.uploads FROM user_wall_messages M, users U  WHERE U.status='1' AND M.uid_fk=U.uid and M.uid_fk='$uid' $morequery order by M.msg_id desc limit " . $this->perpage) or die(mysql_error());
+        $query = $this->db->query("SELECT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.emailid,M.wall_uploads FROM user_wall_messages M, apmusers U  WHERE U.statusid='1' AND M.userid=U.userid and M.userid='$uid' $morequery order by M.wall_message_id desc limit " . $this->perpage);
         $data = $query->fetchAll();
         // while ($row = mysql_fetch_array($query))
         //  $data[] = $row;
@@ -83,8 +86,9 @@ class Wall_Model_Walldb {
     public function Total_Updates($uid) {
         $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("SELECT M.msg_id, M.uid_fk, M.message, M.created, U.username,M.uploads FROM messages M, users U  WHERE U.status='1' AND M.uid_fk=U.uid and M.uid_fk='$uid' $morequery order by M.msg_id ") or die(mysql_error());
-        $data = $query->count();
+        $query = $this->db->query("SELECT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.emailid,M.wall_uploads FROM user_wall_messages M, apmusers U  WHERE U.statusid='1' AND M.userid=U.userid and M.userid='$uid' $morequery order by M.wall_message_id ");
+        $result=$query->fetchAll();
+        $data = sizeof($result);
         return $data;
     }
 
@@ -95,10 +99,10 @@ class Wall_Model_Walldb {
         $this->db = $obj->GetDatabaseConnection();
         $morequery = "";
         if ($lastid)
-            $morequery = " and M.msg_id<'" . $lastid . "' ";
+            $morequery = " and M.wall_message_id<'" . $lastid . "' ";
         // More Button End
 
-        $query =  $this->db->query("SELECT DISTINCT M.msg_id, M.uid_fk, M.message, M.created, U.username,M.uploads FROM messages M, users U, friends F  WHERE U.status='1' AND M.uid_fk=U.uid AND  M.uid_fk = F.friend_two AND F.friend_one='$uid' $morequery order by M.msg_id desc limit " . $this->perpage) or die(mysql_error());
+        $query =  $this->db->query("SELECT DISTINCT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.firstname,U.lastname,M.wall_uploads FROM user_wall_messages M, apmusers U, user_connections F  WHERE U.statusid='1' AND M.userid=U.userid AND  M.userid = F.friend_id AND F.userid='$uid' $morequery order by M.wall_message_id desc limit " . $this->perpage);
 
         $data=$query->fetchAll();
         //while ($row = mysql_fetch_array($query))
@@ -111,10 +115,11 @@ class Wall_Model_Walldb {
 
          $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query =  $this->db->query("SELECT DISTINCT M.msg_id, M.uid_fk, M.message, M.created, U.username,M.uploads FROM messages M, users U, friends F  WHERE U.status='1' AND M.uid_fk=U.uid AND  M.uid_fk = F.friend_two AND F.friend_one='$uid' $morequery order by M.msg_id ") or die(mysql_error());
-
-        $data =  $query->count();
+        $query =  $this->db->query("SELECT DISTINCT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.emailid,M.wall_uploads FROM user_wall_messages M, apmusers U, user_connections F  WHERE U.statusid='1' AND M.userid=U.userid AND  M.userid = F.friend_id AND F.userid='$uid' order by M.wall_message_id ");
+        $result=$query->fetchAll();
+        $data = sizeof($result);
         return $data;
+        
     }
 
     //Comments
@@ -124,7 +129,7 @@ class Wall_Model_Walldb {
         $query = '';
         if ($second_count)
             $query = "limit $second_count,2";
-        $query =  $this->db->query("SELECT C.com_id, C.uid_fk, C.comment, C.created, U.username FROM comments C, users U WHERE U.status='1' AND C.uid_fk=U.uid and C.msg_id_fk='$msg_id' order by C.com_id asc $query") or die(mysql_error());
+        $query =  $this->db->query("SELECT C.com_id, C.uid_fk, C.comment, C.created, U.username FROM comments C, users U WHERE U.status='1' AND C.uid_fk=U.uid and C.msg_id_fk='$msg_id' order by C.com_id asc $query");
         //while ($row = mysql_fetch_array($query))
            // $data[] = $row;
         $data=$query->fetchAll();
@@ -138,7 +143,7 @@ class Wall_Model_Walldb {
     public function Profile_Pic($uid) {
         $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("SELECT profile_pic FROM `users` WHERE uid='$uid'") or die(mysql_error());
+        $query = $this->db->query("SELECT profile_pic FROM `users` WHERE uid='$uid'");
         $row = $query->fetchAll();
         if (!empty($row['profile_pic'])) {
             $profile_pic_path = $base_url . 'profile_pic/';
@@ -154,8 +159,8 @@ class Wall_Model_Walldb {
     public function Gravatar($uid) {
          $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query =$this->db->query("SELECT email FROM `users` WHERE uid='$uid'") or die(mysql_error());
-        $row = $query->fetchAll();
+        $query =$this->db->query("SELECT email FROM `apmusers` WHERE userid='$uid'");
+        $row = $query->fetch();
         if (!empty($row)) {
             $email = $row['email'];
             $lowercase = strtolower($email);
@@ -175,13 +180,13 @@ class Wall_Model_Walldb {
         $update = mysql_real_escape_string($update);
         $time = time();
         $ip = $_SERVER['REMOTE_ADDR'];
-        $query = $this->db->query("SELECT msg_id,message FROM `messages` WHERE uid_fk='$uid' order by msg_id desc limit 1") or die(mysql_error());
+        $query = $this->db->query("SELECT msg_id,message FROM `messages` WHERE uid_fk='$uid' order by msg_id desc limit 1");
         $result = $query->fetch($query);
 
         if ($update != $result['message']) {
             $uploads_array = explode(',', $uploads);
             $uploads = implode(',', array_unique($uploads_array));
-            $query = $this->db->query("INSERT INTO `messages` (message, uid_fk, ip,created,uploads) VALUES ('$update', '$uid', '$ip','$time','$uploads')") or die(mysql_error());
+            $query = $this->db->query("INSERT INTO `messages` (message, uid_fk, ip,created,uploads) VALUES ('$update', '$uid', '$ip','$time','$uploads')");
             $newquery = $this->db->query("SELECT M.msg_id, M.uid_fk, M.message, M.created, U.username FROM messages M, users U where M.uid_fk=U.uid and M.uid_fk='$uid' order by M.msg_id desc limit 1 ");
             $result = $newquery->fetch();
 
@@ -195,8 +200,8 @@ class Wall_Model_Walldb {
     public function Delete_Update($uid, $msg_id) {
         $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("DELETE FROM `comments` WHERE msg_id_fk = '$msg_id' and uid_fk='$uid' ") or die(mysql_error());
-        $query = $this->db->query("DELETE FROM `messages` WHERE msg_id = '$msg_id' and uid_fk='$uid'") or die(mysql_error());
+        $query = $this->db->query("DELETE FROM `comments` WHERE msg_id_fk = '$msg_id' and uid_fk='$uid' ");
+        $query = $this->db->query("DELETE FROM `messages` WHERE msg_id = '$msg_id' and uid_fk='$uid'");
         return true;
     }
 
@@ -210,7 +215,7 @@ class Wall_Model_Walldb {
         $ids = 0;
         $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("insert into user_uploads (image_path,uid_fk)values('$image' ,'$uid')") or die(mysql_error());
+        $query = $this->db->query("insert into user_uploads (image_path,uid_fk)values('$image' ,'$uid')");
         $ids = $query->lastInsertId();
         return $ids;
     }
@@ -220,9 +225,9 @@ class Wall_Model_Walldb {
         $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
         if ($image) {
-            $query = $this->db->query("select id,image_path from user_uploads where image_path='$image'") or die(mysql_error());
+            $query = $this->db->query("select id,image_path from user_uploads where image_path='$image'");
         } else {
-            $query = $this->db->query("select id,image_path from user_uploads where uid_fk='$uid' order by id desc ") or die(mysql_error());
+            $query = $this->db->query("select id,image_path from user_uploads where uid_fk='$uid' order by id desc ");
         }
 
         $result = $query->fetch();
@@ -234,7 +239,7 @@ class Wall_Model_Walldb {
     public function Get_Upload_Image_Id($id) {
          $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("select image_path from user_uploads where id='$id'") or die(mysql_error());
+        $query = $this->db->query("select image_path from user_uploads where id='$id'");
         $result = $query->fetch();
 
         return $result;
@@ -247,11 +252,11 @@ class Wall_Model_Walldb {
         $this->db = $obj->GetDatabaseConnection();
         $time = time();
         $ip = $_SERVER['REMOTE_ADDR'];
-        $query = $this->db->query("SELECT com_id,comment FROM `comments` WHERE uid_fk='$uid' and msg_id_fk='$msg_id' order by com_id desc limit 1 ") or die(mysql_error());
+        $query = $this->db->query("SELECT com_id,comment FROM `comments` WHERE uid_fk='$uid' and msg_id_fk='$msg_id' order by com_id desc limit 1 ");
         $result = $query->fetch();
 
         if ($comment != $result['comment']) {
-            $query = $this->db->query("INSERT INTO `comments` (comment, uid_fk,msg_id_fk,ip,created) VALUES (N'$comment', '$uid','$msg_id', '$ip','$time')") or die(mysql_error());
+            $query = $this->db->query("INSERT INTO `comments` (comment, uid_fk,msg_id_fk,ip,created) VALUES (N'$comment', '$uid','$msg_id', '$ip','$time')");
             $newquery = $this->db->query("SELECT C.com_id, C.uid_fk, C.comment, C.msg_id_fk, C.created, U.username FROM comments C, users U where C.uid_fk=U.uid and C.uid_fk='$uid' and C.msg_id_fk='$msg_id' order by C.com_id desc limit 1 ");
             $result = $newquery->fetch();
 
@@ -275,11 +280,11 @@ class Wall_Model_Walldb {
 
         if ($uid == $oid) {
 
-            $query = $this->db->query("DELETE FROM `comments` WHERE com_id='$com_id'") or die(mysql_error());
+            $query = $this->db->query("DELETE FROM `comments` WHERE com_id='$com_id'");
             return true;
         } else {
 
-            $query = $this->db->query("DELETE FROM `comments` WHERE uid_fk='$uid' and com_id='$com_id'") or die(mysql_error());
+            $query = $this->db->query("DELETE FROM `comments` WHERE uid_fk='$uid' and com_id='$com_id'");
             return true;
         }
     }
@@ -300,7 +305,7 @@ class Wall_Model_Walldb {
 
 
 
-        $query =  $this->db->query("SELECT U.username, U.uid FROM users U, friends F WHERE U.status='1' AND U.uid=F.friend_two AND F.friend_one='$uid' AND F.role='fri' ORDER BY F.friend_id DESC LIMIT $con") or die(mysql_error());
+        $query =  $this->db->query("SELECT U.username, U.uid FROM users U, friends F WHERE U.status='1' AND U.uid=F.friend_two AND F.friend_one='$uid' AND F.role='fri' ORDER BY F.friend_id DESC LIMIT $con");
        // while ($row = mysql_fetch_array($query))
            // $data[] = $row;
         $data=$query->fetchAll();
@@ -310,7 +315,7 @@ class Wall_Model_Walldb {
     public function Friends_Check($uid, $fid) {
          $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("SELECT role FROM friends WHERE friend_one='$uid' AND friend_two='$fid'") or die(mysql_error());
+        $query = $this->db->query("SELECT role FROM friends WHERE friend_one='$uid' AND friend_two='$fid'");
         $num = $query->fetch();
         return $num['role'];
     }
@@ -318,9 +323,10 @@ class Wall_Model_Walldb {
     public function Friends_Check_Count($uid, $fid) {
         $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("SELECT friend_id FROM friends WHERE friend_one='$uid' AND friend_two='$fid'") or die(mysql_error());
-        $num = $query->count();
-        return $num;
+        $query = $this->db->query("SELECT friend_id FROM friends WHERE friend_one='$uid' AND friend_two='$fid'");
+       $result=$query->fetchAll();
+        $data = sizeof($result);
+        return $data;
     }
 
     // Add Friend
@@ -329,9 +335,12 @@ class Wall_Model_Walldb {
         $this->db = $obj->GetDatabaseConnection();
         $fid = mysql_real_escape_string($fid);
         $q = $this->db->query("SELECT friend_id FROM friends WHERE friend_one='$uid' AND friend_two='$fid' AND role='fri'");
-        if ($q->count() == 0) {
-            $query = $this->db->query("INSERT INTO friends(friend_one,friend_two,role) VALUES ('$uid','$fid','fri')") or die(mysql_error());
-            $query = $this->db->query("UPDATE users SET friend_count=friend_count+1 WHERE uid='$uid'") or die(mysql_error());
+         $result= $q->fetchAll();
+        $data = sizeof($result);
+      
+        if ($data == 0) {
+            $query = $this->db->query("INSERT INTO friends(friend_one,friend_two,role) VALUES ('$uid','$fid','fri')");
+            $query = $this->db->query("UPDATE users SET friend_count=friend_count+1 WHERE uid='$uid'");
             return true;
         }
     }
@@ -342,9 +351,11 @@ class Wall_Model_Walldb {
         $this->db = $obj->GetDatabaseConnection();
         $fid = mysql_real_escape_string($fid);
         $q =  $this->db->query("SELECT friend_id FROM friends WHERE friend_one='$uid' AND friend_two='$fid' AND role='fri'");
-        if ($q->count() == 1) {
-            $query = $this->db->query("DELETE FROM friends WHERE friend_one='$uid' AND friend_two='$fid'") or die(mysql_error());
-            $query = $this->db->query("UPDATE users SET friend_count=friend_count-1 WHERE uid='$uid'") or die(mysql_error());
+        $result= $q->fetchAll();
+        $data = sizeof($result);
+        if ($data == 1) {
+            $query = $this->db->query("DELETE FROM friends WHERE friend_one='$uid' AND friend_two='$fid'");
+            $query = $this->db->query("UPDATE users SET friend_count=friend_count-1 WHERE uid='$uid'");
             return true;
         }
     }
