@@ -30,6 +30,17 @@ require('functions.php');
  
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {	
+	/**
+	* Set the default application timezone
+	*
+	* @return void
+	*/
+    protected function _initTimezone()
+    {
+        date_default_timezone_set('Europe/Berlin');
+    }
+	
+	
 	/*
 	 * Initializing Resources
 	 */	

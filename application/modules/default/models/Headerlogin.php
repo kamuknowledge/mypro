@@ -41,33 +41,27 @@ class Default_Model_Headerlogin extends Default_Model_Headerlogindb {
      * @return  
      */
 	
-	public function __construct(){
-		//$this->merchantdb = new Application_Model_Merchantdb();
+	public function __construct(){		
+		
+		$this->headerlogindb=new Default_Model_Headerlogindb();
 		
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyPortal');
-                
 
 		//Assigning a config registry
-		$this->config = Zend_Registry::get('config');
-		
-		//Checking for security enabled or not
-		//if(!isset($this->session->securityqenabled)) {
-			//$this->choosesecurityquestiontype();
-		//}
+		$this->config = Zend_Registry::get('config');		
 		
 		//Redirector handler
-		$this->redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
+		//$this->redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
 		
 		//Request Handler
-		$this->requestHandler = Zend_Controller_Front::getInstance()->getRequest();
+		//$this->requestHandler = Zend_Controller_Front::getInstance()->getRequest();
 		
 		//View Renderer
 		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
 		$viewRenderer->initView();
 		//Assigning renderer to access in the class
-		$this->error = $viewRenderer->view;
-		
+		$this->error = $viewRenderer->view;		
 		$this->viewobj= $viewRenderer->view;
 	}
 	
