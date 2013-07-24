@@ -42,7 +42,7 @@ class EventsController extends Zend_Controller_Action {
 	public function init() { 
 		/*echo "store/index/init";
 		exit;  */
-        $this->_helper->layout->setLayout('default/layout');
+        $this->_helper->layout->setLayout('default/calendar');
 		//$this->setLayoutAction('store/layout');		
 	}
 	
@@ -67,8 +67,24 @@ class EventsController extends Zend_Controller_Action {
 		}
 	}
 	
-	
-	
+    /** 
+	 * Loading a calendar data and  rendering the data in calendar view
+     * @access is public
+	 * @author Alok Pandey.
+	 * @copyright GetLinc.com, Inc. 
+	 * @license GetLinc.com, Inc.
+	*/
+	public function calendarAction(){
+		try{			
+//			echo "df";die;
+
+			
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 	
 	
 	
