@@ -45,7 +45,8 @@ class ProductsController extends Zend_Controller_Action {
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('default/layout');	
 
-		$this->view->headScript()->appendFile($this->view->baseUrl('public/default').'/js/dev_store.js','text/javascript');		
+		$this->view->headScript()->appendFile($this->view->baseUrl('public/default/js/dev_store.js'),'text/javascript');	
+		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_store.css'));
 	}
 	
     

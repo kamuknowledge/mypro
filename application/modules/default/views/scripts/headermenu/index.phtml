@@ -1,10 +1,12 @@
 <?php
 $this->session = new Zend_Session_Namespace('MyClientPortal');
 $isSignedIn = $this->session->isSignedIn;
+
+$config=Zend_Registry::get('config');
 ?>
 <div class="header-bottom">
 	<div class="wrapper">
-		<div class="call"><h5>ORDER BY PHONE</h5><h3>0120-4455918</h3></div>
+		<div class="call"><h5>ORDER BY PHONE</h5><h3><?php echo $config->site->header->phone;?></h3></div>
 		<div class="search">
 			<form>
 				<select>

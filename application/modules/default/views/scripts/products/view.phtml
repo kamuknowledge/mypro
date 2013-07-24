@@ -132,36 +132,67 @@
 							<!-- Top Title Details -->    
 							<div class="mprod-summary-title fksk-mprod-summary-title">
 								<h1 itemprop="name" title="Sony Xperia Tipo"><?php echo $this->productdetails['product_title'];?></h1>
-								<span class="line extra_text">(Tag Lane)</span>
-
+								<span class="line extra_text">(Tag Lane)</span>	
+								<div style="height:20px;"></div>								
 								<div class="mprod-warrenty">
 								<?php echo $this->productdetails['product_small_description'];?>
 								</div>
 							</div>
+							
+							
+							
+							
+							
 							<div class="shop-section line bmargin10 tmargin5">
 								<div class="price-section fksk-price-section unit">
 									<div class="price-table">
 										<div class="line">
-											<div class="prices" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-												
-												<?php print_r($this->ProductPriceDetails);?>
-												<span class="fk-font-finalprice fk-font-big fk-bold final-price"> Rs. 8490</span>
-												<div class="label fksk-label">Inclusive of taxes</div>
-												<meta itemprop="price" content="8490">
-												<meta itemprop="priceCurrency" content="INR">
+											<div class="prices">												
+												<?php 
+												//echo "<pre>";
+												//print_r($this->ProductPriceDetails);
+												?>												
+												<br>
+												<div class="offer-box fk-font-small">
+													<div class="offer-sticker"></div>
+													<div class="line">
+													
+														<?php foreach($this->ProductPriceDetails as $each_ProductPriceDetails){?>
+														<input type="radio">
+														<?php 
+														echo $each_ProductPriceDetails['product_price_description']."-";													
+														
+														if($each_ProductPriceDetails['product_discount_type']=='0'){
+															echo "Rs.".$each_ProductPriceDetails['product_price'];
+														}else{
+															
+															if($each_ProductPriceDetails['product_discount_type']=='Percentage'){
+																echo "(".$each_ProductPriceDetails['product_discount']."% Discount)";
+															}
+															
+															if($each_ProductPriceDetails['product_discount_type']=='Amount'){
+																echo "(Rs.".$each_ProductPriceDetails['product_discount']." Discount)";
+															}
+														}
+														?>
+														
+														<?php }?>													
+													</div>
+												</div>											
 											</div>
 										</div>
 									</div>
 								</div>
-									<div class="stock-section lastUnit">
-									<div class="stock-status instock fk-font-normal fk-bold" id="fk-stock-info-id">In Stock.</div>
-									<div class="shipping-details">Delivered in<br>2-3 business days.</div>
-								</div>
+								
+								<div class="stock-section lastUnit">									
+									<span class="fk-font-finalprice fk-font-big fk-bold final-price">
+									Rs. 8490									
+									</span>									
+									<div class="label fksk-label">Inclusive of taxes</div>									
+									<div class="stock-status instock fk-font-normal fk-bold" id="fk-stock-info-id">In Stock.</div>									
+								</div>								
 							</div>
-							<div class="offer-box fk-font-small">
-								<div class="offer-sticker"></div>
-								<div class="line">Offer Text</div>
-							</div>
+							
 
 
 
@@ -170,6 +201,7 @@
 							<div class="shipping-section fksk-shipping-section" id="fk-mprod-shipping-section-id">
 								<div class="block-header fksk-block-header line">
 								<div class="block-headertext">FREE Home Delivery</div>
+								<div class="shipping-details">Delivered in 2-3 business days.</div>
 								</div>
 								
 								
@@ -187,13 +219,18 @@
 								</form>
 
 								<div class="telesale-msg">
-								<img src="images/phone-icon-7b7b8b07.png">
-								You may also call us at <span class="highlight">1800 420 1111</span> to order<span style="font-size:11px"> (toll free)</span>.
+								<img src="<?php echo $this->baseUrl('public/default/images/phone-icon-7b7b8b07.png');?>">
+								You may also call us at <span class="highlight">
+								<?php 
+								$config=Zend_Registry::get('config');
+								echo $config->site->header->phone;
+								?>
+								</span> to order<span style="font-size:11px"> (toll free)</span>.
 								</div>
 
 
 								<div class="line mprod-wlist-text tmargin10">
-								<img src="images/my-wishlist-icon-68c3111a.png">
+								<img src="<?php echo $this->baseUrl('public/default/images/my-wishlist-icon-68c3111a.png');?>">
 								<a href="javascript:void(0)" class="pp-add-to-wishlist login-required">Add to My Wishlist</a>
 								<span class="wlist-cmp-divider">|</span>
 								<a href="javascript:void(0)" class="pp-add-to-compare fk-inline-block enabled">Add to compare</a>
