@@ -3,8 +3,6 @@
 /******** Ready function starts ********************/
 $(document).ready(function(){
 /******** loading a fullcalendar into a calendar div ********************/
-	$(document).ready(function() {
-	
 		var date = new Date();
 		var d = date.getDate();
 		var m = date.getMonth();
@@ -20,7 +18,18 @@ $(document).ready(function(){
 			selectHelper: true,
 			editable: true,
 			select: function(start, end, allDay, jsEvent, view) {
-					alert('Create event functionality is in under preocess');
+					$('#event_form').dialog({
+						width:'800px',
+						show: {
+							effect: "blind",
+							duration: 1000
+						},
+						hide: {
+							effect: "explode",
+							duration: 1000
+						}
+					});
+					//alert('Create event functionality is in under preocess');
 			},
 			eventClick: function(start, end, allDay, jsEvent, view) {
 					alert('Edit event functionality is in under preocess');
@@ -79,7 +88,34 @@ $(document).ready(function(){
 			]
 		});
 		
-	});
+
+		/************ loading datepicker and timepicker ************************/
+		$('.datepicker').datepicker();
+		$('#event_start_time').timepicker();
+		$('#event_end_time').timepicker();
+		
+		$("#allday").click(function(){
+				var chkStatus = $(this).attr("checked");
+				if(chkStatus=="checked"){
+					$('.time').attr("disabled","disabled");
+				} else {
+					$('.time').removeAttr("disabled");
+				}
+		});
+		
+		$("#event_form_body").submit(function(){
+			$("#event_form_body").validate();
+			if($("#event_form_body").validate()){
+				return true;
+			} else {
+				return false;
+			}
+		})
 
 });
 /******** Ready function ends ********************/
+
+/**************** Close Dialog *******************/
+function dialoge_close(){
+	$('#event_form').dialog('close');
+}
