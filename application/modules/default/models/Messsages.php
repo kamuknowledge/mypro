@@ -12,7 +12,6 @@
 * Purpose	:	This class is used for user messages related database operations
 * Date		:	26/07/2013
 
-
 * Modification History
 * ----------------------------------------------------------------------------------------------------------------
 * Dated		Version		Who		Description
