@@ -12,7 +12,6 @@
 * Purpose	:	This class is used for internal messaging operations for all user types
 * Date		:	26/07/2013
 
-
 * Modification History
 * ----------------------------------------------------------------------------------------------------------------
 * Dated		Version		Who		Description
@@ -28,7 +27,6 @@ class MessagingController extends Zend_Controller_Action {
 	public $error;		// used for managing session with NAMESPACE portalerror
 	private $message;		// used for creating an instance of model, Access is with in the class	
 	private $messagesdb;
-
 	/**
      * Purpose: Initiates sessions with Namespace 'portal' and 'portalerror' 
      *
