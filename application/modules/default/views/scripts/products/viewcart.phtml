@@ -1,0 +1,74 @@
+<?php
+//echo "<pre>";
+print_r($this->ViewCartProductDetails);
+?>
+<div class="main_body">
+					<div class="left width-100">
+<div id="cart-table">
+							<div class="cart-header">
+								<span></span>
+								<a href="javascript:void(0)" >Cart <span>(2)</span></a>
+								<div class="clear"></div>
+							</div>
+							<div class="cart-content">
+								<div class="table_cont">
+								
+								
+									<div class="table-header">
+										<div class="row">
+											<div class="col prd_img">&nbsp;</div>
+											<div class="col prd_info">Item Description</div>
+											<div class="col prd_delivery">Delivery Time</div>
+											<div class="col	prd_price">Price</div>
+											<div class="col prd_qty">Qty.</div>
+											<div class="col prd_total">Subtotal</div>
+											<div class="col prd_action">&nbsp;</div>
+											<div class="clear"></div>
+										</div>
+									</div>
+								
+									
+									<div class="table-body">
+									
+										<?php foreach($this->ViewCartProductDetails  as $ViewCartProductDetails){?>										
+										<div class="row odd">									
+											<div class="col prd_img"><img src="<?php echo $this->baseUrl('public/uploads/product_images')."/No_Image_Available.jpg";?>" title="product name" alt="productname" /></div>
+											<div class="col prd_info">
+												<div class="type">Camera</div>
+												<h2><a href="javascript:void(0)">Canon PowerShot A2300 IS 16.0 MP(12px)</a> </h2>
+												<a href="javascript:void(0)" >Move to Wishlist</a>
+												<div class="promotion">Free battery</div>
+											</div>
+											<div class="col prd_delivery">2-3 business days</div>
+											<div class="col	prd_price">Rs.2000</div>
+											<div class="col prd_qty">2</div>
+											<div class="col prd_total">Rs.4000</div>
+											<div class="col prd_action"><a href="javascript:void(0)" />Delete</a></div>
+											<div class="clear"></div>
+										</div>
+										<?php }?>
+										
+									</div>
+									<div class="table_footer">
+										<div class="row even">
+											<div class="row">
+												<div class="col"><label>Shipping</label>:<span>Free</span></div>
+											</div>
+											<div class="row">
+												<div class="col"><label>Amount</label>:<span>Rs.8000.00</span></div>
+											</div>
+											<div class="clear"></div>
+										</div>
+									</div>
+								</div>
+								<div class="left">
+										<input  type="button" value="Continue Shopping" id="continue_shopping" >	
+								</div>
+								<div class="right">
+									<input class="checkout" type="button" value="Place Order" >
+								</div>
+								<div class="clear"></div>
+							</div>
+						</div>
+						</div>
+						</div>

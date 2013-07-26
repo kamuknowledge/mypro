@@ -5,7 +5,7 @@
 <div class="main_body">
 	<div class="mprod-section unit" itemscope="" itemtype="http://schema.org/Product">
 
-
+		<form action="" method="POST" name="product_details_form" id="product_details_form" enctype='multipart/form-data'>
 			<div id="topsection" class="line bpadding10">
 					
 					
@@ -144,7 +144,7 @@
 							
 							
 							<div class="shop-section line bmargin10 tmargin5">
-								<div class="price-section fksk-price-section unit">
+								<div class="price-section fksk-price-section unit" style="width:350px;">
 									<div class="price-table">
 										<div class="line">
 											<div class="prices">												
@@ -155,28 +155,31 @@
 												<br>
 												<div class="offer-box fk-font-small">
 													<div class="offer-sticker"></div>
-													<div class="line">
-													
-														<?php foreach($this->ProductPriceDetails as $each_ProductPriceDetails){?>
-														<input type="radio">
+													<div class="line" style="line-height:23px;">
+														<input type="hidden" name="product_id" value="<?php echo $this->product_id?>" />
 														<?php 
-														echo $each_ProductPriceDetails['product_price_description']."-";													
+														$p=0;
+														foreach($this->ProductPriceDetails as $each_ProductPriceDetails){														
+														?>
+														<input type="radio" name="product_price_id" <?php if($p==0){?>checked="checked"<?php }?> value="<?php echo $each_ProductPriceDetails['product_price_id'];?>" />
+														<?php 
+														echo $each_ProductPriceDetails['product_price_description']." &nbsp; ";													
 														
-														if($each_ProductPriceDetails['product_discount_type']=='0'){
+														if($each_ProductPriceDetails['product_discount']=='0'){
 															echo "Rs.".$each_ProductPriceDetails['product_price'];
 														}else{
 															
 															if($each_ProductPriceDetails['product_discount_type']=='Percentage'){
-																echo "(".$each_ProductPriceDetails['product_discount']."% Discount)";
+																echo "Rs.".$each_ProductPriceDetails['product_price']."(".$each_ProductPriceDetails['product_discount']."% Discount)";
 															}
 															
 															if($each_ProductPriceDetails['product_discount_type']=='Amount'){
-																echo "(Rs.".$each_ProductPriceDetails['product_discount']." Discount)";
+																echo "Rs.".$each_ProductPriceDetails['product_price']."(Rs.".$each_ProductPriceDetails['product_discount']." Discount)";
 															}
 														}
 														?>
-														
-														<?php }?>													
+														<br>
+														<?php $p++;}?>													
 													</div>
 												</div>											
 											</div>
@@ -187,8 +190,10 @@
 								<div class="stock-section lastUnit">									
 									<span class="fk-font-finalprice fk-font-big fk-bold final-price">
 									Rs. 8490									
-									</span>									
-									<div class="label fksk-label">Inclusive of taxes</div>									
+									</span>
+									<br>
+									<div class="label fksk-label">Inclusive of taxes</div>	
+									<br>
 									<div class="stock-status instock fk-font-normal fk-bold" id="fk-stock-info-id">In Stock.</div>									
 								</div>								
 							</div>
@@ -206,40 +211,42 @@
 								
 								
 								<div class="block-body fksk-block-body line">
-								<form name="">
+								
 								<div class="line">
-								<div class="unit buy-btn-sec" id="mprod-buy-btn">
-								<a href="javascript:void(0)" class="fk-inline-block buy-btn fksk-buy-btn">
+								<div class="unit buy-btn-sec" id="mprod-buy-btn">								
+								<a href="javascript:void(0)" class="fk-inline-block buy-btn fksk-buy-btn" id="add_to_cart">
 								</a>
 								</div>
 								<div class="lastUnit">
 								<div class="mprod-shipment-text fk-normalfont">with an option to pay <div class="boldtext">Cash on Delivery</div></div>
 								</div>
 								</div>
-								</form>
+								
 
 								<div class="telesale-msg">
-								<img src="<?php echo $this->baseUrl('public/default/images/phone-icon-7b7b8b07.png');?>">
-								You may also call us at <span class="highlight">
-								<?php 
-								$config=Zend_Registry::get('config');
-								echo $config->site->header->phone;
-								?>
-								</span> to order<span style="font-size:11px"> (toll free)</span>.
+									<img src="<?php echo $this->baseUrl('public/default/images/phone-icon-7b7b8b07.png');?>">									
+									You may also call us at <span class="highlight">
+									<?php 
+									$config=Zend_Registry::get('config');
+									echo $config->site->header->phone;
+									?>
+									</span> to order<span style="font-size:11px"> (toll free)</span>.
 								</div>
 
-
+								<?php /*
 								<div class="line mprod-wlist-text tmargin10">
-								<img src="<?php echo $this->baseUrl('public/default/images/my-wishlist-icon-68c3111a.png');?>">
-								<a href="javascript:void(0)" class="pp-add-to-wishlist login-required">Add to My Wishlist</a>
-								<span class="wlist-cmp-divider">|</span>
-								<a href="javascript:void(0)" class="pp-add-to-compare fk-inline-block enabled">Add to compare</a>
+									<img src="<?php echo $this->baseUrl('public/default/images/my-wishlist-icon-68c3111a.png');?>">
+									<a href="javascript:void(0)" class="pp-add-to-wishlist login-required">Add to My Wishlist</a>
+									<span class="wlist-cmp-divider">|</span>
+									<a href="javascript:void(0)" class="pp-add-to-compare fk-inline-block enabled">Add to compare</a>
 								</div>
+								*/?>
 								</div>
 							</div>
 					</div>
 
 			</div>
+		</form>
 			
 			
 

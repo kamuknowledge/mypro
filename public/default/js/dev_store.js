@@ -22,6 +22,20 @@ $(document).ready(function(){
 					return false;
 				}
 			});	
-	});		
+	});
+
+	
+	/* Add to Cart Form Submit */
+	$('#add_to_cart').click(function() {
+	  $('#product_details_form').submit();
+	});	
+	
+	
+	$("#continue_shopping").click(function() {
+	  //alert("Handler for .click() called.");
+	  window.location = baseUrl+'/index';
+	});
 		
 });
+
+

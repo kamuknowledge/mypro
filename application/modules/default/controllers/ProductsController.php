@@ -43,8 +43,11 @@ class ProductsController extends Zend_Controller_Action {
 		$this->productss = new Default_Model_Productss();
 		$this->productssdb = new Default_Model_Productssdb();
         $this->_helper->layout->setLayout('default/layout');
-		//$this->setLayoutAction('default/layout');	
+		//$this->setLayoutAction('default/layout');
 
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
+		$this->error = new Zend_Session_Namespace('MyClientPortalerror');		
+		
 		$this->view->headScript()->appendFile($this->view->baseUrl('public/default/js/dev_store.js'),'text/javascript');	
 		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_store.css'));
 	}
@@ -162,23 +165,68 @@ class ProductsController extends Zend_Controller_Action {
 	
 	public function viewAction() {
 		try{
-			$params = $this->_getAllParams();
-			//Print_r($params);			
-			$productdetails = $this->productssdb->getProductDetails($params);			
-			$this->view->headTitle()->append($productdetails['product_title']);
-			$this->view->productdetails = $productdetails;
+		
+		
+			$request = $this->getRequest();
+			$Request_Values = $request->getPost();	
+			print_r($Request_Values);
 			
-			$ProductImageDetails = $this->productssdb->getProductImageDetails($params);
-			$this->view->ProductImageDetails = $ProductImageDetails;
+			//if ($request->isPost() && isset($Request_Values['product_update_submit']) && $Request_Values['product_update_submit']=='Save')
+			if ($request->isPost())
+			{
+				$product_price_id = $Request_Values['product_price_id'];
+				$product_id = $Request_Values['product_id'];
+				$action = '';
+				$this->productss->insertViewCartProduct($product_id,$product_price_id,$action);
+				$this->_redirect('/products/viewcart');
+				exit;				
+			}else{
+		
+				$params = $this->_getAllParams();
+				$this->view->product_id = $params['id'];
+				Print_r($params);			
+				$productdetails = $this->productssdb->getProductDetails($params);			
+				$this->view->headTitle()->append($productdetails['product_title']);
+				$this->view->productdetails = $productdetails;
+				
+				$ProductImageDetails = $this->productssdb->getProductImageDetails($params);
+				$this->view->ProductImageDetails = $ProductImageDetails;
+				
+				$ProductReviewDetails = $this->productssdb->getProductReviewDetails($params);
+				$this->view->ProductReviewDetails = $ProductReviewDetails;
+				
+				$ProductAttributesDetails = $this->productssdb->getProductAttributesDetails($params);
+				$this->view->ProductAttributesDetails = $ProductAttributesDetails;
+				
+				$ProductPriceDetails = $this->productssdb->getProductPriceDetails($params);
+				$this->view->ProductPriceDetails = $ProductPriceDetails;
+			}
 			
-			$ProductReviewDetails = $this->productssdb->getProductReviewDetails($params);
-			$this->view->ProductReviewDetails = $ProductReviewDetails;
-			
-			$ProductAttributesDetails = $this->productssdb->getProductAttributesDetails($params);
-			$this->view->ProductAttributesDetails = $ProductAttributesDetails;
-			
-			$ProductPriceDetails = $this->productssdb->getProductPriceDetails($params);
-			$this->view->ProductPriceDetails = $ProductPriceDetails;
+			//exit;			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     *
+     * Access is public
+     *
+     * @param	
+     * 
+     * @return  
+     */
+	
+	public function viewcartAction() {
+	try{			
+			$ViewCartProductDetails = $this->productssdb->getViewCartProductDetails();
+			$this->view->ViewCartProductDetails = $ViewCartProductDetails;			
 			
 			//exit;			
 		}catch (Exception $e){

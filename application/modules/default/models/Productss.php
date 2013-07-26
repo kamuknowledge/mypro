@@ -26,6 +26,7 @@
 class Default_Model_Productss extends Application_Model_Validation {
 	
 	public $session;
+	public $sessionid;
 	private $error;
 	private $config;
 	private $redirector;
@@ -42,7 +43,16 @@ class Default_Model_Productss extends Application_Model_Validation {
      */
 	
 	public function __construct(){
-	
+		
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
+		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		
+		$this->sessionid = new Zend_Session_Namespace('MyClientPortalId');
+		if(!isset($this->sessionid->session_id) && trim($this->sessionid->session_id)==''){
+			$this->sessionid->session_id = time().get_rand_id(8);
+		}
+		//echo "##".$this->sessionid->session_id."##";exit;
+		
 		$this->productssdb=new Default_Model_Productssdb();
 				
 		//Assigning session
@@ -64,6 +74,31 @@ class Default_Model_Productss extends Application_Model_Validation {
 		//Assigning renderer to access in the class
 		$this->error = $viewRenderer->view;		
 		$this->viewobj= $viewRenderer->view;
+	}
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Creates product images
+     *
+     * Access is public
+     *
+     * @param	Array	$params Create product image parameters
+     * 
+     * @return  object	Returns a boolean of status.
+     */
+	
+	public  function insertViewCartProduct($product_id,$product_price_id,$action) {
+		try{				
+			$ProductViewCartSet = $this->productssdb->insertViewCartProduct($product_id, $product_price_id, $action, $this->session->userid, $this->sessionid->session_id);
+			//print_r($ProductViewCartSet);exit;
+			return false;				
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
 	}
 	
 }

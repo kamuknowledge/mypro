@@ -276,5 +276,61 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 	}
 	
 	
+	
+	
+	
+	
+	/**
+     * Purpose: Fetching product list
+     *
+     * Access is limited to class and extended classes
+     *
+     * @param	int		$istart Start value
+     * @param	int		$ilimit Limit value for fetching result set
+     * @param	varchar	$cond Search condition
+     * @return  object	Returns status message.	
+     */
+	
+	public function getViewCartProductDetails(){
+		try {	
+			
+			
+			$query = "SELECT * FROM store_users_temp_cart";
+			
+			//exit;			
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
+			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Creates product and returns status of the user creation process 
+     *
+     * Access is limited to class and extended classes
+     *    
+     * @return  object	Returns status message.	
+     */
+	public function insertViewCartProduct($product_id, $product_price_id, $action, $userid, $session_id){
+		try {		
+			$query = "insert into store_users_temp_cart (userid, user_session_id, product_id, product_price_id, product_quantity, statusid) values('".$userid."', '".$session_id."', ".$product_id.", ".$product_price_id.",'1','1')";
+			//exit;
+			$stmt = $this->db->query($query);	
+			return $stmt; 
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
 }
 ?>

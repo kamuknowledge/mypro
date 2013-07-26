@@ -1,5 +1,97 @@
 <?php
 
+
+
+/*
+* Finding the difference between dates
+*/
+function dateDifference($startDate, $endDate) {
+    // Parse dates for conversion
+	$startArry = date_parse($startDate);
+	$endArry = date_parse($endDate);
+
+	// Convert dates to Julian Days
+	$start_date = gregoriantojd($startArry["month"], $startArry["day"], $startArry["year"])."</br>";
+	$end_date   = gregoriantojd($endArry["month"], $endArry["day"], $endArry["year"]);
+
+	// Return difference
+	return round(($end_date - $start_date), 0);
+}
+
+
+
+
+/*
+* money format
+*/
+function AmountFormat($amount = '0', $symbal = '$') {
+	$amount = round($amount,2);
+	$sign = '';
+	if ( substr($amount, 0, 1) == '-'){
+		$sign = '-';
+		$amount = substr($amount, 1);
+	}
+	if($symbal == " ") {		// If you want the format without any symbol then pass space, ie: " "
+		$amount = $sign . number_format($amount, 2,'.','');
+	} else {
+		$amount = $sign . $symbal . number_format($amount, 2);
+	}
+	return $amount;
+}
+
+
+
+
+
+/* html_mail */
+
+function html_mail ($to, $subject, $html_message, $from_address, $from_display_name=''){
+	$email_from_addr = $from_address; // actual email address of the sender
+	$email_from_name = $from_display_name; // display name, if any, that the sender wishes to use
+	$email_subject =  $subject; // The Subject of the email 
+	$email_txt = $html_message; // Message that the email has in it 
+	$email_to = $to; // Who the email is to
+	$headers = $email_from_name == '' ? "From: ".$email_from_addr : "From: ".$email_from_name." <".$email_from_addr.">";
+	$semi_rand = md5(time()); 
+	$mime_boundary = "==Multipart_Boundary_x{$semi_rand}x"; 
+	//$headers .= "\nMIME-Version: 1.0\n" . 
+           // "Content-Type: multipart/mixed;\n" . 
+           // " boundary=\"{$mime_boundary}\""; 
+           
+	
+	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+	
+	// Additional headers
+	//$headers .= 'To: Mary <'.$email_to.'>, Kelly <kelly@example.com>' . "\r\n";
+	$headers .= 'From: Birthday Reminder <birthday@example.com>' . "\r\n";
+	//$headers .= 'Cc: birthdayarchive@example.com' . "\r\n";
+	///$headers .= 'Bcc: birthdaycheck@example.com' . "\r\n"; 
+
+
+
+	$email_message .= "This is a multi-part message in MIME format.\n\n" . 
+                "--{$mime_boundary}\n" . 
+                "Content-Type:text/html; charset=\"iso-8859-1\"\n" . 
+                "Content-Transfer-Encoding: 7bit\n\n" . 
+				$email_txt . 
+				"\n\n\n";
+//				"<html><body><img src='" . $fileurl . "'><BR>" . $email_txt . "</body></html>\n\n"; 
+	$ok = @mail($email_to, $email_subject, $email_message, $headers); 
+	if(! $ok) { 
+		//die("Sorry but the email could not be sent. Please go back and try again!"); 
+	} 
+}
+
+
+
+function domain_exists($email,$record = 'MX'){
+  list($user,$domain) = split('@',$email);
+  return checkdnsrr($domain,$record);
+}
+
+
+
 /*
  * Function is used to return middle tier object
  */
