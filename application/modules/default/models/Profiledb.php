@@ -159,5 +159,16 @@ class Default_Model_Profiledb  {
 			throw new Exception($e->getMessage());
 		}
 	}
+	
+	public function createupdateExperiance($params) {
+		try {
+			// $query = 'UPDATE user_profile SET about_us = "'.$about_us.'" WHERE userid = "'.$this->userid.'";';
+			// $stmt = $this->db->query($query);
+			return 1;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 }
 ?>

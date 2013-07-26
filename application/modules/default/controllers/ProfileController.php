@@ -153,13 +153,13 @@ class ProfileController extends Zend_Controller_Action {
 	
 	public function addeditexperianceAction() {
 		try{
-			$params = $this->_getAllParams();
+			//$params = $this->_getAllParams();
 			$request = $this->getRequest();
 			$Request_Values = $request->getPost();
 			if ($request->isPost()) {
 				$this->_helper->layout->setLayout('default/empty_layout');
-				if(isset($params["type"]) && $params["type"] == "edit") {
-					$id = $params["id"];
+				if(isset($Request_Values["type"]) && $Request_Values["type"] == "edit") {
+					$id = $Request_Values["id"];
 					if($id)
 					{
 						$this->view->UserDetails = $this->profiledb->getUserExperiance($id);
@@ -174,6 +174,38 @@ class ProfileController extends Zend_Controller_Action {
 			}else{			
 				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
 				//return 0;
+			}
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function vieweditexperianceAction() {
+		try{
+			//$params = $this->_getAllParams();
+			$request = $this->getRequest();
+			$Request_Values = $request->getPost();
+			if ($request->isPost()) {
+				$this->_helper->layout->setLayout('default/empty_layout');
+				if(isset($Request_Values["type"]) && $Request_Values["type"] == "edit") {
+					$experiance_id = $Request_Values["experiance_id"];
+					$edit_exp_id = $Request_Values["exp_id"];
+					if($experiance_id)
+					{
+						$this->view->UserDetails = $this->profiledb->getUserExperiance($experiance_id);
+					} if($edit_exp_id) {
+						if($this->profiledb->createupdateExperiance($params)) {
+							//echo "<script>window.location.reload();</script>";
+							echo 1;
+							exit;
+						}
+					}
+				} else if(isset($Request_Values["type"]) && $Request_Values["type"] == "new") {
+					
+				}
+			}else{
+				echo 0;exit;
 			}
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
