@@ -43,7 +43,9 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 		
 	public function __construct(){
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
-		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		$this->error = new Zend_Session_Namespace('MyClientPortalerror');		
+		$this->sessionid = new Zend_Session_Namespace('MyClientPortalId');
+	
 		$this->db=Zend_Registry::get('db');
 	}
 	
@@ -236,8 +238,7 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 						spr.userid = au.userid
 						AND
 						spr.statusid=1
-						AND product_id = ".$params['id']."
-						AND spr.userid=86";			
+						AND product_id = ".$params['id'];			
 			//exit;			
 			$stmt = $this->db->query($query);			
 			return $stmt->fetchAll();
@@ -294,8 +295,21 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 	public function getViewCartProductDetails(){
 		try {	
 			
+			if(isset($this->session->userid) && trim($this->session->userid)!=''){
+				$userid_condition = " OR sutc.userid = '".$this->session->userid."' ";
+			}
 			
-			$query = "SELECT * FROM store_users_temp_cart";
+			$query = "SELECT
+					sutc.temp_cart_id, sutc.userid, sutc.user_session_id, sutc.product_id, sutc.product_price_id, sutc.product_quantity,
+					sp.product_title,
+					spi.product_image,
+					spp.product_price_id, spp.discount_start_date, spp.discount_end_date, spp.product_id, spp.product_price_description,
+					spp.product_price, spp.product_discount, spp.product_discount_type
+					FROM
+					store_users_temp_cart sutc LEFT JOIN store_products sp  ON (sutc.product_id = sp.product_id)
+					LEFT JOIN store_products_images spi ON (sutc.product_id = spi.product_id AND spi.product_thumbnail=1)
+					LEFT JOIN store_products_price spp ON (sutc.product_id = spp.product_id AND sutc.product_price_id = spp.product_price_id)
+					WHERE sutc.user_session_id = '".$this->sessionid->session_id."' ".$userid_condition."";
 			
 			//exit;			
 			$stmt = $this->db->query($query);			
@@ -320,11 +334,11 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
      * @return  object	Returns status message.	
      */
 	public function insertViewCartProduct($product_id, $product_price_id, $action, $userid, $session_id){
-		try {		
-			$query = "insert into store_users_temp_cart (userid, user_session_id, product_id, product_price_id, product_quantity, statusid) values('".$userid."', '".$session_id."', ".$product_id.", ".$product_price_id.",'1','1')";
-			//exit;
-			$stmt = $this->db->query($query);	
-			return $stmt; 
+		try {
+			//$query = "CALL SPviewcartinsert('".$product_id."','".$product_price_id."','".$session_id."','".$action."','".$userid."')";
+			//echo $query;exit;
+			$stmt = $this->db->query("CALL SPviewcartinsert(?, ?, ? , ?, ?)", array($product_id,$product_price_id,$session_id,$action,$userid));			
+			return $stmt->fetch();			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
