@@ -6,7 +6,7 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Messaging.php 
+* File		:	Videos.php 
 * Module	:	Default Module
 * Owner		:	RAM's 
 * Purpose	:	This class is used for internal messaging operations for all user types
@@ -22,7 +22,7 @@
 *===================================================================================================================
 */
 
-class MessagingController extends Zend_Controller_Action { 
+class VideosController extends Zend_Controller_Action { 
 	public $session;	// used for managing session with NAMESPACE portal
 	public $error;		// used for managing session with NAMESPACE portalerror
 	private $message;		// used for creating an instance of model, Access is with in the class	
@@ -44,8 +44,8 @@ class MessagingController extends Zend_Controller_Action {
 		$this->error = new Zend_Session_Namespace('MyPortalerror');
 		
 		// Calling DB Operations and Validations Classes
-		$this->message = new Default_Model_Messages();
-		$this->messagesdb = new Default_Model_Messagesdb();
+		$this->videos = new Default_Model_Videos();
+		$this->Videosdb = new Default_Model_Videosdb();
 		
 		// Setting Layout
         $this->_helper->layout->setLayout('default/layout');
@@ -54,13 +54,13 @@ class MessagingController extends Zend_Controller_Action {
 		//$this->setLayoutAction('store/layout');
 
 		// Calling config registry values
-		$this->config = Zend_Registry::get('config');
+		$this->config = Zend_Registry::get('config');	
 
 		// Including JS
-		$this->view->headScript()->appendFile($this->view->baseUrl('public/default/js/dev_messaging.js'),'text/javascript');
+		$this->view->headScript()->appendFile($this->view->baseUrl('public/default/js/dev_videos.js'),'text/javascript');
 
 		// Including CSS
-		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_messaging.css'));		
+		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_videos.css'));		
 	}
 	
     
@@ -94,36 +94,12 @@ class MessagingController extends Zend_Controller_Action {
      * @return  
      */
 	
-	public function inboxAction() {
+	public function categoriesAction() {
 		try{	
-			$InboxDetails["inbox"] = $this->messagesdb->getInboxMessages();			
+			// Code
 			
-			$this->view->InboxDetails = $InboxDetails;
-			//echo "store/index/index";
-			//exit; 
-			//echo "hi";exit;		
-		}catch (Exception $e){
-			Application_Model_Logging::lwrite($e->getMessage());
-			throw new Exception($e->getMessage());
-		}
-	}
-	
-	
-	
-	
-	
-	/**
-     * Purpose: Index action
-     * Access is public
-     *
-     * @param	
-     * @return  
-     */
-	
-	public function composeAction() {
-		try{	
-			// code
-
+			$CategoriesList = $this->Videosdb->getCategoriesList();	
+			$this->view->CategoriesList = $CategoriesList;
 			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
@@ -143,7 +119,7 @@ class MessagingController extends Zend_Controller_Action {
      * @return  
      */
 	
-	public function viewAction() {
+	public function listAction() {
 		try{	
 			// code
 
@@ -153,6 +129,7 @@ class MessagingController extends Zend_Controller_Action {
 			throw new Exception($e->getMessage());
 		}
 	}
+
 
 }
 ?>

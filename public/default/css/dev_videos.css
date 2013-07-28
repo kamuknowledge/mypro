@@ -1,0 +1,64 @@
+/* Videos Module CSS */
+
+
+.videos_list{}
+.videos_list h4 {
+    border-bottom: 1px solid #DDDDDD;
+    color: #E47911;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 5px 0;
+}
+.videos_list ul li {
+    list-style: none;
+    float: left;
+    width: 21%;
+    margin: 1%;
+}
+.videos_list ul li div.videos_image {
+}
+.videos_list ul li span.rating {
+    height: 13px;
+    width: 65px;
+    background: url(../images/star-rating.png);
+    display: block;
+    margin: auto;
+    margin: 5px auto;
+}
+.videos_list ul li span.rating.rating-1 {
+    background-position: -53px 0px;
+}
+.videos_list ul li div.videos_image {
+    text-align: center;
+    margin-bottom: 5px;
+}
+.videos_list ul li div.price {
+    text-align: center;
+    margin: 5px 0px;
+}
+.videos_list ul li div.price span {
+    margin-right: 3px;
+}
+.videos_list ul li div.price span.old {
+    text-decoration: line-through;
+    color: #999;
+}
+.videos_list ul li div.price span.new {
+    color: #dd0000;
+    font-size: 14px;
+}
+
+.category_border{
+	border:#CCC dotted 1px; 
+	width:125px; 
+	padding:5px; 
+	border-radius: 3px 3px 3px 3px;
+	}
+	
+.category_title{
+	background:#EDEDED;
+	padding:5px; 
+	border-radius: 3px 3px 3px 3px;
+	min-height:50px;
+	}
+	
