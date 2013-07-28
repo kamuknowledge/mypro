@@ -30,25 +30,37 @@ class ProductsController extends Zend_Controller_Action {
 	private $productssdb;
 	
 	/**
-     * Purpose: Initiates sessions with Namespace 'portal' and 'portalerror' 
-     *
+     * Purpose: Initiates sessions with Namespace 'MyClientPortal' and 'MyClientPortalerror' 
      * Access is public
      *
      * @param	
-     * 
      * @return  
      */
 	
-	public function init() { 	
+	public function init() { 
+		
+		//Assigning session
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
+		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		
+		// Calling DB Operations and Validations Classes
 		$this->productss = new Default_Model_Productss();
 		$this->productssdb = new Default_Model_Productssdb();
+		
+		
+		// Calling config registry values
+		$this->config = Zend_Registry::get('config');
+				
+		// Setting Layout
         $this->_helper->layout->setLayout('default/layout');
+		
+		// Disable Layout
 		//$this->setLayoutAction('default/layout');
 
-		$this->session = new Zend_Session_Namespace('MyClientPortal');
-		$this->error = new Zend_Session_Namespace('MyClientPortalerror');		
-		
-		$this->view->headScript()->appendFile($this->view->baseUrl('public/default/js/dev_store.js'),'text/javascript');	
+		// Including JS
+		$this->view->headScript()->appendFile($this->view->baseUrl('public/default/js/dev_store.js'),'text/javascript');
+
+		// Including CSS
 		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_store.css'));
 	}
 	
@@ -56,11 +68,9 @@ class ProductsController extends Zend_Controller_Action {
 	
 	/**
      * Purpose: Index action
-     *
      * Access is public
      *
      * @param	
-     * 
      * @return  
      */
 	
@@ -80,11 +90,9 @@ class ProductsController extends Zend_Controller_Action {
 	
 	/**
      * Purpose: Index action
-     *
      * Access is public
      *
      * @param	
-     * 
      * @return  
      */
 	
@@ -114,13 +122,11 @@ class ProductsController extends Zend_Controller_Action {
 	
 	
 	
-		/**
+	/**
      * Purpose: Index action
-     *
      * Access is public
      *
      * @param	
-     * 
      * @return  
      */
 	
@@ -155,11 +161,9 @@ class ProductsController extends Zend_Controller_Action {
 	
 	/**
      * Purpose: Index action
-     *
      * Access is public
      *
      * @param	
-     * 
      * @return  
      */
 	
@@ -215,11 +219,9 @@ class ProductsController extends Zend_Controller_Action {
 	
 	/**
      * Purpose: Index action
-     *
      * Access is public
      *
      * @param	
-     * 
      * @return  
      */
 	

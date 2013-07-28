@@ -6,11 +6,12 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	messages.php 
-* Module	:	User Management Module
+* File		:	Messsagesdb.php 
+* Module	:	Internal Messaging Management Module
 * Owner		:	RAM's 
-* Purpose	:	This class is used for user messages related database operations
-* Date		:	26/07/2013
+* Purpose	:	This class is used for Internal Messaging management related database operations
+* Date		:	08/05/2012
+
 
 * Modification History
 * ----------------------------------------------------------------------------------------------------------------
@@ -22,27 +23,56 @@
 *===================================================================================================================
 */
 
-
-//class Application_Model_Userdb extends Application_Model_DataBaseOperations {
-class Default_Model_Messsages extends Application_Model_Validation{
+class Default_Model_Messagesdb {
 	
 	public $session;
 	private $error;
+	public $viewobj;
+	
 	
 	/**
-     * Purpose: Constructor sets sessions for portal and portalerror
-     *
+     * Purpose: Constructor sets sessions for MyClientPortal and MyClientPortalerror
      * Access is limited to class and extended classes
-     *
      * @param   
      * @return  
      */
 	
 		
 	public function __construct(){
-		$this->session = new Zend_Session_Namespace('MyPortal');
-		$this->error = new Zend_Session_Namespace('MyPortalerror');
+		
+		//Assigning session
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
+		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		
+		// DB Connection
 		$this->db=Zend_Registry::get('db');
+		
+		// Calling config registry values
+		$this->config = Zend_Registry::get('config');
 	}
-}	
-?>	
+	
+	
+
+	
+	/**
+     * Purpose: Fetching list
+     * Access is limited to class and extended classes
+     *
+     * @param	varchar	$cond Search condition
+     * @return  object	Returns status message.	
+     */
+	
+	public function getInboxMessages(){
+		try {	
+			// Example Method List
+			
+			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+}
+?>

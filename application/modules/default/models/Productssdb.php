@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
+class Default_Model_Productssdb {
 	
 	public $session;
 	private $error;
@@ -42,10 +42,13 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 	
 		
 	public function __construct(){
+		
+		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyClientPortalerror');		
 		$this->sessionid = new Zend_Session_Namespace('MyClientPortalId');
-	
+		
+		// DB Connection
 		$this->db=Zend_Registry::get('db');
 	}
 	
@@ -294,7 +297,7 @@ class Default_Model_Productssdb extends Application_Model_DataBaseOperations {
 	
 	public function getViewCartProductDetails(){
 		try {	
-			
+			$userid_condition = "";
 			if(isset($this->session->userid) && trim($this->session->userid)!=''){
 				$userid_condition = " OR sutc.userid = '".$this->session->userid."' ";
 			}

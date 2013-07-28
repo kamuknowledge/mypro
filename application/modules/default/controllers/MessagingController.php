@@ -27,33 +27,43 @@ class MessagingController extends Zend_Controller_Action {
 	public $error;		// used for managing session with NAMESPACE portalerror
 	private $message;		// used for creating an instance of model, Access is with in the class	
 	private $messagesdb;
+	
+	
 	/**
      * Purpose: Initiates sessions with Namespace 'portal' and 'portalerror' 
-     *
      * Access is public
-     *
+	 
      * @param	
-     * 
      * @return  
      */
 	
-	public function init() { 
-		/*echo "store/index/init";
-		exit;  */		
-		$this->message = new Default_Model_Messsages();
-		$this->messagesdb = new Default_Model_Messsagesdb();
-        $this->_helper->layout->setLayout('default/_layout');
-		//$this->setLayoutAction('store/layout');		
+	public function init() {
+	
+		//Assigning session
+		$this->session = new Zend_Session_Namespace('MyPortal');
+		$this->error = new Zend_Session_Namespace('MyPortalerror');
+		
+		// Calling DB Operations and Validations Classes
+		$this->message = new Default_Model_Messages();
+		$this->messagesdb = new Default_Model_Messagesdb();
+		
+		// Setting Layout
+        $this->_helper->layout->setLayout('default/layout');
+		
+		// Disable Layout
+		//$this->setLayoutAction('store/layout');
+
+		// Calling config registry values
+		$this->config = Zend_Registry::get('config');		
 	}
 	
     
+	
 	/**
      * Purpose: Index action
-     *
      * Access is public
      *
      * @param	
-     * 
      * @return  
      */
 	
@@ -67,30 +77,25 @@ class MessagingController extends Zend_Controller_Action {
 		}
 	}
 	
-	
-
-	
+		
 	
 	
 	/**
      * Purpose: Index action
-     *
      * Access is public
      *
      * @param	
-     * 
      * @return  
      */
 	
-	public function viewInboxAction() {
-		try{		
-			//$this->_helper->layout->disableLayout();
-			$InboxDetails["inbox"] = $this->messagesdb->getInboxMessages();
+	public function inboxAction() {
+		try{	
+			$InboxDetails["inbox"] = $this->messagesdb->getInboxMessages();			
 			
-			//print_r($UserDetails);
 			$this->view->InboxDetails = $InboxDetails;
 			//echo "store/index/index";
 			//exit; 
+			//echo "hi";exit;		
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -101,11 +106,47 @@ class MessagingController extends Zend_Controller_Action {
 	
 	
 	
-
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
 	
+	public function composeAction() {
+		try{	
+			// code
 
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 	
+	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function viewAction() {
+		try{	
+			// code
 
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 
 }
 ?>

@@ -44,6 +44,7 @@ class Default_Model_Productss extends Application_Model_Validation {
 	
 	public function __construct(){
 		
+		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
 		
@@ -53,20 +54,21 @@ class Default_Model_Productss extends Application_Model_Validation {
 		}
 		//echo "##".$this->sessionid->session_id."##";exit;
 		
+		
+		// Calling DB Operations
 		$this->productssdb=new Default_Model_Productssdb();
-				
-		//Assigning session
-		$this->session = new Zend_Session_Namespace('MyClientPortal');
-		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
-
-		//Assigning a config registry
+		
+		
+		// Calling config registry values
 		$this->config = Zend_Registry::get('config');		
+		
 		
 		//Redirector handler
 		//$this->redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
 		
 		//Request Handler
 		//$this->requestHandler = Zend_Controller_Front::getInstance()->getRequest();
+		
 		
 		//View Renderer
 		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
