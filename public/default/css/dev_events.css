@@ -2,3 +2,4 @@
 
 .calendar{width:800px;float:left;margin:0px 0px 0px 25px;}
 .time{width: 6.5em !important;}
+.error{border:1px solid red !important;}

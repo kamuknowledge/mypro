@@ -79,7 +79,21 @@ class EventsController extends Zend_Controller_Action {
 	*/
 	public function calendarAction(){
 		try{			
-//			echo "df";die;
+			$request = $this->getRequest();
+			$Values = $request->getPost();
+
+			/*$Request_Values = $request->getPost();
+			if ($request->isPost()) {
+				if(!$this->signup -> createUser($params)) {
+					echo "Registration Failed! Try Again.";
+				} else {
+					echo $this->session->success;
+					echo "Successfully Registered. Please login with your account.";
+					exit;
+				}
+			}else{			
+				echo "Data not received from Origin Place.";exit;
+			}*/
 
 			
 			
@@ -87,6 +101,22 @@ class EventsController extends Zend_Controller_Action {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
+	}
+	 /** 
+	 * Process a create event form using an aja call
+     * @access is public
+	 * @author Alok Pandey.
+	 * @copyright GetLinc.com, Inc. 
+	 * @license GetLinc.com, Inc.
+	*/
+	public function processAction(){
+		if ($this->getRequest()->isXmlHttpRequest()) {
+			if ($this->getRequest()->isPost()) {
+				$this->_helper->layout->disableLayout();
+			}	$post = $this->getRequest()->getPost();
+			die;
+		}
+	
 	}
 }
 ?>

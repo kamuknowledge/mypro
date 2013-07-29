@@ -9,12 +9,13 @@
 						<div id="events_page">
 							<div class="header_events">
 								<h2>Create Event</h2>
-								<a id="save-event" href="javascript:void(0)" class="button-grey add right" onclick="return dialoge_close();"><span><span>Cancel</span></span></a>
-								<a id="save-event" href="javascript:void(0)" class="button-dark add right" onclick="return document.event_form_body.submit();"><span><span>Save</span></span></a>
+								<a id="cancel_event_one" href="javascript:void(0)" class="button-grey add right" onclick="dialoge_close();"><span><span>Cancel</span></span></a>
+								<a id="save_event_one" href="javascript:void(0)" class="button-dark add right" onclick="$('#event_form_body').submit();"><span><span>Save</span></span></a>
 								<div class="clear"></div>
 							</div>
 							<div class="event-form">
 								<form name="event_form_body" id="event_form_body" action="" method="post" enctype="multipart/form-data">
+								<input type="hidden" id="submit_check" name="submit_check" value="1">
 									<div class="heading">
 										<h3>Basic Information</h3><span class="required">Required Information</span>
 										<div class="clear"></div>
@@ -43,17 +44,17 @@
 									<div class="clear"></div>
 									<div class="row left width-50 half date">
 										<label class="required">Start Date :</label>
-										<input type="text" name="event_start_date" id="event_start_date" value="" class="datepicker required"/><input id="event_start_time" name="event_start_time" disabled="disabled" type="text" class="time" />
+										<input type="text" name="event_start_date" id="event_start_date" value="" class="datepicker required"/><input id="event_start_time" name="event_start_time" type="text" class="time" />
 										<div class="clear"></div>
 									</div>
 									<div class="row left width-50 half date">
 										<label class="required">End Date :</label>
-										<input type="text" name="event_end_date" id="event_end_date" value="" class="datepicker required"/><input id="event_end_time" name="event_end_time" disabled="disabled" type="text" class="time" />
+										<input type="text" name="event_end_date" id="event_end_date" value="" class="datepicker required"/><input id="event_end_time" name="event_end_time" type="text" class="time" />
 										<div class="clear"></div>
 									</div>	
 									<div class="clear"></div>
 									<div class="row chekbox">
-										<input type="checkbox" name="allday" id="allday" value="1" checked="checked"/><label>Make Event As All Day Event</label>
+										<input type="checkbox" name="allday" id="allday" value="1"/><label>Make Event As All Day Event</label>
 										<div class="clear"></div>
 									</div>
 									<!--<div class="row">
@@ -96,8 +97,8 @@
 										<div class="clear"></div>
 									</div>
 									<div class="clear">
-										<a id="save-event" href="javascript:void(0)" class="button-grey add right" onclick="return dialoge_close();"><span><span>Cancel</span></span></a>
-										<a id="save-event" href="javascript:void(0)" class="button-dark add right" onclick="return document.event_form_body.submit();"><span><span>Save</span></span></a>
+										<a id="cancel_event_two" href="javascript:void(0)" class="button-grey add right" onclick="dialoge_close();"><span><span>Cancel</span></span></a>
+										<a id="save_event_two" href="javascript:void(0)" class="button-dark add right" onclick="$('#event_form_body').submit();"><span><span>Save</span></span></a>
 									</div>
 								</form>
 								<div class="clear">&nbsp;</div>
