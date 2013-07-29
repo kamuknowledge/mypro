@@ -1,0 +1,30 @@
+<?php 
+if($this->cdata)
+{
+    $com_id=$cdata['comment_id'];
+ $comment=tolink(htmlcode($cdata['wall_comment'] ));
+  $time=$cdata['createddatetime'];
+$mtime=date("c", $time);
+   $username=$cdata['emailid'];
+  $uid=$cdata['userid'];
+  $image_path=$cdata['image_path'];
+ // User Avatar
+ if($image_path=='')
+ $cface=$this->baseUrl('public/uploads/user_images/No_Image_Available.jpg');
+ else
+ $cface=$this->baseUrl('public/uploads/user_images/'.$image_path);
+
+  // End Avatar
+ ?>
+<div class="stcommentbody" id="stcommentbody<?php echo $com_id; ?>">
+<div class="stcommentimg">
+<img src="<?php echo $cface; ?>" class='small_face' alt='<?php echo $uid; ?>'/>
+</div> 
+<div class="stcommenttext">
+<a class="stcommentdelete" href="#" id='<?php echo $com_id; ?>'></a>
+<b><a href="<?php echo $this->baseUrl("wall/index/profile/userid/".$com_uid); ?>"><?php echo $username; ?></a></b> <?php echo clear($comment); ?>
+<div class="stcommenttime" title="<?php echo $mtime; ?>"></div> 
+</div>
+</div>
+<?php
+}?>

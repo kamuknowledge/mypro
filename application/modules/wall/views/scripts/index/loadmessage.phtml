@@ -58,7 +58,9 @@ echo Expand_URL($link);
 <div class="commentcontainer" id="commentload<?php echo $msg_id;?>">
 <?php
 $x=1;
-//include('load_comments.php') ?>
+//include('load_comments.php') 
+echo $this->action('loadcomments', 'index', 'wall', array('x'=>1,'msg_id'=>$msg_id,'msg_uid'=>$msg_uid));
+?>
 </div>
 <div class="commentupdate" style='display:none' id='commentbox<?php echo $msg_id;?>'>
 <div class="stcommentimg">

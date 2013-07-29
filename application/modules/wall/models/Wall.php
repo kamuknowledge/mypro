@@ -55,6 +55,28 @@ class Wall_Model_Wall extends Application_Model_Validation {
             throw new Exception($e->getMessage());
         }
     }
+      public function Comments($msg_id,$second_count) {
+        try {
+                
+                $this->walldb = new Wall_Model_Walldb();
+                $result = $this->walldb->Comments($msg_id,$second_count);               
+                return $result;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+     public function Insert_Comment($uid, $msg_id, $comment) {
+        try {
+           
+                $this->walldb = new Wall_Model_Walldb();
+                $result = $this->walldb->Insert_Comment($uid, $msg_id, $comment);
+                return $result;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
 }
 
 ?>

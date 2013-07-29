@@ -87,7 +87,7 @@ else
 {
 $.ajax({
 type: "POST",
-url: "comment_ajax.php",
+url: baseUrl+"/wall/index/ajaxcomments",
 data: dataString,
 cache: false,
 success: function(html){
@@ -269,11 +269,12 @@ return false;
 $(".view_comments").live("click",function()  
 {
 var ID = $(this).attr("id");
+var msgid = $(this).attr("id");
 
 $.ajax({
 type: "POST",
-url: "view_ajax.php",
-data: "msg_id="+ ID, 
+url: baseUrl+"/wall/index/loadcomments",
+data: "msg_id="+ ID +"&msg_uid="+msgid+"&x=0", 
 cache: false,
 success: function(html){
 $("#commentload"+ID).html(html);

@@ -75,7 +75,7 @@ class Wall_Model_Walldb {
         // More Button End
         $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("SELECT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.emailid,M.wall_uploads FROM user_wall_messages M, apmusers U  WHERE U.statusid='1' AND M.userid=U.userid and M.userid='$uid' $morequery order by M.wall_message_id desc limit " . $this->perpage);
+        $query = $this->db->query("SELECT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.emailid,M.wall_uploads FROM user_wall_messages M, apmusers U,  WHERE U.statusid='1' AND M.userid=U.userid and M.userid='$uid' $morequery order by M.wall_message_id desc limit " . $this->perpage);
         $data = $query->fetchAll();
         // while ($row = mysql_fetch_array($query))
         //  $data[] = $row;
@@ -124,15 +124,33 @@ class Wall_Model_Walldb {
 
     //Comments
     public function Comments($msg_id, $second_count) {
+        
+       
+        
          $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = '';
-        if ($second_count)
-            $query = "limit $second_count,2";
-        $query =  $this->db->query("SELECT C.com_id, C.uid_fk, C.comment, C.created, U.username FROM comments C, users U WHERE U.status='1' AND C.uid_fk=U.uid and C.msg_id_fk='$msg_id' order by C.com_id asc $query");
+       //echo $second_count;
+         $select =$this->db->select("c.comment_id,")
+             ->from(array('c' => 'user_wall_message_comments'),
+                    array('comment_id', 'userid','wall_comment','createddatetime'))
+             ->joinLeft(array('u' => 'apmusers'),
+                    'c.userid = u.userid',array('emailid'))
+                ->joinLeft(array('ui' => 'user_images'),
+                    'c.userid = ui.userid',array('image_path'))
+                ->where("u.statusid=?",1)
+                    ->where('c.wall_message_id=?',$msg_id)
+                ->order(array('c.comment_id ASC'));
+                 if($second_count!=0)
+                $select->limit(2,$second_count);
+                 //echo $select;
+       // exit;
+        $query=$this->db->query($select);
+        //$query =  $this->db->query("SELECT C.comment_id, C.userid, C.wall_comment, C.createddatetime, U.email,UI.image_path FROM user_wall_message_comments C, apmusers U,user_image UI WHERE U.statusid='1' AND C.userid=U.userid and C.userid=UI.userid and  C.wall_message_id='$msg_id' order by C.comment_id asc $query");
         //while ($row = mysql_fetch_array($query))
            // $data[] = $row;
+        
         $data=$query->fetchAll();
+        
         if (!empty($data)) {
             return $data;
         }
@@ -247,20 +265,43 @@ class Wall_Model_Walldb {
 
     //Insert Comments
     public function Insert_Comment($uid, $msg_id, $comment) {
-        $comment = mysql_real_escape_string($comment);
- $obj = new Application_Model_DataBaseOperations();
-        $this->db = $obj->GetDatabaseConnection();
+        $obj = new Application_Model_DataBaseOperations();
+         $this->db = $obj->GetDatabaseConnection();
+        $comment = $comment;
+ 
+       
         $time = time();
         $ip = $_SERVER['REMOTE_ADDR'];
-        $query = $this->db->query("SELECT com_id,comment FROM `comments` WHERE uid_fk='$uid' and msg_id_fk='$msg_id' order by com_id desc limit 1 ");
+        $query = $this->db->query("SELECT comment_id,wall_comment FROM `user_wall_message_comments` WHERE userid='$uid' and wall_message_id='$msg_id' order by comment_id desc limit 1 ");
+       
         $result = $query->fetch();
 
-        if ($comment != $result['comment']) {
-            $query = $this->db->query("INSERT INTO `comments` (comment, uid_fk,msg_id_fk,ip,created) VALUES (N'$comment', '$uid','$msg_id', '$ip','$time')");
-            $newquery = $this->db->query("SELECT C.com_id, C.uid_fk, C.comment, C.msg_id_fk, C.created, U.username FROM comments C, users U where C.uid_fk=U.uid and C.uid_fk='$uid' and C.msg_id_fk='$msg_id' order by C.com_id desc limit 1 ");
-            $result = $newquery->fetch();
+        if ($comment != $result['wall_comment']) {
+            $query = $this->db->query("INSERT INTO `user_wall_message_comments` (wall_comment, userid,wall_message_id,user_ip,createddatetime,statusid) VALUES ('$comment', '$uid','$msg_id', '$ip','$time','1')");
+            //$newquery = $this->db->query("SELECT C.com_id, C.uid_fk, C.comment, C.msg_id_fk, C.created, U.username FROM comments C, users U where C.uid_fk=U.uid and C.uid_fk='$uid' and C.msg_id_fk='$msg_id' order by C.com_id desc limit 1 ");
+            //$result = $newquery->fetch();
+             
+       //echo $second_count;
+         $select =$this->db->select("c.comment_id,")
+             ->from(array('c' => 'user_wall_message_comments'),
+                    array('comment_id', 'userid','wall_comment','createddatetime'))
+             ->joinLeft(array('u' => 'apmusers'),
+                    'c.userid = u.userid',array('emailid'))
+                ->joinLeft(array('ui' => 'user_images'),
+                    'c.userid = ui.userid',array('image_path'))
+                ->where("u.statusid=?",1)
+                    ->where('c.wall_message_id=?',$msg_id)
+                ->order(array('c.comment_id ASC'))
+                 ->limitPage(0,1);
+                // echo $select;
+        //exit;
+        $query=$this->db->query($select);
+        //$query =  $this->db->query("SELECT C.comment_id, C.userid, C.wall_comment, C.createddatetime, U.email,UI.image_path FROM user_wall_message_comments C, apmusers U,user_image UI WHERE U.statusid='1' AND C.userid=U.userid and C.userid=UI.userid and  C.wall_message_id='$msg_id' order by C.comment_id asc $query");
+        //while ($row = mysql_fetch_array($query))
+           // $data[] = $row;
+        $data=$query->fetch();
 
-            return $result;
+            return $data;
         } else {
             return false;
         }

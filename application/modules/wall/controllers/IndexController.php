@@ -1,5 +1,4 @@
 <?php
-
 /*
  * ================AllySoft Internal Use only========================
 
@@ -30,6 +29,7 @@ class Wall_IndexController extends Zend_Controller_Action {
     public $error;  // used for managing session with NAMESPACE portalerror
     private $wall;  // used for creating an instance of model, Access is with in the class	
     public $perpage = 10;
+
     /**
      * Purpose: Initiates sessions with Namespace 'portal' and 'portalerror' 
      * 			and creates an instance of the model class 'Application_Model_Users'
@@ -40,13 +40,13 @@ class Wall_IndexController extends Zend_Controller_Action {
      * 
      * @return  
      */
-
     public function init() {
         /* echo "store/index/init";
           exit; */
         $this->_helper->layout->setLayout('default/layout');
-        $this->wall=new Wall_Model_Wall();
+        $this->wall = new Wall_Model_Wall();
         $this->session = new Zend_Session_Namespace('MyClientPortal');
+
         //$this->setLayoutAction('store/layout');		
     }
 
@@ -86,9 +86,9 @@ class Wall_IndexController extends Zend_Controller_Action {
 
     public function loadmessageAction() {
         try {
-            $lastid=$this->_getParam('lastid','0');
-            $profile_uid=$this->_getParam('userid');
-            $uid=86;
+            $lastid = $this->_getParam('lastid', '0');
+            $profile_uid = $this->_getParam('userid');
+            $uid = 86;
             if ($lastid == '')
                 $lastid = 0;
 
@@ -101,14 +101,75 @@ class Wall_IndexController extends Zend_Controller_Action {
             }
 
 
-           // if ($gravatar)
-           //     $session_face = $this->wall->Gravatar($uid);
-           // else
-           //     $session_face = $this->wall->Profile_Pic($uid);
-            $this->view->updatesarray=$updatesarray;
-            $this->view->sess_id=$uid;
-            $this->view->perpage=$this->perpage;
-             $this->view->total=$total;
+            // if ($gravatar)
+            //     $session_face = $this->wall->Gravatar($uid);
+            // else
+            //     $session_face = $this->wall->Profile_Pic($uid);
+            $this->view->updatesarray = $updatesarray;
+            $this->view->sess_id = $uid;
+            $this->view->perpage = $this->perpage;
+            $this->view->total = $total;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function loadcommentsAction() {
+        try {
+            if($this->_request->isXmlHttpRequest()){
+               $this->_helper->layout->disableLayout();
+            }
+            $msg_id = $this->_getParam("msg_id");
+            $msg_uid = $this->_getParam("msg_uid");
+            $second_count=0;
+            $commentsarray = $this->wall->Comments($msg_id, 0);
+            $x = $this->_getParam("x",1);
+           // echo "<pre>";print_r($commentsarray);
+            $comment_count=0;
+            if ($x) {
+                $comment_count = count($commentsarray);
+               
+                 $second_count = $comment_count - 2;
+                   
+                if ($comment_count > 2) { 
+                    
+                    $commentsarray = $this->wall->Comments($msg_id, $second_count);
+                   
+                }
+            }
+           
+            //print_r($commentsarray);
+           
+            $this->view->comment_count = $comment_count;
+            $this->view->commentsarray = $commentsarray;
+            //$this->view->userid=$this->session->userid;
+            $this->view->userid=86;
+            $this->view->msg_id=$msg_id;
+            $this->view->msg_uid=$msg_uid;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function ajaxcommentsAction() {
+        try {
+            if($this->_request->isXmlHttpRequest()){
+               $this->_helper->layout->disableLayout();
+            }
+            $msg_id = $this->_getParam("msg_id");
+            $comment = $this->_getParam("comment");
+            $second_count=0;
+            $ip=$_SERVER['REMOTE_ADDR'];
+           
+           //$uid=$this->session->userid;
+            $uid=86;
+            $cdata=$this->wall->Insert_Comment($uid,$msg_id,$comment,$ip);
+            $this->view->cdata = $cdata;
+            $this->view->userid=$this->session->userid;
+            $this->view->msg_id=$msg_id;
+           
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());
@@ -116,5 +177,4 @@ class Wall_IndexController extends Zend_Controller_Action {
     }
 
 }
-
 ?>
