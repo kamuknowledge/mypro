@@ -3,3 +3,4 @@
 .calendar{width:800px;float:left;margin:0px 0px 0px 25px;}
 .time{width: 6.5em !important;}
 .error{border:1px solid red !important;}
+.error_div {display:none;color:red;128px;padding-left:128px}

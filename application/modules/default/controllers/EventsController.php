@@ -26,7 +26,8 @@
 class EventsController extends Zend_Controller_Action { 
 	public $session;	// used for managing session with NAMESPACE portal
 	public $error;		// used for managing session with NAMESPACE portalerror
-	private $events;		// used for creating an instance of model, Access is with in the class	
+	private $events;			// used for creating an instance of model, Access is with in the class
+	private $eventsdb;	// used for creating an instance of model, Access is with in the class	
 
 	/**
      * Purpose: Initiates sessions with Namespace 'portal' and 'portalerror' 
@@ -44,7 +45,7 @@ class EventsController extends Zend_Controller_Action {
 		exit;  */
         $this->_helper->layout->setLayout('default/calendar');
 		//$this->setLayoutAction('store/layout');	
-		
+		$this->events = new Default_Model_Events();
 		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_events.css'));
 		
 	}
@@ -112,9 +113,21 @@ class EventsController extends Zend_Controller_Action {
 	public function processAction(){
 		if ($this->getRequest()->isXmlHttpRequest()) {
 			if ($this->getRequest()->isPost()) {
+				$data = array();
 				$this->_helper->layout->disableLayout();
-			}	$post = $this->getRequest()->getPost();
-			die;
+				$post = $this->getRequest()->getPost();
+				$dataCreateEvent = $this->events -> createEvent($post);
+				if($dataCreateEvent['error']) {
+					$error_data = $dataCreateEvent;
+					echo json_encode($error_data);
+					die;
+				} else {
+					$data = array('success'=>'Event successfully created.');
+					echo json_encode($data);
+					die;
+				}
+			}	
+			
 		}
 	
 	}

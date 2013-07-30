@@ -38,7 +38,7 @@
 									</div>
 									<div class="row left width-50 half">
 										<label>Type :</label>
-										<select><option value="public">Public</option><option value="public">Private</option></select>
+										<select name="event_type" id="event_type"><option value="public">Public</option><option value="private">Private</option></select>
 										<div class="clear"></div>
 									</div>	
 									<div class="clear"></div>
@@ -52,6 +52,8 @@
 										<input type="text" name="event_end_date" id="event_end_date" value="" class="datepicker required"/><input id="event_end_time" name="event_end_time" type="text" class="time" />
 										<div class="clear"></div>
 									</div>	
+									<div class="clear"></div>
+									<div class="error_div"></div>
 									<div class="clear"></div>
 									<div class="row chekbox">
 										<input type="checkbox" name="allday" id="allday" value="1"/><label>Make Event As All Day Event</label>

@@ -16,7 +16,15 @@ $(document).ready(function(){
                 data: $('form#event_form_body').serializeArray(),
                 dataType: 'json',
                 success: function(data) {
-				
+					if(data.error){
+						$(".error_div").show();
+						$(".error_div").html(data.error);
+					}
+					
+					setTimeout(function(){
+						$(".error_div").html();
+						$(".error_div").hide();
+					},2000);
 				}
 			});
 		}
