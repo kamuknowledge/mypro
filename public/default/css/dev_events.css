@@ -4,3 +4,4 @@
 .time{width: 6.5em !important;}
 .error{border:1px solid red !important;}
 .error_div {display:none;color:red;128px;padding-left:128px}
+.success_message{color:green;display:none;font-weight:bold;margin-left:315px;}

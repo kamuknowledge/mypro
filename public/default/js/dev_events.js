@@ -19,12 +19,19 @@ $(document).ready(function(){
 					if(data.error){
 						$(".error_div").show();
 						$(".error_div").html(data.error);
+						setTimeout(function(){
+							$(".error_div").html();
+							$(".error_div").hide();
+						},2000);
+					} else {
+						dialoge_close();
+						$(".success_message").show();
+						$(".success_message").html(data.success);
+						$('#event_calendar').fullCalendar('refetchEvents');
+						
 					}
 					
-					setTimeout(function(){
-						$(".error_div").html();
-						$(".error_div").hide();
-					},2000);
+					
 				}
 			});
 		}
@@ -87,6 +94,8 @@ $(document).ready(function(){
 					$('#event_end_time').attr('disabled',false);
 				}
 				
+				$("#event_form_body input[type=text],textarea").val('');
+				
 				$('#event_form').dialog({
 					width:'800px',
 					show: {
@@ -127,52 +136,31 @@ $(document).ready(function(){
 			eventResize: function(event, dayDelta, minuteDelta, revertFunc) {
 					alert('Event Resize functionality is in under preocess');
 			},
-			events: [
-				{
-					title: 'All Day Event',
-					start: new Date(y, m, 1)
-				},
-				{
-					title: 'Long Event',
-					start: new Date(y, m, d-5),
-					end: new Date(y, m, d-2)
-				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: new Date(y, m, d-3, 16, 0),
-					allDay: false
-				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: new Date(y, m, d+4, 16, 0),
-					allDay: false
-				},
-				{
-					title: 'Meeting',
-					start: new Date(y, m, d, 10, 30),
-					allDay: false
-				},
-				{
-					title: 'Lunch',
-					start: new Date(y, m, d, 12, 0),
-					end: new Date(y, m, d, 14, 0),
-					allDay: false
-				},
-				{
-					title: 'Birthday Party',
-					start: new Date(y, m, d+1, 19, 0),
-					end: new Date(y, m, d+1, 22, 30),
-					allDay: false
-				},
-				{
-					title: 'Click for Google',
-					start: new Date(y, m, 28),
-					end: new Date(y, m, 29),
-					url: 'http://google.com/'
-				}
-			]
+			events: function(start, end, callback) {
+				 var startDate = start.getFullYear() + '-' + (parseInt(start.getMonth()) + 1) + '-' + start.getDate() + ' ' + start.getHours() + ':' + start.getMinutes() + ':' + start.getSeconds();
+				 var endDate = end.getFullYear() + '-' + (parseInt(end.getMonth()) + 1) + '-' + end.getDate() + ' ' + end.getHours() + ':' + end.getMinutes() + ':' + end.getSeconds();
+				 $.ajax({
+					url: baseUrl + '/events/load',
+					type: 'POST',
+					data: {
+						start: startDate,
+						end: endDate
+					},
+					dataType: 'json',
+					success: function(data) {
+						var events = data;
+						//console.log(events);
+						$('#event_calendar').fullCalendar('removeEvents');
+						if (events.length <= 0) {
+							return false;
+						} else {
+							for (var i = 0; i < events.length; i++) {
+								$('#event_calendar').fullCalendar('renderEvent', events[i], true);
+							}
+						}
+					}
+				});
+			}
 		});
 		
 

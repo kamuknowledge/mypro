@@ -46,6 +46,7 @@ class EventsController extends Zend_Controller_Action {
         $this->_helper->layout->setLayout('default/calendar');
 		//$this->setLayoutAction('store/layout');	
 		$this->events = new Default_Model_Events();
+		$this->eventsdb = new Default_Model_Eventsdb();
 		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_events.css'));
 		
 	}
@@ -131,5 +132,45 @@ class EventsController extends Zend_Controller_Action {
 		}
 	
 	}
+	
+	 /** 
+	 * load events in calendar between start and end date
+     * @access is public
+	 * @author Alok Pandey.
+	 * @copyright GetLinc.com, Inc. 
+	 * @license GetLinc.com, Inc.
+	*/
+	public function loadAction(){
+		if ($this->getRequest()->isXmlHttpRequest()) {
+			if ($this->getRequest()->isPost()) {
+				$data = array();
+				$this->_helper->layout->disableLayout();
+				$post = $this->getRequest()->getPost();
+				$start_date = $post['start'];
+				$end_date = $post['end'];
+				$events = $this->eventsdb -> getEvents($start_date,$end_date);
+				if($events){
+					foreach($events as $key=>$value) {
+						$data[] = array(
+						'id'=>$value['event_id'],
+						'title'=>$value['event_title'],
+						'allday'=>($value['event_all_day']==1)?true:false,
+						'start'=>$value['event_startdate'],
+						'end'=>$value['event_enddate'],
+						'editable'=>true,
+						'color'=>'#69131E'
+						
+						);
+					}
+				}
+				echo json_encode($data);
+				die;
+			}	
+			
+		}
+	
+	}
+	
+	
 }
 ?>
