@@ -1,10 +1,7 @@
 <?php
 //print_r ($this->InboxDetails["inbox"]);
 $inbox=$this->sentDetails["inbox"];
-print_r($inbox);
-foreach($inbox as $key => $value) { 
-echo $value["message_subject"];
-}
+
 
 ?>
 <div class="main_body">
@@ -45,10 +42,10 @@ echo $value["message_subject"];
 				<thead>
 					<tr>
 						<th width='30'><input type="checkbox"/></th>
-						<th >From</th>
+						<th >To</th>
 						<th  width='100'>Subject</th>
 						<th  width='100'>Message</th>
-						<th  width='100'>Created Date</th>
+						<th  width='100'>Sent Date</th>
 						
 					</tr>
 				</thead>
