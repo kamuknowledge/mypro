@@ -114,7 +114,7 @@ class MessagingController extends Zend_Controller_Action {
 	
 	
 	/**
-     * Purpose: Index action
+     * Purpose: Sent Mails
      * Access is public
 		*
      * @param	
