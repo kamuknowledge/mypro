@@ -80,7 +80,6 @@ class Default_Model_Messagesdb {
 						WHERE m.userid = '".$this->userid."' ";
 		//echo $query;
 		//exit;			
-		
 		$stmt = $this->db->query($query);			
 		return $stmt->fetchAll();
 		
