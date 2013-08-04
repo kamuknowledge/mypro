@@ -162,7 +162,11 @@ class ProfileController extends Zend_Controller_Action {
 					$id = $Request_Values["id"];
 					if($id)
 					{
-						$this->view->UserDetails = $this->profiledb->getUserExperiance($id);
+						if($id != "new") {
+							$this->view->UserDetails = $this->profiledb->getUserExperiance($id);
+						} else {
+							$this->view->UserDetails = array(array("experience_id"=>"new", "company_name"=>"", "job_location"=>"", "country_id"=>"", "job_title"=>"", "industry_id"=>"", "state_id"=>"", "from_month"=>"", "from_year"=>"", "to_month"=>"", "to_year"=>"", "present_working"=>"", "company_description"=>"", ""=>"", ""=>""));
+						}
 						// return 1;
 						// redirect to current url
 						
@@ -194,11 +198,10 @@ class ProfileController extends Zend_Controller_Action {
 					if($experiance_id)
 					{
 						$this->view->UserDetails = $this->profiledb->getUserExperiance($experiance_id);
-					} if($edit_exp_id) {
+					} else if($edit_exp_id) {
 						if($this->profiledb->createupdateExperiance($params)) {
 							//echo "<script>window.location.reload();</script>";
-							echo 1;
-							exit;
+							$this->view->UserDetails = $this->profiledb->getUserExperiance($edit_exp_id);
 						}
 					}
 				} else if(isset($Request_Values["type"]) && $Request_Values["type"] == "new") {

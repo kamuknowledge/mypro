@@ -175,30 +175,36 @@ $(document).ready(function(){
 	});
 	// Experiance Functionality
 	$(".edit_experiance").live("click", function(){
-		var id_str = $(this).parents(".experiance_view").attr('id');
+		var id_str = $(this).attr('id');
 		var id_array = id_str.split("_");
 		var id = id_array[2];
-		$.ajax({
-			type : "POST",
-			url : baseUrl+"/profile/addeditexperiance",
-			data : "type=edit&id="+id,
-			beforeSend : function() {
-				$("#edit_experiance_"+id).hide();
-				$("#experiance_edit_loading_"+id).show();
-			},
-			success : function(data) {
-				$("#experiance_edit_loading_"+id).hide();
-				if(data == 1) {
-					$("#view_about_us").text(about_us);
-					$("#view_about_us").show();
-				} else {
-					$("#experiance_edit_"+id).html(data);
-					$("#experiance_edit_"+id).show();
-					$("#experiance_view_"+id).hide();
+		if($("#experiance_edit_"+id).html() == "") {
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/addeditexperiance",
+				data : "type=edit&id="+id,
+				beforeSend : function() {
+					//$("#edit_experiance_"+id).hide();
+					if(id != "new")
+					$("#experiance_edit_loading_"+id).show();
+				},
+				success : function(data) {
+					if(id != "new") {
+						$("#experiance_edit_loading_"+id).hide();
+						$("#experiance_view_"+id).hide();
+						$("#experiance_edit_"+id).html(data);
+						$("#experiance_edit_"+id).show();
+					} else {
+						$("#experiance_edit_"+id).html(data);
+						$("#experiance_edit_"+id).show();
+					}
+					return false;
 				}
-				return false;
-			}
-		});
+			});
+		} else {
+			$("#experiance_view_"+id).hide();
+			$("#experiance_edit_"+id).show();
+		}
 	});
 });
 function submit_form(){

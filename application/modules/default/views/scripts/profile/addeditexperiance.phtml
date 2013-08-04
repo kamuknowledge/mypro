@@ -19,16 +19,16 @@ $(document).ready(function(){
 			//$("#login_user").html("Loading...");
 			$.ajax({
 				type : "POST",
-				url : baseUrl+"/profile/addeditexperiance",
+				url : baseUrl+"/profile/vieweditexperiance",
 				data : "type=edit&"+str,
 				beforeSend : function() {
-					$("#login_loading").show();
-					$("#login_user").hide();
+					$("#experiance_edit_loading_<?php echo $experiance["experience_id"]; ?>").show();
 				},
 				success : function(data) {
-					$("#login_loading").hide();
-					$("#login_user").html(data);
-					$("#login_user").show();
+					$("#experiance_view_<?php echo $experiance["experience_id"]; ?>").html(data);
+					$("#experiance_edit_loading_<?php echo $experiance["experience_id"]; ?>").hide();
+					$("#experiance_edit_<?php echo $experiance["experience_id"]; ?>").hide();
+					$("#experiance_view_<?php echo $experiance["experience_id"]; ?>").show();
 					return false;
 				}
 			});
@@ -37,6 +37,10 @@ $(document).ready(function(){
 });
 function submit_exp_form(form) {
 	$("#"+form).submit();
+}
+function cancel_exp_form(id) {
+	$("#experiance_edit_"+id).hide();
+	$("#experiance_view_"+id).show();
 }
 </script>
 <form name="experiance_form_<?php echo $experiance["experience_id"]; ?>" id="experiance_form_<?php echo $experiance["experience_id"]; ?>">
@@ -98,7 +102,7 @@ function submit_exp_form(form) {
 			<div class="info"  style="margin-left: 15%;"><span class="blue">2500</span> Words Remaining.</div>
 			<div class="text-right">
 				<a class="button-dark add" href="javascript:void(0)" onclick="submit_exp_form('experiance_form_<?php echo $experiance["experience_id"]; ?>')"><span><span>Save</span></span></a>
-				<a class="button-grey add" href="javascript:void(0)"><span><span>Cancel</span></span></a>
+				<a class="button-grey add" href="javascript:void(0)"onclick="cancel_exp_form('<?php echo $experiance["experience_id"]; ?>')"><span><span>Cancel</span></span></a>
 				<div class="clear"></div>
 			</div>
 		</div>
