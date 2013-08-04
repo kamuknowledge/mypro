@@ -49,6 +49,7 @@ class MessagingController extends Zend_Controller_Action {
 		
 		// Setting Layout
         $this->_helper->layout->setLayout('default/layout');
+
 		
 		// Disable Layout
 		//$this->setLayoutAction('store/layout');
@@ -60,7 +61,8 @@ class MessagingController extends Zend_Controller_Action {
 		$this->view->headScript()->appendFile($this->view->baseUrl('public/default/js/dev_messaging.js'),'text/javascript');
 
 		// Including CSS
-		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_messaging.css'));		
+		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_messaging.css'));	
+		
 	}
 	
     
@@ -95,14 +97,41 @@ class MessagingController extends Zend_Controller_Action {
      */
 	
 	public function inboxAction() {
-		try{	
-			$InboxDetails["inbox"] = $this->messagesdb->getInboxMessages();			
+		try{
 			
+			//print_r($this->messagesdb->getInboxMessages());
+			$InboxDetails["inbox"] = $this->messagesdb->getInboxMessages();			
+			//print_r($InboxDetails["inbox"]);
 			$this->view->InboxDetails = $InboxDetails;
 			//echo "store/index/index";
 			//exit; 
 			//echo "hi";exit;		
 		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+		*
+     * @param	
+     * @return  
+     */
+	
+	public function sentAction() {
+		try{
+			
+			$sentDetails["inbox"] = $this->messagesdb->getSentMessages();			
+			print_r($sentDetails["inbox"]);
+			//exit;
+			$this->view->sentDetails = $sentDetails;
+			//echo "store/index/index";
+			//exit; 
+			//echo "hi";exit;		
+			}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
@@ -144,14 +173,7 @@ class MessagingController extends Zend_Controller_Action {
      */
 	
 	public function viewAction() {
-		try{	
-			// code
-
-			
-		}catch (Exception $e){
-			Application_Model_Logging::lwrite($e->getMessage());
-			throw new Exception($e->getMessage());
-		}
+		
 	}
 
 }
