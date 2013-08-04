@@ -1,3 +1,9 @@
+<?php
+//print_r ($this->InboxDetails["inbox"]);
+$inbox=$this->InboxDetails["inbox"];
+
+
+?>
 <div class="main_body">
 <div class="left width-100">
 	<div class="breadcrumbs">
@@ -36,77 +42,33 @@
 				<thead>
 					<tr>
 						<th width='30'><input type="checkbox"/></th>
-						<th >Event Name</th>
-						<th  width='100'>Start Date</th>
-						<th  width='100'>End Date</th>
-						<th  width='100'>Owner</th>
-						<th  width='30'>Flag</th>
+						<th >From</th>
+						<th  width='100'>Subject</th>
+						<th  width='100'>Message</th>
+						<th  width='100'>Created Date</th>
+						
 					</tr>
 				</thead>
 				<tbody>
+				
+					<?php foreach($inbox as $key => $value) { 
+					$subject= $value["message_subject"];
+					$message= $value["message_body_content"];
+					$mdate= $value["createddatetime"];
+					$from= $value["firstname"];
+					$subject= $value["message_subject"];
+					$mid=$value["message_id"];
+					print<<<END
 					<tr class="odd">
-						<td><input type="checkbox"/></td>
-						<td>Birth Day</td>
-						<td>08/10/2013</td>
-						<td>08/10/2013</td>
-						<td>GUNNAM CHOWD</td>
-						<td><img src="<?php echo $this->baseUrl('public/default'); ?>/images/flag.png"/></td>
+					<td><input type="checkbox" id="$mid"/></td>
+				    <td>$from</td><td>$subject</td><td>$message</td><td>$mdate</td>	
+				
 					</tr>
-					<tr class="even">
-						<td><input type="checkbox"/></td>
-						<td>Birth Day</td>
-						<td>08/10/2013</td>
-						<td>08/10/2013</td>
-						<td>GUNNAM CHOWD</td>
-						<td><img src="<?php echo $this->baseUrl('public/default'); ?>/images/flag.png"/></td>
-					</tr>
-					<tr class="odd">
-						<td><input type="checkbox"/></td>
-						<td>Birth Day</td>
-						<td>08/10/2013</td>
-						<td>08/10/2013</td>
-						<td>GUNNAM CHOWD</td>
-						<td><img src="<?php echo $this->baseUrl('public/default'); ?>/images/flag.png"/></td>
-					</tr>
-					<tr class="even">
-						<td><input type="checkbox"/></td>
-						<td>Birth Day</td>
-						<td>08/10/2013</td>
-						<td>08/10/2013</td>
-						<td>GUNNAM CHOWD</td>
-						<td><img src="<?php echo $this->baseUrl('public/default'); ?>/images/flag.png"/></td>
-					</tr>
-					<tr class="odd">
-						<td><input type="checkbox"/></td>
-						<td>Birth Day</td>
-						<td>08/10/2013</td>
-						<td>08/10/2013</td>
-						<td>GUNNAM CHOWD</td>
-						<td><img src="<?php echo $this->baseUrl('public/default'); ?>/images/flag.png"/></td>
-					</tr>
-					<tr class="even">
-						<td><input type="checkbox"/></td>
-						<td>Birth Day</td>
-						<td>08/10/2013</td>
-						<td>08/10/2013</td>
-						<td>GUNNAM CHOWD</td>
-						<td><img src="<?php echo $this->baseUrl('public/default'); ?>/images/flag.png"/></td>
-					</tr><tr class="odd">
-						<td><input type="checkbox"/></td>
-						<td>Birth Day</td>
-						<td>08/10/2013</td>
-						<td>08/10/2013</td>
-						<td>GUNNAM CHOWD</td>
-						<td><img src="<?php echo $this->baseUrl('public/default'); ?>/images/flag.png"/></td>
-					</tr>
-					<tr class="even">
-						<td><input type="checkbox"/></td>
-						<td>Birth Day</td>
-						<td>08/10/2013</td>
-						<td>08/10/2013</td>
-						<td>GUNNAM CHOWD</td>
-						<td><img src="<?php echo $this->baseUrl('public/default'); ?>/images/flag.png"/></td>
-					</tr>
+END;
+}
+					?>
+					
+					
 				</tbody>
 			</table>
 			<div class="grid-view-footer">
