@@ -49,6 +49,11 @@ class SignupController extends Zend_Controller_Action {
 				
 		$this->signup = new Default_Model_Signup();
         $this->_helper->layout->setLayout('default/layout');
+		
+		
+		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_profile.css'));
+		
+		$this->view->headScript()->appendFile($this->view->baseUrl('public/default').'/js/dev_profile.js','text/javascript');
 		//$this->setLayoutAction('store/layout');		
 	}
 	

@@ -61,9 +61,6 @@ class Default_Model_Signup extends Application_Model_Validation {
 		//Request Handler
 		$this->requestHandler = Zend_Controller_Front::getInstance()->getRequest();
 		
-		$this->view->headStyle()->appendFile($this->view->baseUrl('public/default').'/css/dev_profile.css','text/stylesheet');   
-		$this->view->headScript()->appendFile($this->view->baseUrl('public/default').'/js/dev_profile.js','text/javascript');
-		
 		//View Renderer
 		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
 		$viewRenderer->initView();
