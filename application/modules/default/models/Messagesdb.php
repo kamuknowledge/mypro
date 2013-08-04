@@ -28,7 +28,7 @@ class Default_Model_Messagesdb {
 	public $session;
 	private $error;
 	public $viewobj;
-	
+	public $userid;
 	
 	/**
      * Purpose: Constructor sets sessions for MyClientPortal and MyClientPortalerror
@@ -45,10 +45,17 @@ class Default_Model_Messagesdb {
 		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
 		
 		// DB Connection
-		$this->db=Zend_Registry::get('db');
+		 $this->db=Zend_Registry::get('db');
 		
 		// Calling config registry values
 		$this->config = Zend_Registry::get('config');
+		if(!$this->session->userid)
+		{
+			echo "Not logged in";
+			exit;
+		} else {
+			 $this->userid = $this->session->userid;
+		}
 	}
 	
 	
@@ -63,11 +70,42 @@ class Default_Model_Messagesdb {
      */
 	
 	public function getInboxMessages(){
-		try {	
-			// Example Method List
+		try{
+		
+		$query = "SELECT m.message_id, im.message_subject, im.message_body_content, m.createddatetime, u.firstname, u.display_name, u.emailid 
+						FROM social_internal_messaging_users m
+						LEFT JOIN social_internal_messaging im ON m.message_id = im.message_id AND im.statusid = 1
+						LEFT JOIN apmusers u ON m.userid = u.userid 
+						
+						WHERE m.userid = '".$this->userid."' ";
+		//echo $query;
+		//exit;			
+		
+		$stmt = $this->db->query($query);			
+		return $stmt->fetchAll();
+		
+			} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function getSentMessages(){
+		try{
 			
+			$query = "SELECT m.message_id, im.message_subject, im.message_body_content, m.createddatetime, u.firstname, u.display_name, u.emailid 
+			FROM social_internal_messaging_users m
+			LEFT JOIN social_internal_messaging im ON m.message_id = im.message_id AND im.statusid = 1
+			LEFT JOIN apmusers u ON m.userid = u.userid 
 			
-		} catch(Exception $e) {
+			WHERE im.userid = '".$this->userid."' ";
+			//echo $query;
+			//exit;			
+			
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
+			
+			} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
