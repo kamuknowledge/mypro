@@ -436,4 +436,8 @@
 	 *  Error messages for Profile edit
 	 */
 	define('Error_about_us_empty', 'About us should not empty');
+	/*
+	 * Error messages for experiance 
+	 */
+	define('Error_experiance_company_name', 'Company Name should not empty');
 ?>

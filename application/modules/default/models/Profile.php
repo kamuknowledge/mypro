@@ -99,22 +99,40 @@ class Default_Model_Profile extends Application_Model_Validation {
 	
 	public function add_edit_experiance(Array $params) {
 		try{
-			$about_us = trim($params['about_us']);
+			$exp_id = trim($params['exp_id']);
+			$company_name = trim($params['company_name']);
+			$job_location = trim($params['job_location']);
+			$job_title = trim($params['job_title']);
+			$country_id = trim($params['country']);
+			$industry_id = trim($params['industry']);
+			$state_id = trim($params['state']);
+			$from_month = trim($params['from_month']);
+			$from_year = trim($params['from_year']);
+			$to_month = trim($params['to_month']);
+			$to_year = trim($params['to_year']);
+			$present_working = trim($params['present_working']);
+			$company_description = trim($params['description']);
 			$error = 0;
-			if($about_us == '') {				// Validation for about us
-            	$this->error->error_about_us = Error_about_us_empty;
+			if($company_name == '') {				// Validation for about us
+            	$this->error->error_company_name = Error_experiance_company_name;
             	$error = 1;
             }
             if($error == 1) {
-            	$this->error->error_aboutus_values = $params;
+            	$this->error->error_experiance_values = $params;
             	$error = 0;
             	return false;
             }
             /*
              * Validation ends here
              */
-			$outpt = $this->Profiledb->updateAboutus($about_us);
-			return $outpt;
+			$outpt = $this->Profiledb->createupdateExperiance($exp_id, $company_name, $job_location, $job_title, $country_id, $industry_id, $state_id, $from_month, $from_year, $to_month, $to_year, $present_working, $company_description);
+			if($exp_id && $exp_id == "new") {
+				$outpt = $outpt[0];
+				$result = explode('#', $outpt['toutput']);
+				return $result[1];
+			} else {
+				return $outpt;
+			}
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
