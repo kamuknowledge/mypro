@@ -65,14 +65,40 @@ class Default_Model_Videosdb {
 	public function getCategoriesList(){
 		try {	
 			// Example Method List
-			
-			
-		} catch(Exception $e) {
+
+		$query = "SELECT * FROM social_album";			
+			//exit;			
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
+		
+		} catch(Exception $sssse) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
 	}
 	
 	
+	/**
+     * Purpose: Fetching list
+     * Access is limited to class and extended classes
+     *
+     * @param	varchar	$cond Search condition
+     * @return  object	Returns status message.	
+     */
+	
+	public function getVideosByCatId($user_id){
+		try {	
+			// Example Method List
+
+		$query = "SELECT * FROM social_album_files saf JOIN social_album sa ON saf.album_id = sa.album_id WHERE saf.userid='".$user_id."'";			
+			//exit;			
+			$stmt 	= $this->db->query($query);			
+			return $stmt->fetchAll();
+		
+		} catch(Exception $sssse) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 }
 ?>
