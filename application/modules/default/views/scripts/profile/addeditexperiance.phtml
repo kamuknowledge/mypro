@@ -3,6 +3,7 @@
 ?>
 <script>
 $(document).ready(function(){
+	var save_type = "<?php echo ($experiance["experience_id"] && $experiance["experience_id"] != "new") ? "edit" : "new"; ?>";
 	$("#experiance_form_<?php echo $experiance["experience_id"]; ?>").validate({
 		rules : {
 			company_name : {
@@ -20,15 +21,23 @@ $(document).ready(function(){
 			$.ajax({
 				type : "POST",
 				url : baseUrl+"/profile/vieweditexperiance",
-				data : "type=edit&"+str,
+				data : "type="+save_type+"&"+str,
 				beforeSend : function() {
 					$("#experiance_edit_loading_<?php echo $experiance["experience_id"]; ?>").show();
 				},
 				success : function(data) {
-					$("#experiance_view_<?php echo $experiance["experience_id"]; ?>").html(data);
-					$("#experiance_edit_loading_<?php echo $experiance["experience_id"]; ?>").hide();
-					$("#experiance_edit_<?php echo $experiance["experience_id"]; ?>").hide();
-					$("#experiance_view_<?php echo $experiance["experience_id"]; ?>").show();
+					if(save_type == "new") {
+						$("#experiance_view_<?php echo $experiance["experience_id"]; ?>").html("");
+						$("#experiance_edit_<?php echo $experiance["experience_id"]; ?>").html("");
+						$("#experiance_view_<?php echo $experiance["experience_id"]; ?>").hide();
+						$("#experiance_edit_<?php echo $experiance["experience_id"]; ?>").hide();
+						$("#experiance_edit_<?php echo $experiance["experience_id"]; ?>").after(data);
+					} else {
+						$("#experiance_view_<?php echo $experiance["experience_id"]; ?>").html(data);
+						$("#experiance_edit_loading_<?php echo $experiance["experience_id"]; ?>").hide();
+						$("#experiance_edit_<?php echo $experiance["experience_id"]; ?>").hide();
+						$("#experiance_view_<?php echo $experiance["experience_id"]; ?>").show();
+					}
 					return false;
 				}
 			});

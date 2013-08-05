@@ -160,11 +160,16 @@ class Default_Model_Profiledb  {
 		}
 	}
 	
-	public function createupdateExperiance($params) {
+	public function createupdateExperiance($exp_id, $company_name, $job_location, $job_title, $country_id, $industry_id, $state_id, $from_month, $from_year, $to_month, $to_year, $present_working, $company_description) {
 		try {
 			// $query = 'UPDATE user_profile SET about_us = "'.$about_us.'" WHERE userid = "'.$this->userid.'";';
 			// $stmt = $this->db->query($query);
-			return 1;
+			if($exp_id != "" && $exp_id != "new") {
+				$stmt = $this->db->query("CALL SPuser_experience_edit(?, ?, ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($exp_id,$this->userid,$company_name,$job_title,$job_location,$industry_id,$from_year,$from_month,$to_year,$to_month,$present_working,$company_description,$country_id,$state_id,"Save"));
+			} else {
+				$stmt = $this->db->query("CALL SPuser_experience_add(?, ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($this->userid,$company_name,$job_title,$job_location,$industry_id,$from_year,$from_month,$to_year,$to_month,$present_working,$company_description,$country_id,$state_id,"Save"));
+			}
+			return $stmt->fetchAll();
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

@@ -187,7 +187,7 @@ class ProfileController extends Zend_Controller_Action {
 	
 	public function vieweditexperianceAction() {
 		try{
-			//$params = $this->_getAllParams();
+			$params = $this->_getAllParams();
 			$request = $this->getRequest();
 			$Request_Values = $request->getPost();
 			if ($request->isPost()) {
@@ -197,15 +197,24 @@ class ProfileController extends Zend_Controller_Action {
 					$edit_exp_id = $Request_Values["exp_id"];
 					if($experiance_id)
 					{
-						$this->view->UserDetails = $this->profiledb->getUserExperiance($experiance_id);
+						$results = $this->profiledb->getUserExperiance($experiance_id);
+						$this->view->UserDetails = $results[0];
 					} else if($edit_exp_id) {
-						if($this->profiledb->createupdateExperiance($params)) {
-							//echo "<script>window.location.reload();</script>";
-							$this->view->UserDetails = $this->profiledb->getUserExperiance($edit_exp_id);
+						if($this->profile->add_edit_experiance($params)) {
+							$results = $this->profiledb->getUserExperiance($edit_exp_id);
+							$this->view->UserDetails = $results[0];
+						} else {
+							echo 1;
+							exit;
 						}
 					}
 				} else if(isset($Request_Values["type"]) && $Request_Values["type"] == "new") {
-					
+					$exp_id = $this->profile->add_edit_experiance($params);
+					if($exp_id) {
+						$results = $this->profiledb->getUserExperiance($exp_id);
+						$results[0]["dis_type"] = "new";
+						$this->view->UserDetails = $results[0];
+					}
 				}
 			}else{
 				echo 0;exit;
