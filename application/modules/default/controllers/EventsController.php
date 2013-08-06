@@ -117,7 +117,11 @@ class EventsController extends Zend_Controller_Action {
 				$data = array();
 				$this->_helper->layout->disableLayout();
 				$post = $this->getRequest()->getPost();
-				$dataCreateEvent = $this->events -> createEvent($post);
+				if(isset($post['event_id']) && !empty($post['event_id'])){
+					$dataCreateEvent = $this->events -> updateEvent($post);
+				} else {
+					$dataCreateEvent = $this->events -> createEvent($post);
+				}
 				if($dataCreateEvent['error']) {
 					$error_data = $dataCreateEvent;
 					echo json_encode($error_data);
@@ -154,9 +158,13 @@ class EventsController extends Zend_Controller_Action {
 						$data[] = array(
 						'id'=>$value['event_id'],
 						'title'=>$value['event_title'],
-						'allday'=>($value['event_all_day']==1)?true:false,
+						'allDay'=>($value['event_all_day']==1)?TRUE:FALSE,
 						'start'=>$value['event_startdate'],
-						'end'=>$value['event_enddate'],
+						'end_date'=>$value['event_enddate'],
+						'description'=>$value['event_details'],
+						'event_type'=>$value['event_type'],
+						'event_location'=>$value['event_location'],
+						'event_address'=>$value['event_address'],
 						'editable'=>true,
 						'color'=>'#69131E'
 						

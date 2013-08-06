@@ -28,7 +28,10 @@ $(document).ready(function(){
 						$(".success_message").show();
 						$(".success_message").html(data.success);
 						$('#event_calendar').fullCalendar('refetchEvents');
-						
+						setTimeout(function(){
+							$(".success_message").html();
+							$(".success_message").hide();
+						},2000);
 					}
 					
 					
@@ -127,8 +130,34 @@ $(document).ready(function(){
 					
 					//alert('Create event functionality is in under preocess');
 			},
-			eventClick: function(start, end, allDay, jsEvent, view) {
-					alert('Edit event functionality is in under preocess');
+			eventClick: function(event, jsEvent, view) {
+				//console.log(event.end_date);
+				$('#event_form').dialog({
+					width:'800px',
+					show: {
+						effect: "blind",
+						duration: 1000
+					},
+					hide: {
+						effect: "blind",
+						duration: 1000
+					}
+				});
+				
+				$('.header_events h2').html('Edit Event');
+				$('#event_name').val(event.title);
+				$('#event_venue').val(event.event_location);
+				$('#event_address').val(event.event_address);
+				$('#event_type').val(event.event_type);
+				$("#event_start_date").datepicker('setDate', event.start);
+				$("#event_end_date").datepicker('setDate', event.end_date);
+				$('#event_start_time').timepicker('setTime', event.start);
+				$('#event_end_time').timepicker('setTime', event.end_date);
+				if(event.allDay==true){
+					$('#allday').attr('checked','checked');
+				}
+				$("#event_id").val(event.id);
+				$('#event_description').val(event.description);
 			},
 			eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc) {
 					alert('Event Drop functionality is in under preocess');
