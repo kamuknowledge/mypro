@@ -59,7 +59,7 @@ $(document).ready(function(){
 			selectHelper: true,
 			editable: true,
 			select: function(start, end, allDay, jsEvent, view) {
-				
+				//console.log(allDay);
 				var start_date = convert(start);
 				start_date = start_date.split(' ');
 				end_date = convert(end);
@@ -85,37 +85,39 @@ $(document).ready(function(){
 					dialoge_close();
 					$('#event_calendar').fullCalendar('unselect');
 					return false;
-                }
-				
-				if(view.name=="month"){
-					$('#allday').attr('checked',true);
-					$('#event_start_time').attr('disabled',true);
-					$('#event_end_time').attr('disabled',true);
-				} else {
-					$('#allday').attr('checked',false);
-					$('#event_start_time').attr('disabled',false);
-					$('#event_end_time').attr('disabled',false);
+                } else {
+					if(allDay==true){
+						$('#allday').attr('checked',true);
+						$('#event_start_time').attr('disabled',true);
+						$('#event_end_time').attr('disabled',true);
+					} else {
+						$('#allday').attr('checked',false);
+						$('#event_start_time').attr('disabled',false);
+						$('#event_end_time').attr('disabled',false);
+					}
+					
+					$("#event_form_body input[type=text],textarea").val('');
+					
+					$('#event_form').dialog({
+						width:'800px',
+						show: {
+							effect: "blind",
+							duration: 1000
+						},
+						hide: {
+							effect: "blind",
+							duration: 1000
+						}
+					});
+					
+					
+					$("#event_start_date").datepicker('setDate', start);
+					$("#event_end_date").datepicker('setDate', end);
+					$('#event_start_time').timepicker('setTime', start);
+					$('#event_end_time').timepicker('setTime', end);
 				}
 				
-				$("#event_form_body input[type=text],textarea").val('');
 				
-				$('#event_form').dialog({
-					width:'800px',
-					show: {
-						effect: "blind",
-						duration: 1000
-					},
-					hide: {
-						effect: "blind",
-						duration: 1000
-					}
-				});
-				
-				
-				$("#event_start_date").datepicker('setDate', start);
-				$("#event_end_date").datepicker('setDate', end);
-				$('#event_start_time').timepicker('setTime', start);
-				$('#event_end_time').timepicker('setTime', end);
 				//$("#event_start_date").val(start_date[0]);
 				//$("#event_end_date").val(end_date[0]);
 				
@@ -131,7 +133,7 @@ $(document).ready(function(){
 					//alert('Create event functionality is in under preocess');
 			},
 			eventClick: function(event, jsEvent, view) {
-				//console.log(event.end_date);
+				console.log(event.end_date);
 				$('#event_form').dialog({
 					width:'800px',
 					show: {
@@ -149,10 +151,10 @@ $(document).ready(function(){
 				$('#event_venue').val(event.event_location);
 				$('#event_address').val(event.event_address);
 				$('#event_type').val(event.event_type);
-				$("#event_start_date").datepicker('setDate', event.start);
-				$("#event_end_date").datepicker('setDate', event.end_date);
-				$('#event_start_time').timepicker('setTime', event.start);
-				$('#event_end_time').timepicker('setTime', event.end_date);
+				$("#event_start_date").datepicker('setDate', new Date(event.start));
+				$("#event_end_date").datepicker('setDate', new Date(event.end_date));
+				$('#event_start_time').timepicker('setTime', new Date(event.start));
+				$('#event_end_time').timepicker('setTime', new Date(event.end_date));
 				if(event.allDay==true){
 					$('#allday').attr('checked','checked');
 				}

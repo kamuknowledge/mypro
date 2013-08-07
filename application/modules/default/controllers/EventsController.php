@@ -103,7 +103,7 @@ class EventsController extends Zend_Controller_Action {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
-	}
+	}  
 	 /** 
 	 * Process a create event form using an aja call
      * @access is public

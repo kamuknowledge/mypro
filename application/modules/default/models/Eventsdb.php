@@ -104,7 +104,7 @@ class Default_Model_Eventsdb extends Application_Model_DataBaseOperations {
 				'event_type'=>$event_type,
 				'createddatetime'=>date("Y-m-d H:i:s"),
 			);
-			$result = $this->db->insert('social_events', $data);*/
+			$result = $this->db->insert('social_events', $data);*/  
 			$res = $this->db->query("update `social_events` set event_title='".$event_name."', event_startdate='".$start_date."',event_enddate='".$end_date."',event_all_day='".$allday."',event_location='".$event_venue."',event_address='".$event_address."',event_details='".$event_description."',event_type='".$event_type."',lastupdatedby='".date("Y-m-d H:i:s")."' where event_id='".$update_id."' and userid='".$uid."'");
 			return ($res)?1:0;
 		} catch(Exception $e) {
