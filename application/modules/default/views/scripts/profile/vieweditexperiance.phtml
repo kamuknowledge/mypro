@@ -1,7 +1,13 @@
 <?php
 	$experiance = $this->UserDetails;
-	$dis_type = (isset($experiance["dis_type"])) ? 1 : 0;
-	if($dis_type) {
+	$error = (isset($experiance["error"])) ? 1 : 0;
+	if($error) {
+		$exp_id = (isset($experiance["exp_id"])) ? $experiance["exp_id"] : 0;
+		echo $this->action('addeditexperiance', 'profile', 'default', array('input_type'=>'error', 'experiance_idd'=>$experiance["exp_id"]));
+	}
+	else {
+		$dis_type = (isset($experiance["dis_type"])) ? 1 : 0;
+		if($dis_type) {
 ?>
 <div class="experiance_view" id="experiance_view_<?php echo $experiance["experience_id"]; ?>">
 	<?php } ?>
@@ -17,4 +23,4 @@
 <?php if($dis_type) { ?>
 </div>
 <div class="experiance_edit" id="experiance_edit_<?php echo $experiance["experience_id"]; ?>" style="display:none;"></div>
-<?php } ?>
+<?php } } ?>

@@ -153,31 +153,37 @@ class ProfileController extends Zend_Controller_Action {
 	
 	public function addeditexperianceAction() {
 		try{
-			//$params = $this->_getAllParams();
-			$request = $this->getRequest();
-			$Request_Values = $request->getPost();
-			if ($request->isPost()) {
-				$this->_helper->layout->setLayout('default/empty_layout');
-				if(isset($Request_Values["type"]) && $Request_Values["type"] == "edit") {
-					$id = $Request_Values["id"];
-					if($id)
-					{
-						if($id != "new") {
-							$this->view->UserDetails = $this->profiledb->getUserExperiance($id);
+			$params = $this->_getAllParams();
+			$this->_helper->layout->setLayout('default/empty_layout');
+			if(isset($params["input_type"]) && $params["input_type"]) {
+				// Display form with error message
+				$this->view->UserDetails = array(array("input_type"=>"error", "experience_id" => $params["experiance_idd"]));
+			} else {
+				// Normal form display functionality for the first time
+				$request = $this->getRequest();
+				$Request_Values = $request->getPost();
+				if ($request->isPost()) {
+					if(isset($Request_Values["type"]) && $Request_Values["type"] == "edit") {
+						$id = $Request_Values["id"];
+						if($id)
+						{
+							if($id != "new") {
+								$this->view->UserDetails = $this->profiledb->getUserExperiance($id);
+							} else {
+								$this->view->UserDetails = array(array("experience_id"=>"new", "company_name"=>"", "job_location"=>"", "country_id"=>"", "job_title"=>"", "industry_id"=>"", "state_id"=>"", "from_month"=>"", "from_year"=>"", "to_month"=>"", "to_year"=>"", "present_working"=>"", "company_description"=>"", ""=>"", ""=>""));
+							}
+							// return 1;
+							// redirect to current url
+							
 						} else {
-							$this->view->UserDetails = array(array("experience_id"=>"new", "company_name"=>"", "job_location"=>"", "country_id"=>"", "job_title"=>"", "industry_id"=>"", "state_id"=>"", "from_month"=>"", "from_year"=>"", "to_month"=>"", "to_year"=>"", "present_working"=>"", "company_description"=>"", ""=>"", ""=>""));
+							echo 1;
+							exit;
 						}
-						// return 1;
-						// redirect to current url
-						
-					} else {
-						echo 1;
-						exit;
 					}
+				}else{			
+					//$this->view->countrieslist = $this->merchantdb->getCountriesList();
+					//return 0;
 				}
-			}else{			
-				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
-				//return 0;
 			}
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
@@ -204,8 +210,8 @@ class ProfileController extends Zend_Controller_Action {
 							$results = $this->profiledb->getUserExperiance($edit_exp_id);
 							$this->view->UserDetails = $results[0];
 						} else {
-							echo 1;
-							exit;
+							// Load form with error messages
+							$this->view->UserDetails = array("error"=>1, "exp_id"=>$edit_exp_id);
 						}
 					}
 				} else if(isset($Request_Values["type"]) && $Request_Values["type"] == "new") {
@@ -214,6 +220,9 @@ class ProfileController extends Zend_Controller_Action {
 						$results = $this->profiledb->getUserExperiance($exp_id);
 						$results[0]["dis_type"] = "new";
 						$this->view->UserDetails = $results[0];
+					} else {
+						// Load form with error messages
+						$this->view->UserDetails = array("error"=>1, "exp_id"=>"new");
 					}
 				}
 			}else{
