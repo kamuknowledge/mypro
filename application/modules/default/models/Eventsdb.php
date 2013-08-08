@@ -72,7 +72,7 @@ class Default_Model_Eventsdb extends Application_Model_DataBaseOperations {
 				'createddatetime'=>date("Y-m-d H:i:s"),
 			);
 			$result = $this->db->insert('social_events', $data);*/
-			$res = $this->db->query("INSERT INTO `social_events` (userid, event_title, event_startdate,event_enddate,event_all_day,event_location,event_address,event_details,event_type,statusid,createddatetime) VALUES ('$uid', '$event_name', '$start_date','$end_date','$allday','$event_venue','$event_address','$event_description,','$event_type',1,'".date("Y-m-d H:i:s")."')");
+			$res = $this->db->query("INSERT INTO `social_events` (userid, event_title, event_startdate,event_enddate,event_all_day,event_location,event_address,event_details,event_type,statusid,createddatetime) VALUES ('$uid', '$event_name', '$start_date','$end_date','$allday','$event_venue','$event_address','$event_description','$event_type',1,'".date("Y-m-d H:i:s")."')");
 			return ($res)?1:0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
@@ -106,6 +106,73 @@ class Default_Model_Eventsdb extends Application_Model_DataBaseOperations {
 			);
 			$result = $this->db->insert('social_events', $data);*/  
 			$res = $this->db->query("update `social_events` set event_title='".$event_name."', event_startdate='".$start_date."',event_enddate='".$end_date."',event_all_day='".$allday."',event_location='".$event_venue."',event_address='".$event_address."',event_details='".$event_description."',event_type='".$event_type."',lastupdatedby='".date("Y-m-d H:i:s")."' where event_id='".$update_id."' and userid='".$uid."'");
+			return ($res)?1:0;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	/** 
+	 * update events into social_events table
+     * @access is public
+	 * @author Alok Pandey.
+	 * @copyright GetLinc.com, Inc. 
+	 * @license GetLinc.com, Inc.
+	*/
+	
+	public function updateEventDrop($start_date, $end_date, $allday, $update_id){
+		try {
+		 $uid = 86;//$this->session->userid;
+		/*$data = array(
+				'event_title'=>$event_name,
+				'userid'=>$this->session->userid,
+				'event_startdate'=>$start_date,
+				'event_enddate'=>$end_date,
+				'event_enddate'=>$end_date,
+				'event_all_day'=>$allday,
+				'event_location'=>$event_venue,
+				'event_address'=>$event_address,
+				'event_details'=>$event_description,
+				'event_type'=>$event_type,
+				'createddatetime'=>date("Y-m-d H:i:s"),
+			);
+			$result = $this->db->insert('social_events', $data);*/  
+			$res = $this->db->query("update `social_events` set event_startdate='".$start_date."',event_enddate='".$end_date."',event_all_day='".$allday."',lastupdatedby='".date("Y-m-d H:i:s")."' where event_id='".$update_id."' and userid='".$uid."'");
+			return ($res)?1:0;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	/** 
+	 * update events into social_events table
+     * @access is public
+	 * @author Alok Pandey.
+	 * @copyright GetLinc.com, Inc. 
+	 * @license GetLinc.com, Inc.
+	*/
+	
+	public function updateEventResize($end_date, $update_id){
+		try {
+		 $uid = 86;//$this->session->userid;
+		/*$data = array(
+				'event_title'=>$event_name,
+				'userid'=>$this->session->userid,
+				'event_startdate'=>$start_date,
+				'event_enddate'=>$end_date,
+				'event_enddate'=>$end_date,
+				'event_all_day'=>$allday,
+				'event_location'=>$event_venue,
+				'event_address'=>$event_address,
+				'event_details'=>$event_description,
+				'event_type'=>$event_type,
+				'createddatetime'=>date("Y-m-d H:i:s"),
+			);
+			$result = $this->db->insert('social_events', $data);*/  
+			$res = $this->db->query("update `social_events` set event_enddate='".$end_date."',lastupdatedby='".date("Y-m-d H:i:s")."' where event_id='".$update_id."' and userid='".$uid."'");
 			return ($res)?1:0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());

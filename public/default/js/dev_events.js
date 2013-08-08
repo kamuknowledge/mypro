@@ -2,8 +2,7 @@
 
 /******** Ready function starts ********************/
 $(document).ready(function(){
-
-
+	
 	$("#event_form_body").submit(function(e){
 		$('#event_form_body').validate({errorElement: 'span', errorPlacement: function(error, element) {
             }});
@@ -24,7 +23,8 @@ $(document).ready(function(){
 							$(".error_div").hide();
 						},2000);
 					} else {
-						dialoge_close();
+						$('#event_form').hide('slide', {direction: 'left'}, 1000);
+						$('.calendar').show('slide', {direction: 'left'}, 1000);
 						$(".success_message").show();
 						$(".success_message").html(data.success);
 						$('#event_calendar').fullCalendar('refetchEvents');
@@ -82,10 +82,12 @@ $(document).ready(function(){
 				if (today > stDate)
                 {
                     alert("You can not create a backdate event.");
-					dialoge_close();
+					//dialoge_close();
 					$('#event_calendar').fullCalendar('unselect');
 					return false;
                 } else {
+					$('.calendar').hide('slide', {direction: 'left'}, 1000);
+					$('#event_form').show('slide', {direction: 'left'}, 1000);
 					if(allDay==true){
 						$('#allday').attr('checked',true);
 						$('#event_start_time').attr('disabled',true);
@@ -95,20 +97,10 @@ $(document).ready(function(){
 						$('#event_start_time').attr('disabled',false);
 						$('#event_end_time').attr('disabled',false);
 					}
-					
+					$("#event_id").val('');
 					$("#event_form_body input[type=text],textarea").val('');
 					
-					$('#event_form').dialog({
-						width:'800px',
-						show: {
-							effect: "blind",
-							duration: 1000
-						},
-						hide: {
-							effect: "blind",
-							duration: 1000
-						}
-					});
+					
 					
 					
 					$("#event_start_date").datepicker('setDate', start);
@@ -134,17 +126,8 @@ $(document).ready(function(){
 			},
 			eventClick: function(event, jsEvent, view) {
 				console.log(event.end_date);
-				$('#event_form').dialog({
-					width:'800px',
-					show: {
-						effect: "blind",
-						duration: 1000
-					},
-					hide: {
-						effect: "blind",
-						duration: 1000
-					}
-				});
+				$('.calendar').hide('slide', {direction: 'left'}, 1000);
+				$('#event_form').show('slide', {direction: 'left'}, 1000);
 				
 				$('.header_events h2').html('Edit Event');
 				$('#event_name').val(event.title);
@@ -153,19 +136,69 @@ $(document).ready(function(){
 				$('#event_type').val(event.event_type);
 				$("#event_start_date").datepicker('setDate', new Date(event.start));
 				$("#event_end_date").datepicker('setDate', new Date(event.end_date));
-				$('#event_start_time').timepicker('setTime', new Date(event.start));
-				$('#event_end_time').timepicker('setTime', new Date(event.end_date));
+				
 				if(event.allDay==true){
 					$('#allday').attr('checked','checked');
+					$('#event_start_time').attr('disabled',true);
+					$('#event_end_time').attr('disabled',true);
+					$('#event_start_time').timepicker();
+					$('#event_end_time').timepicker();
+				} else {
+					$('#event_start_time').attr('disabled',false);
+					$('#event_end_time').attr('disabled',false);
+					$('#event_start_time').timepicker('setTime', new Date(event.start));
+					$('#event_end_time').timepicker('setTime', new Date(event.end_date));
 				}
 				$("#event_id").val(event.id);
 				$('#event_description').val(event.description);
 			},
 			eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc) {
-					alert('Event Drop functionality is in under preocess');
+					if (event.end == null){
+						end = start;
+					}
+					var start = convert(event.start);
+					var end = convert(event.end);
+					//alert(start +' : ' + end + ' : ' + allDay );
+					
+					start1 = start.split(' ');
+					var y1 = start1[0].substring(0, 4);
+					var m1 = start1[0].substring(5, 7);
+					var d1 = start1[0].substring(8, 10);
+
+					var today = new Date();
+					if (today > event.start)
+					{
+						alert('Cannot move an event to past dates.');
+						$('#event_calendar').fullCalendar('refetchEvents');
+					} else {
+						var allDay = (allDay == true) ? 1 : 0;
+						$.post(baseUrl + '/events/drop', {start: start, end: end, id: event.id, allday: allDay}, function(data) {
+							
+						});
+					}
 			},
 			eventResize: function(event, dayDelta, minuteDelta, revertFunc) {
-					alert('Event Resize functionality is in under preocess');
+					var end_date = '';
+					if (event.end == null) {
+						end_date = convert(event.start);
+					} else {
+						end_date = convert(event.end);
+					}
+					//alert(end_date);
+					if (confirm(' Event end time changed. Is this okay?')) {
+
+						$.ajax({
+							type: 'POST',
+							url: baseUrl + '/events/resize',
+							data: 'endDate=' + end_date + '&eventId=' + event.id ,
+							success: function(data) {
+								
+							}
+						});
+
+					} else {
+						self.calendar.calendar.refetchEvents();
+					}
 			},
 			events: function(start, end, callback) {
 				 var startDate = start.getFullYear() + '-' + (parseInt(start.getMonth()) + 1) + '-' + start.getDate() + ' ' + start.getHours() + ':' + start.getMinutes() + ':' + start.getSeconds();
@@ -196,10 +229,29 @@ $(document).ready(function(){
 		
 
 		/************ loading datepicker and timepicker ************************/
-		$("#event_start_date").datepicker();
-		$("#event_end_date").datepicker();
-		$('#event_start_time').timepicker();
-		$('#event_end_time').timepicker();
+		 $('#event_start_date').datepicker({
+			changeMonth: false,
+			changeYear: false,
+			minDate: 0,
+			dateFormat: 'mm/dd/yy',
+			onSelect: function(selectedDate) {
+				$("#event_end_date").datepicker("option", "minDate", selectedDate);
+			}
+		});
+		
+		 $('#event_end_date').datepicker({
+                changeMonth: false,
+                changeYear: false,
+                minDate: 0,
+                dateFormat: 'mm/dd/yy',
+                onSelect: function(selectedDate) {
+                    $("#event_start_date").datepicker("option", "maxDate", selectedDate);
+                    
+                }
+            });
+			
+			$('#event_start_time').timepicker();
+			$('#event_end_time').timepicker();
 		
 		$("#allday").click(function(){
 				var chkStatus = $(this).attr("checked");
@@ -217,7 +269,8 @@ $(document).ready(function(){
 
 /**************** Close Dialog *******************/
 function dialoge_close(){
-	$('#event_form').dialog('close');
+	$('#event_form').hide('slide', {direction: 'left'}, 1000);
+	$('.calendar').show('slide', {direction: 'left'}, 1000);
 }
 
 function convert(str) {
