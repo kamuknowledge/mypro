@@ -155,6 +155,8 @@ class ProfileController extends Zend_Controller_Action {
 		try{
 			$params = $this->_getAllParams();
 			$this->_helper->layout->setLayout('default/empty_layout');
+			$this->view->IndustryList = $this->profiledb->getIndustry();
+			$this->view->CountryList = $this->profiledb->getCountry();
 			if(isset($params["input_type"]) && $params["input_type"]) {
 				// Display form with error message
 				$this->view->UserDetails = array(array("input_type"=>"error", "experience_id" => $params["experiance_idd"]));
@@ -169,6 +171,8 @@ class ProfileController extends Zend_Controller_Action {
 						{
 							if($id != "new") {
 								$this->view->UserDetails = $this->profiledb->getUserExperiance($id);
+								$country = isset($this->view->UserDetails[0]["country_id"]) ? $this->view->UserDetails[0]["country_id"] : "";
+								$this->view->StateList = $this->profiledb->getState($country);
 							} else {
 								$this->view->UserDetails = array(array("experience_id"=>"new", "company_name"=>"", "job_location"=>"", "country_id"=>"", "job_title"=>"", "industry_id"=>"", "state_id"=>"", "from_month"=>"", "from_year"=>"", "to_month"=>"", "to_year"=>"", "present_working"=>"", "company_description"=>"", ""=>"", ""=>""));
 							}
@@ -233,6 +237,19 @@ class ProfileController extends Zend_Controller_Action {
 			throw new Exception($e->getMessage());
 		}
 	}
-
+	
+	public function getstatesAction() {
+		$request = $this->getRequest();
+		$Request_Values = $request->getPost();
+		$country_arr = "";
+		if ($request->isPost() && isset($Request_Values["country"])) {
+			$country_db_arr = $this->profiledb->getState($Request_Values["country"]);
+			foreach($country_db_arr as $value) {
+				$country_arr .= "<option value='".$value["state_id"]."'>".$value["name"]."</option>";
+			}
+		}
+		echo $country_arr;
+		exit;
+	}
 }
 ?>

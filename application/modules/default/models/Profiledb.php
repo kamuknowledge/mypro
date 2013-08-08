@@ -175,5 +175,26 @@ class Default_Model_Profiledb  {
 			throw new Exception($e->getMessage());
 		}
 	}
+	
+	public function getIndustry() {
+		$query = "SELECT ui.* FROM user_industry ui WHERE statusid = 1;";
+		$stmt = $this->db->query($query);			
+		return $stmt->fetchAll();
+	}
+	
+	public function getCountry() {
+		$query = "SELECT mc.* FROM master_countries mc WHERE statusid = 1;";
+		$stmt = $this->db->query($query);			
+		return $stmt->fetchAll();
+	}
+	
+	public function getState($country_id = "") {
+		if($country_id) {
+			$query = "SELECT ms.* FROM master_states ms WHERE country_id = '".$country_id."' AND statusid = 1;";
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
+		}
+		return FALSE;
+	}
 }
 ?>

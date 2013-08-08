@@ -1,6 +1,9 @@
 <?php
 	$error = $this;
 	$experiance = isset($this->UserDetails[0]) ? $this->UserDetails[0] : "";
+	$industry = isset($this->IndustryList) ? $this->IndustryList : "";
+	$country = isset($this->CountryList) ? $this->CountryList : "";
+	$state = isset($this->StateList) ? $this->StateList : "";
 	$experiance_id = $experiance["experience_id"];
 	$company_name = $experiance["company_name"];
 	$job_location = $experiance["job_location"];
@@ -14,6 +17,9 @@
 	$to_year = $experiance["to_year"];
 	$present_working = $experiance["present_working"];
 	$company_description = $experiance["company_description"];
+	$industry_sel = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['industry'] : $industry_id;
+	$country_sel = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['country'] : $country_id;
+	$state_sel = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['state'] : $state_id;
 ?>
 <script>
 $(document).ready(function(){
@@ -63,6 +69,7 @@ $(document).ready(function(){
 						$("#experiance_edit_<?php echo $experiance_id; ?>").html("");
 						$("#experiance_view_<?php echo $experiance_id; ?>").hide();
 						$("#experiance_edit_<?php echo $experiance_id; ?>").hide();
+						if($("#experiance_form_new")) $("#experiance_form_new").remove();
 						$("#experiance_edit_<?php echo $experiance_id; ?>").after(data);
 					} else {
 						$("#experiance_view_<?php echo $experiance_id; ?>").html(data);
@@ -73,6 +80,26 @@ $(document).ready(function(){
 					return false;
 				}
 			});
+		}
+	});
+	$("#country").live("change", function() {
+		var selcted = $(this).find("option:selected").val();
+		if(selcted) {
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/getstates",
+				data : "country="+selcted,
+				success : function(data) {
+					$('#state').html('<option value="">Select State..</option>'+data);
+				}
+			});
+		} else {
+			$('#state')
+				.find('option')
+				.remove()
+				.end()
+				.append('<option value="">Select State..</option>')
+				.val('');
 		}
 	});
 });
@@ -111,8 +138,10 @@ function cancel_exp_form(id) {
 			<div class="row">
 				<label>Country:</label>
 				<select id="country" name="country">
-					<option>Please Select Country..</option>
-					<option><?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['country']; } else { echo $country_id; } ?></option>
+					<option value="">Please Select Country..</option>
+					<?php foreach($country as $value) { ?>
+					<option value="<?php echo $value["country_id"] ?>" <?php echo ($country_sel == $value["country_id"]) ? "selected" : ""; ?>><?php echo $value["country"] ?></option>
+					<?php } ?>
 				</select>
 			</div>
 		</div>
@@ -130,15 +159,20 @@ function cancel_exp_form(id) {
 			<div class="row">
 				<label>Industry:</label>
 				<select id="industry" name="industry">
-					<option>Select Industry..</option>
-					<option><?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['industry']; } else { echo $industry_id; } ?></option>
+					<option value="">Select Industry..</option>
+					<?php foreach($industry as $value) { ?>
+						<option value="<?php echo $value["industry_id"]; ?>" <?php echo ($industry_sel == $value["industry_id"]) ? "selected" : ""; ?>><?php echo $value["industry_name"]; ?></option>
+						<!--option></option-->
+					<?php } ?>
 				</select>
 			</div>
 			<div class="row">
 				<label>State:</label>
 				<select id="state" name="state">
-					<option>Select State..</option>
-					<option><?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['state']; } else { echo $state_id; } ?></option>
+					<option value="">Select State..</option>
+					<?php foreach($state as $value) { ?>
+						<option value="<?php echo $value["state_id"]; ?>" <?php echo ($state_sel == $value["state_id"]) ? "selected" : ""; ?>><?php echo $value["name"]; ?></option>
+					<?php } ?>
 				</select>
 			</div>
 		</div>
@@ -146,10 +180,34 @@ function cancel_exp_form(id) {
 			<label class="width-15">Time Period : </label>
 			<div class="fields-container">
 				<div class="row">
-					<select id="from_month" name="from_month"><option>Month</option><option><?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['from_month']; } else { echo $from_month; } ?></option></select>
-					<select id="from_year" name="from_year"><option>Year</option><option><?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['from_year']; } else { echo $from_year; } ?></option></select>
-					<select id="to_month" name="to_month"><option>Month</option><option><?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['to_month']; } else { echo $to_month; } ?></option></select>
-					<select id="to_year" name="to_year"><option>Year</option><option><?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['to_year']; } else { echo $to_year; } ?></option></select>
+					<select id="from_month" name="from_month">
+						<option>Month</option>
+						<?php $fmonth = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['from_month'] : $from_month; ?>
+						<?php for($i = 1; $i<=12; $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($fmonth == $i) ? "selected" : ""; ?>><?php echo date("F", mktime(0, 0, 0, $i, 10)); ?></option>
+						<?php } ?>
+					</select>
+					<select id="from_year" name="from_year">
+						<option>Year</option>
+						<?php $fyear = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['from_year'] : $from_year; ?>
+						<?php for($i = 1925; $i <= date("Y"); $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($fyear == $i) ? "selected" : ""; ?>><?php echo $i; ?></option>
+						<?php } ?>
+					</select>
+					<select id="to_month" name="to_month">
+						<option>Month</option>
+						<?php $tmonth = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['to_month'] : $to_month; ?>
+						<?php for($i = 1; $i<= 12; $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($tmonth == $i) ? "selected" : ""; ?>><?php echo date("F", mktime(0, 0, 0, $i, 10)); ?></option>
+						<?php } ?>
+					</select>
+					<select id="to_year" name="to_year">
+						<option>Year</option>
+						<?php $tyear = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['to_year'] : $to_year; ?>
+						<?php for($i = 1925; $i <= date("Y"); $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($tyear == $i) ? "selected" : ""; ?>><?php echo $i; ?></option>
+						<?php } ?>
+					</select>
 					<input type="checkbox" style="margin-top: 7px;"<?php if(is_array($error->error_experiance_values)) { echo ($error->error_experiance_values['present_working']) ? 'checked="checked"' : ""; } else { echo ($present_working) ? 'checked="checked"' : ""; } ?> id="present_working" name="present_working"><label>Present Working Here.</label>
 					<div class="clear"></div>
 				</div>
