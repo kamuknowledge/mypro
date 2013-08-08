@@ -117,6 +117,18 @@ class Default_Model_Profile extends Application_Model_Validation {
             	$this->error->error_company_name = Error_experiance_company_name;
             	$error = 1;
             }
+			if($job_location == '') {				// Validation for about us
+            	$this->error->error_location_name = Error_experiance_company_name;
+            	$error = 1;
+            }
+			if($job_title == '') {				// Validation for about us
+            	$this->error->error_position_name = Error_experiance_company_name;
+            	$error = 1;
+            }
+			if($industry_id == '') {				// Validation for about us
+            	$this->error->error_industry_name = Error_experiance_company_name;
+            	$error = 1;
+            }
             if($error == 1) {
             	$this->error->error_experiance_values = $params;
             	$error = 0;
