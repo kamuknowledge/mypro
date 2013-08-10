@@ -1,6 +1,7 @@
 <?php
 $this->session = new Zend_Session_Namespace('MyClientPortal');
 $isSignedIn = $this->session->isSignedIn;
+$displayName = $this->session->name;
 ?>
 <div class="header-top">
 			<div class="wrapper">
@@ -9,32 +10,74 @@ $isSignedIn = $this->session->isSignedIn;
 				
 				<div id="links">
 					<ul>
+						<li><a href="javascript:void(0)" class="subitems"/>About Us</a></li>
+						<li><a href="javascript:void(0)" class="subitems"/>Contact Us</a></li>
 						<li class="subitems">
-							<a href="javascript:void(0)" class="subitems"/>Subscribe</a>
+							<a href="javascript:void(0)" class="subitems"/>My Account</a>
 							<ul>
-								<li><a href="javascript:void(0)" class="subitems"/>Subscribe1</a></li>
-								<li><a href="javascript:void(0)" class="subitems"/>Subscribe1</a></li>
-								<li><a href="javascript:void(0)" class="subitems"/>Subscribe1</a></li>
-								<li><a href="javascript:void(0)" class="subitems"/>Subscribe1</a></li>
+								<li><a href="<?php echo $this->baseUrl('profile/view/');?>" class="subitems"/>My&nbsp;Profile</a></li>
+								<?php /*<li><a href="javascript:void(0)" class="subitems"/>Settings</a></li>
+								<li><a href="javascript:void(0)" class="subitems"/>Privacy Options</a></li>*/?>
+								<li><a href="<?php echo $this->baseUrl('signin/logout/');?>" class="subitems"/>Sign&nbsp;Out</a></li>
 							</ul>
 						</li>
-						<li><a href="javascript:void(0)" class="subitems"/>What's New</a></li>
-						<li class="subitems">
-							<a href="javascript:void(0)" />Select City</a>
-							<ul>
-								<li><a href="javascript:void(0)" class="subitems"/>Subscribe1</a></li>
-								<li><a href="javascript:void(0)" class="subitems"/>Subscribe1</a></li>
-								<li><a href="javascript:void(0)" class="subitems"/>Subscribe1</a></li>
-								<li><a href="javascript:void(0)" class="subitems"/>Subscribe1</a></li>
-							</ul>
-						</li>
-						<li><a href="javascript:void(0)" class="subitems"/>Track Your Order</a></li>
-						<li><a href="javascript:void(0)" class="subitems"/>Customer Support</a></li>
-						<li><a href="javascript:void(0)" class="subitems"/>My Account</a></li>
 					</ul>
 				</div>
 				
 				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			
+		
+		
+							<div class="header_bottom" style="margin-top:0px; width:115px; border:#ff0000 solid 0px; float:right">	
+								<div class="right_cart">			
+								<?php								
+								if($isSignedIn!=1){
+								?>
+								<a alt="Your Account" class="" href="javascript:void(0)" id="signup">
+								  <!--span class="top">Hello, <span class="height">Sign</span></span-->
+								  <span class="label" style="padding-left:20px">Click Here For Signup</span>
+								</a>								
+								<?php }else{?>
+								<a alt="Your Account" class="" href="javascript:void(0)" id="myaccount">
+								  <span class="top">Hello, <span class="height"><?php echo $displayName;?></span></span>
+								  <span class="label">Your Account</span>
+								</a>
+								<div id="myac-options" style="display:none;z-index:1000;">
+									<ul >
+										<li class="top_arrow"></li>
+										<li><a href="<?php echo $this->baseUrl('profile/view/');?>">My profile</a></li>
+										<li><a href="javascript:void(0)">Settings</a></li>
+										<li><a href="javascript:void(0)">Privacy&nbsp;Options</a></li>
+										<li><a href="<?php echo $this->baseUrl('signin/logout/');?>">Sign Out</a></li>
+									</ul>
+								</div>
+								
+								<?php }?>			
+								<div class="clear"></div> 
+							</div>
+							<div class="clear"></div>
+							</div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
 				<?php
 				if($isSignedIn!=1){
 				?>
@@ -48,12 +91,21 @@ $isSignedIn = $this->session->isSignedIn;
                     </form>
 					<div class="clear"></div>
 				</div>
-				<?php }else{?>				
+				<?php }else{?>
+
+
+			
 				<div id="profile">
-					<h5>Prifile Name</h5>
-					<div class="cont_an"><a href="javascript:void(0)" class="button" id="show_all">ShowAll</a></div>
+					<h5 class="prifile_image_label"><?php echo $displayName;?></h5>
+					<div class="cont_an"><a href="<?php echo $this->baseUrl('wall/');?>" class="button" id="show_all">Show Wall</a></div>
 					<div class="cont_an"><a href="javascript:void(0)" class="button arrow arw-lef" id="share"><span class="plus"></span>Share<span class="arrow"></span></a></div>
-					<div class="profile_image"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/profile_image.png" title="profil name" alt="profil_name" /><span class="small_arrow"></span></div>				
+					<div class="profile_image"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/profile_image.png" title="profil name" alt="profil_name" /></div>				
+					<!--span class="small_arrow"></span-->
+				
+							
+				
+				
+				
 				</div>
 				<!-- dialog Content -->
 				<div id="share-content" style="display:none">
