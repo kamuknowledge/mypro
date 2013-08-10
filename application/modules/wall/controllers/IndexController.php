@@ -41,10 +41,17 @@ class Wall_IndexController extends Zend_Controller_Action {
      * @return  
      */
     public function init() {
-        /* echo "store/index/init";
-          exit; */
+		
+		/* Set Layout */
         $this->_helper->layout->setLayout('default/layout');
+		
+		/* Validations Layer Class*/
         $this->wall = new Wall_Model_Wall();
+		
+		/* Check Login */
+		if(!$this->wall->check_login()){ $this->_redirect('/');exit;}
+		
+		/* Sessions */
         $this->session = new Zend_Session_Namespace('MyClientPortal');
 
         //$this->setLayoutAction('store/layout');		
@@ -52,11 +59,9 @@ class Wall_IndexController extends Zend_Controller_Action {
 
     /**
      * Purpose: Index action shows user login screen
-     *
      * Access is public
      *
-     * @param	
-     * 
+     * @param
      * @return  
      */
     public function indexAction() {

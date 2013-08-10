@@ -6,10 +6,10 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Bestsellingdb.php 
+* File		:	Brandsdb.php 
 * Module	:	Best Selling Products Module
 * Owner		:	RAM's 
-* Purpose	:	This class is used for Best Selling Products management related database operations
+* Purpose	:	This class is used for Brands Products management related database operations
 * Date		:	08/05/2012
 
 
@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Default_Model_Bestsellingdb extends Application_Model_DataBaseOperations {
+class Default_Model_Brandsdb extends Application_Model_DataBaseOperations {
 	
 	public $session;
 	private $error;

@@ -26,6 +26,27 @@
 class Application_Model_Validation extends Application_Model_DataBaseOperations{
 	
 	/**
+     * Purpose: To validate Login
+     * Access is restricted to class and its child classes
+     *
+     * @param	varchar	$str String to validate
+     * @return  
+     */
+	public function check_login() 
+	{	   
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
+		$isSignedIn = $this->session->isSignedIn;
+		if($isSignedIn==1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	
+	
+	
+		/**
      * Purpose: To validate alphanumeric character with space
      *
      * Access is restricted to class and its child classes
@@ -50,6 +71,11 @@ class Application_Model_Validation extends Application_Model_DataBaseOperations{
 	    	return true;
 	    }
 	}
+	
+	
+	
+	
+	
 
 	/**
      * Purpose: To validate alphanumeric character with space
