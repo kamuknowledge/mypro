@@ -59,6 +59,8 @@ $isSignedIn = $this->session->isSignedIn;
 			<?php echo $this->action('index', 'chat', 'default', array('a_parameter'=>'a_value'));?>
 			<?php echo $this->action('index', 'friendsuggestion', 'default', array('a_parameter'=>'a_value'));?>
 			<?php echo $this->action('index', 'eventnotifications', 'default', array('a_parameter'=>'a_value'));?>
+			<?php }else{?>
+			<?php echo $this->action('index', 'bestselling', 'default', array('a_parameter'=>'a_value'));?>
 			<?php }?>
 			</div>
 			
