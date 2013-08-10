@@ -58,8 +58,8 @@ $isSignedIn = $this->session->isSignedIn;
 				<?php 
 				$layout_module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
 				$layout_controller = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
-				echo $layout_module;
-				echo $layout_controller;
+				//echo $layout_module;
+				//echo $layout_controller;
 				if($layout_module=='wall' || ($layout_module=='default' && $layout_controller=='messaging') || ($layout_module=='default' && $layout_controller=='videos')){
 					echo $this->action('index', 'chat', 'default', array('a_parameter'=>'a_value'));
 					echo $this->action('index', 'friendsuggestion', 'default', array('a_parameter'=>'a_value'));

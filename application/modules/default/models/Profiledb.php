@@ -33,7 +33,6 @@ class Default_Model_Profiledb  {
 	
 	/**
      * Purpose: Constructor sets sessions for portal and portalerror
-     *
      * Access is limited to class and extended classes
      *
      * @param   
@@ -46,11 +45,9 @@ class Default_Model_Profiledb  {
 		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
 		$this->db=Zend_Registry::get('db');
 		
-		if(!$this->session->userid)
+		/* Check Login */
+		if($this->session->userid)
 		{
-			echo "Not logged in";
-			exit;
-		} else {
 			$this->userid = $this->session->userid;
 		}
 	}

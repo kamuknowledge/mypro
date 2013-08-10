@@ -47,6 +47,11 @@ class VideosController extends Zend_Controller_Action {
 		$this->videos = new Default_Model_Videos();
 		$this->Videosdb = new Default_Model_Videosdb();
 		
+		
+		/* Check Login */
+		if(!$this->videos->check_login()){ $this->_redirect('/');exit;}
+		
+		
 		// Setting Layout
         $this->_helper->layout->setLayout('default/layout');
 		

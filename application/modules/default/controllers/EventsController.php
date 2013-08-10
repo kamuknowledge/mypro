@@ -41,14 +41,16 @@ class EventsController extends Zend_Controller_Action {
      */
 	
 	public function init() { 
-		/*echo "store/index/init";
-		exit;  */
-        $this->_helper->layout->setLayout('default/calendar');
-		//$this->setLayoutAction('store/layout');	
+
+        $this->_helper->layout->setLayout('default/calendar');		
+	
 		$this->events = new Default_Model_Events();
 		$this->eventsdb = new Default_Model_Eventsdb();
-		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_events.css'));
 		
+		/* Check Login */
+		if(!$this->events->check_login()){ $this->_redirect('/');exit;}
+		
+		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_events.css'));
 	}
 	
     

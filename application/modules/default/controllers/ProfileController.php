@@ -40,10 +40,12 @@ class ProfileController extends Zend_Controller_Action {
      */
 	
 	public function init() { 
-		/*echo "store/index/init";
-		exit;  */		
 		$this->profile = new Default_Model_Profile();
 		$this->profiledb = new Default_Model_Profiledb();
+		
+		/* Check Login */
+		if(!$this->profile->check_login()){ $this->_redirect('/');exit;}		
+		
         $this->_helper->layout->setLayout('default/profile_layout');
 		//$this->setLayoutAction('store/layout');		
 	}

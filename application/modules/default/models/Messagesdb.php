@@ -49,12 +49,11 @@ class Default_Model_Messagesdb {
 		
 		// Calling config registry values
 		$this->config = Zend_Registry::get('config');
-		if(!$this->session->userid)
-		{
-			echo "Not logged in";
-			exit;
-		} else {
-			 $this->userid = $this->session->userid;
+		
+		/* Check Login */
+		if($this->session->userid)
+		{		
+			$this->userid = $this->session->userid;
 		}
 	}
 	
