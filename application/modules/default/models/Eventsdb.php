@@ -124,7 +124,8 @@ class Default_Model_Eventsdb extends Application_Model_DataBaseOperations {
 	
 	public function updateEventDrop($start_date, $end_date, $allday, $update_id){
 		try {
-		 $uid = 86;//$this->session->userid;
+		 //$uid = 86;//$this->session->userid;
+		 $uid = $this->session->userid;
 		/*$data = array(
 				'event_title'=>$event_name,
 				'userid'=>$this->session->userid,
@@ -157,7 +158,8 @@ class Default_Model_Eventsdb extends Application_Model_DataBaseOperations {
 	
 	public function updateEventResize($end_date, $update_id){
 		try {
-		 $uid = 86;//$this->session->userid;
+		//$uid = 86;//$this->session->userid;
+		 $uid = $this->session->userid;
 		/*$data = array(
 				'event_title'=>$event_name,
 				'userid'=>$this->session->userid,
@@ -191,7 +193,7 @@ class Default_Model_Eventsdb extends Application_Model_DataBaseOperations {
 	public function getEvents($start_date,$end_date) {
 		try {	
 			///parent::SetDatabaseConnection();
-			$query = "SELECT * FROM social_events WHERE userid = '86' AND statusid = 1 AND event_startdate>='".$start_date."' AND event_enddate<='".$end_date."';";
+			$query = "SELECT * FROM social_events WHERE userid = '".$this->session->userid."' AND statusid = 1 AND event_startdate>='".$start_date."' AND event_enddate<='".$end_date."';";
 			//echo $query;die;
 			$stmt = $this->db->query($query);			
 			return $stmt->fetchAll();
