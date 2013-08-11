@@ -232,8 +232,9 @@ class EventsController extends Zend_Controller_Action {
 						'event_address'=>$value['event_address'],
 						'editable'=>true,
 						'color'=>'#69131E',
-						'cache'=> true
-						
+						'cache'=> true,
+						'className' => 'event_'.$value['event_id'],
+						'type'=>'event'
 						);
 					}
 				}
