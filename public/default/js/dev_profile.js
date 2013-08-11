@@ -206,9 +206,75 @@ $(document).ready(function(){
 			$("#experiance_edit_"+id).show();
 		}
 	});
+// Education Functionality
+	$(".edit_education").live("click", function(){
+		var id_str = $(this).attr('id');
+		var id_array = id_str.split("_");
+		var id = id_array[2];
+		if($("#education_edit_"+id).html() == "") {
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/addediteducation",
+				data : "type=edit&id="+id,
+				beforeSend : function() {
+					if(id != "new")
+					$("#education_edit_loading_"+id).show();
+				},
+				success : function(data) {
+					if(id != "new") {
+						$("#education_edit_loading_"+id).hide();
+						$("#education_view_"+id).hide();
+						$("#education_edit_"+id).html(data);
+						$("#education_edit_"+id).show();
+					} else {
+						$("#education_edit_"+id).html(data);
+						$("#education_edit_"+id).show();
+					}
+					return false;
+				}
+			});
+		} else {
+			$("#education_view_"+id).hide();
+			$("#education_edit_"+id).show();
+		}
+	});
+// Personal Information
+	$(".edit_personal").live("click", function(){
+		$.ajax({
+			type : "POST",
+			url : baseUrl+"/profile/addeditpersonal",
+			data : "type=editform",
+			beforeSend : function() {
+				//$("#personal_edit_loading").show();
+			},
+			success : function(data) {
+				$("#personal_view").html(data);
+				return false;
+			}
+		});
+	});
+// Addreess Information
+	$(".edit_address").live("click", function(){
+		$.ajax({
+			type : "POST",
+			url : baseUrl+"/profile/addeditaddress",
+			data : "type=editform",
+			beforeSend : function() {
+				//$("#personal_edit_loading").show();
+			},
+			success : function(data) {
+				$("#address_view").html(data);
+				return false;
+			}
+		});
+	});	
 });
 function submit_form(){
 	$("#form_about_us").submit();
+}
+function cancel_form(){
+	$("#edit_about_us").hide();
+	$("#view_about_us").show();
 }
 function postArray(form){ 
 	var data = {}; 

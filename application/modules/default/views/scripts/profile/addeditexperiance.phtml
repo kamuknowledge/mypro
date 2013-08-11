@@ -208,7 +208,6 @@ function cancel_exp_form(id) {
 							<option value="<?php echo $i; ?>" <?php echo ($tyear == $i) ? "selected" : ""; ?>><?php echo $i; ?></option>
 						<?php } ?>
 					</select>
-					<input type="checkbox" style="margin-top: 7px;"<?php if(is_array($error->error_experiance_values)) { echo ($error->error_experiance_values['present_working']) ? 'checked="checked"' : ""; } else { echo ($present_working) ? 'checked="checked"' : ""; } ?> id="present_working" name="present_working"><label>Present Working Here.</label>
 					<div class="clear"></div>
 				</div>
 			</div>

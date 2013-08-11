@@ -1,0 +1,270 @@
+<?php
+	$error = $this;
+	$address = $this->UserDetails;
+	$address_type = (isset($this->UserDetails[1]["display"]) || isset($this->UserDetails[2]["display"])) ? 1 : 0;
+	if($address_type) {
+		$home_address1 = $home_address2 = $home_city = $home_street = $home_postal_code = $home_country_id = $home_state_id = $office_address1 = $office_address2 = $office_city = $office_street = $office_postal_code = $office_country_id = $office_state_id = "";
+		$country = isset($this->CountryList) ? $this->CountryList : array();
+		$home_state = isset($this->HomeStateList) ? $this->HomeStateList : array();
+		$office_state = isset($this->OfficeStateList) ? $this->OfficeStateList : array();
+		foreach($address as $value) {
+			if($value["address_type"] == "Home") {
+				$home_address1 = $value["address1"];
+				$home_address2 = $value["address2"];
+				$home_city = $value["city"];
+				$home_street = $value["street"];
+				$home_postal_code = $value["postal_code"];
+				$home_country_id = (is_array($error->error_address_values)) ? $error->error_address_values['home_country_id'] : $value["country_id"];
+				$home_state_id = (is_array($error->error_address_values)) ? $error->error_address_values['home_state_id'] : $value["state_id"];
+			} else if($value["address_type"] == "Office") {
+				$office_address1 = $value["address1"];
+				$office_address2 = $value["address2"];
+				$office_city = $value["city"];
+				$office_street = $value["street"];
+				$office_postal_code = $value["postal_code"];
+				$office_country_id = (is_array($error->error_address_values)) ? $error->error_address_values['office_country_id'] : $value["country_id"];
+				$office_state_id = (is_array($error->error_address_values)) ? $error->error_address_values['office_state_id'] : $value["state_id"];
+			}
+		}
+?>
+<script> 
+var sub_type = "edit";
+$(document).ready(function(){
+	$("#address_form").validate({
+		submitHandler: function(form) {
+			var str = $("#address_form").serialize();
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/addeditaddress",
+				data : "type="+sub_type+"&"+str,
+				beforeSend : function() {
+					//$("#experiance_edit_loading_<?php echo $experiance_id; ?>").show();
+				},
+				success : function(data) {
+					$("#address_view").html(data);
+					return false;
+				}
+			});
+		}
+	});
+	$("#home_country_id").live("change", function() {
+		var selcted = $(this).find("option:selected").val();
+		if(selcted) {
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/getstates",
+				data : "country="+selcted,
+				success : function(data) {
+					$('#home_state_id').html('<option value="">Select State..</option>'+data);
+				}
+			});
+		} else {
+			$('#home_state_id')
+				.find('option')
+				.remove()
+				.end()
+				.append('<option value="">Select State..</option>')
+				.val('');
+		}
+	});
+	$("#office_country_id").live("change", function() {
+		var selcted = $(this).find("option:selected").val();
+		if(selcted) {
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/getstates",
+				data : "country="+selcted,
+				success : function(data) {
+					$('#office_state_id').html('<option value="">Select State..</option>'+data);
+				}
+			});
+		} else {
+			$('#office_state_id')
+				.find('option')
+				.remove()
+				.end()
+				.append('<option value="">Select State..</option>')
+				.val('');
+		}
+	});
+});
+function submit_per_form() {
+	$("#address_form").submit();
+}
+function cancel_per_form() {
+	sub_type = "view";
+	$("#address_form").submit();
+}
+</script>
+<form name="address_form" id="address_form">
+	<div class="add_experience_form form">
+		<div class="left width-50">
+			<h2 class="black">Home</h2>
+			<div class="row">
+				<label>Address1 :</label>
+				<input type="text" value="<?php if(is_array($error->error_address_values)) { echo $error->error_address_values['home_address1']; } else { echo $home_address1; } ?>" id="home_address1" name="home_address1" <?php if($error->error_home_address1 != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_home_address1 != '') {
+						echo '<label for="home_address1" generated="true" class="error" style="">' .$error->error_home_address1 . '</label>';
+						$error->error_home_address1 = '';
+					}
+				?>
+			</div>
+			<div class="row">
+				<label>Address2 :</label>
+				<input type="text" value="<?php if(is_array($error->error_address_values)) { echo $error->error_address_values['home_address2']; } else { echo $home_address2; } ?>" id="home_address2" name="home_address2" <?php if($error->error_home_address2 != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_home_address2 != '') {
+						echo '<label for="home_address2" generated="true" class="error" style="">' .$error->error_home_address2 . '</label>';
+						$error->error_home_address2 = '';
+					}
+				?>
+			</div>
+			<div class="row">
+				<label>Street :</label>
+				<textarea name="home_street" id="home_street" <?php if($error->error_home_street != '') { echo 'class="error"'; } ?>><?php if(is_array($error->error_address_values)) {echo $error->error_address_values['home_street'];} else { echo $home_street; } ?></textarea>
+				<?php 
+					if($error->error_home_street != '') {
+						echo '<label for="home_street" generated="true" class="error">'.$error->error_home_street.'</label>';
+						$error->error_home_street = '';
+					}
+				?>
+			</div>
+			<div class="row">
+				<label>City :</label>
+				<input type="text" value="<?php if(is_array($error->error_address_values)) { echo $error->error_address_values['home_city']; } else { echo $home_city; } ?>" id="home_city" name="home_city" <?php if($error->error_home_city != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_home_city != '') {
+						echo '<label for="home_city" generated="true" class="error" style="">' .$error->error_home_city . '</label>';
+						$error->error_home_city = '';
+					}
+				?>
+			</div>
+			<div class="row">
+				<label>Country :</label>
+				<select name="home_country_id" id="home_country_id">
+					<option value="">Please Select Country..</option>
+					<?php foreach($country as $value) { ?>
+					<option value="<?php echo $value["country_id"] ?>" <?php echo ($home_country_id == $value["country_id"]) ? "selected" : ""; ?>><?php echo $value["country"] ?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="row">
+				<label>State :</label>
+				<select name="home_state_id" id="home_state_id">
+					<option value="">Select State..</option>
+					<?php foreach($home_state as $value) { ?>
+						<option value="<?php echo $value["state_id"]; ?>" <?php echo ($home_state_id == $value["state_id"]) ? "selected" : ""; ?>><?php echo $value["name"]; ?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="row">
+				<label>Zip Code :</label>
+				<input type="text" value="<?php if(is_array($error->error_address_values)) { echo $error->error_address_values['home_postal_code']; } else { echo $home_postal_code; } ?>" id="home_postal_code" name="home_postal_code" <?php if($error->error_home_postal_code != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_home_postal_code != '') {
+						echo '<label for="home_postal_code" generated="true" class="error" style="">' .$error->error_home_postal_code . '</label>';
+						$error->error_home_postal_code = '';
+					}
+				?>
+			</div>
+		</div>
+		<div class="left width-50">
+			<h2 class="black">Office</h2>
+			<div class="row">
+				<label>Address1 :</label>
+				<input type="text" value="<?php if(is_array($error->error_address_values)) { echo $error->error_address_values['office_address1']; } else { echo $office_address1; } ?>" id="office_address1" name="office_address1" <?php if($error->error_office_address1 != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_office_address1 != '') {
+						echo '<label for="office_address1" generated="true" class="error" style="">' .$error->error_office_address1 . '</label>';
+						$error->error_office_address1 = '';
+					}
+				?>
+			</div>
+			<div class="row">
+				<label>Address2 :</label>
+				<input type="text" value="<?php if(is_array($error->error_address_values)) { echo $error->error_address_values['office_address2']; } else { echo $office_address2; } ?>" id="office_address2" name="office_address2" <?php if($error->error_office_address2 != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_office_address2 != '') {
+						echo '<label for="office_address2" generated="true" class="error" style="">' .$error->error_office_address2 . '</label>';
+						$error->error_office_address2 = '';
+					}
+				?>
+			</div>
+			<div class="row">
+				<label>Street :</label>
+				<textarea name="office_street" id="office_street" <?php if($error->error_office_street != '') { echo 'class="error"'; } ?>><?php if(is_array($error->error_address_values)) {echo $error->error_address_values['office_street'];} else { echo $office_street; } ?></textarea>
+				<?php 
+					if($error->error_office_street != '') {
+						echo '<label for="interests" generated="true" class="error">'.$error->error_office_street.'</label>';
+						$error->error_office_street = '';
+					}
+				?>></textarea>
+			</div>
+			<div class="row">
+				<label>City :</label>
+				<input type="text" value="<?php if(is_array($error->error_address_values)) { echo $error->error_address_values['office_city']; } else { echo $office_city; } ?>" id="office_city" name="office_city" <?php if($error->error_office_city != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_office_city != '') {
+						echo '<label for="office_city" generated="true" class="error" style="">' .$error->error_office_city . '</label>';
+						$error->error_office_city = '';
+					}
+				?>
+			</div>
+			<div class="row">
+				<label>Country :</label>
+				<select name="office_country_id" id="office_country_id">
+					<option value="">Please Select Country..</option>
+					<?php foreach($country as $value) { ?>
+					<option value="<?php echo $value["country_id"] ?>" <?php echo ($office_country_id == $value["country_id"]) ? "selected" : ""; ?>><?php echo $value["country"] ?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="row">
+				<label>State :</label>
+				<select name="office_state_id" id="office_state_id">
+					<option value="">Select State..</option>
+					<?php foreach($office_state as $value) { ?>
+						<option value="<?php echo $value["state_id"]; ?>" <?php echo ($office_state_id == $value["state_id"]) ? "selected" : ""; ?>><?php echo $value["name"]; ?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="row">
+				<label>Zip Code :</label>
+				<input type="text" value="<?php if(is_array($error->error_address_values)) { echo $error->error_address_values['office_postal_code']; } else { echo $office_postal_code; } ?>" id="office_postal_code" name="office_postal_code" <?php if($error->error_office_postal_code != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_office_postal_code != '') {
+						echo '<label for="office_postal_code" generated="true" class="error" style="">' .$error->error_office_postal_code . '</label>';
+						$error->error_office_postal_code = '';
+					}
+				?>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="text-right">
+				<a class="button-dark add" href="javascript:void(0)" onclick="submit_per_form();"><span><span>Save</span></span></a>
+				<a class="button-grey add" href="javascript:void(0)" onclick="cancel_per_form();"><span><span>Cancel</span></span></a>
+				<div class="clear"></div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</form>
+<?php
+	}
+	else {
+?>
+<?php foreach($address as $key => $value) { ?>
+<div class="left width-50">
+	<h3><?php echo $value["address_type"]; ?></h3>
+	<?php echo $value["address1"].", ".$value["address2"]; ?>,<br/>
+	<?php echo $value["street"]; ?>,<br/>
+	<?php echo $value["city"]; ?>,<br/>
+	<?php echo $value["name"]; ?>,<br/>
+	<?php echo $value["country"]; ?>,<br/>
+	<?php echo $value["postal_code"]; ?>.
+</div>
+<?php } ?>
+<div class="clear"></div>
+<?php
+	}
+?>

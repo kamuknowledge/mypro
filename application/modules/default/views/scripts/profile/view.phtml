@@ -80,7 +80,7 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 													</div>
 													<div class="right">
 														<a class="button-dark add" href="javascript:void(0);" onclick="submit_form()"><span><span>Save</span></span></a>
-														<a class="button-grey add" href="javascript:void(0)"><span><span>Cancel</span></span></a>
+														<a class="button-grey add" href="javascript:void(0)" onclick="cancel_form()"><span><span>Cancel</span></span></a>
 													</div>
 												</div>
 											</form>
@@ -120,16 +120,19 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 								<div class="profile_info_block">
 									<div class="header">
 										<h2 class="title_have_image edu">Education Details</h2>
-										<a href="javascript:void(0)"><span>+</span>Add Education</a>
+										<a href="javascript:void(0);" class="edit_education edit_education_new" id="edit_education_new"><span>+</span>Add Education</a>
 									</div>
-										<div class="desc">
+										<div class="desc education_views">
+										<div class="education_view" id="education_view_new" style="display:none;"></div>
+										<div class="education_edit" id="education_edit_new" style="display:none;"></div>
 										<?php foreach($education as $key => $value) { ?>
-										<div class="education" id="">
-											<h2 class="title_have_image exprce"><?php echo $value["school_name"]; ?><span class="icon"></span></h2>
+										<div class="education_view" id="education_view_<?php echo $value["education_id"]; ?>">
+											<h2 class="title_have_image educat"><?php echo $value["school_name"]; ?><span class="edit_education edit_education_<?php echo $value["education_id"]; ?> icon" id="edit_education_<?php echo $value["education_id"]; ?>"></span><div id="education_edit_loading_<?php echo $value["education_id"]; ?>" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div></h2>
 											<span class="caption"><?php echo $value["school_name"].", ".$value["specialization"]; ?></span>
-											<span class="information"><?php echo $value["from_year"]; ?>-<?php echo $value["to_year"]; ?></span>
+											<span class="information"><?php echo ($value["from_month"]) ? date("F", mktime(0, 0, 0, $value["from_month"], 10)) : 0; ?> <?php echo $value["from_year"]; ?> - To <?php echo ($value["present_working"]) ? "Present" : (($value["to_month"]) ? date("F", mktime(0, 0, 0, $value["to_month"], 10)) : 0)." ".$value["to_year"]; ?></span>
 											<p><?php echo $value["education_notes"]; ?></p>
 										</div>
+										<div class="education_edit" id="education_edit_<?php echo $value["education_id"]; ?>" style="display:none;"></div>
 										<?php } ?>
 										</div>
 									
@@ -137,36 +140,35 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 								<div class="profile_info_block">
 									<div class="header">
 										<h2 class="title_have_image prsnlinformtn">Personal Information</h2>
-										<a href="javascript:void(0)"><span>+</span>Add/Change</a>
+										<a href="javascript:void(0);" class="edit_personal" id="edit_personal"><span>+</span>Add/Change</a>
 									</div>
-										<div class="desc">
-											<ul>
-												<li><label>Birthday : </label><span class="blue"><?php echo $profile["date_of_birth"]; ?></span></li>
-												<li><label>Marital Status : </label><span class="blue"><?php echo $profile["marital_status"]; ?></span></li>
-												<li><label>Interests : </label><span class="blue"><?php echo $profile["interests"]; ?></span></li>
-												<li><label>Honors & Awards : </label><span class="blue">Honors & Awards Honors & Awards Honors & Awards</span></li>
-												<li><label>Contact For : </label><span class="blue">Contact For Contact For Contact For</span></li>
-												<li><label>Personal : </label><span class="blue"><?php echo $profile["phonenumber"]; ?></span></li>
-												<li><label>Website : </label><span class="blue">http://www.telugump3lyrics.com</span></li>
-												<li><label>Skype : </label><span class="blue">vip.veera</span></li>	
-											</ul>
-										</div>
-									
+									<div class="desc personal_view" id="personal_view">
+										<ul>
+											<li><label>Birthday : </label><span class="blue"><?php echo $profile["date_of_birth"]; ?></span></li>
+											<li><label>Marital Status : </label><span class="blue"><?php echo $profile["marital_status"]; ?></span></li>
+											<li><label>Interests : </label><span class="blue"><?php echo $profile["interests"]; ?></span></li>
+											<!--li><label>Honors & Awards : </label><span class="blue">Honors & Awards Honors & Awards Honors & Awards</span></li>
+											<li><label>Contact For : </label><span class="blue">Contact For Contact For Contact For</span></li-->
+											<li><label>Personal : </label><span class="blue"><?php echo $profile["phonenumber"]; ?></span></li>
+											<!--li><label>Website : </label><span class="blue">http://www.telugump3lyrics.com</span></li>
+											<li><label>Skype : </label><span class="blue">vip.veera</span></li-->
+										</ul>
+									</div>
 								</div>
 								<div class="profile_info_block">
 									<div class="header">
 										<h2 class="title_have_image address">Address</h2>
-										<a href="javascript:void(0)"><span>+</span>Add/Change</a>
+										<a href="javascript:void(0)" class="edit_address" id="edit_address"><span>+</span>Add/Change</a>
 									</div>
-										<div class="desc">
+										<div class="desc address_view" id="address_view">
 											<?php foreach($address as $key => $value) { ?>
 												<div class="left width-50">
 													<h3><?php echo $value["address_type"]; ?></h3>
 													<?php echo $value["address1"].", ".$value["address2"]; ?>,<br/>
 													<?php echo $value["street"]; ?>,<br/>
 													<?php echo $value["city"]; ?>,<br/>
-													<?php echo $value["state_id"]; ?>,<br/>
-													<?php echo $value["country_id"]; ?>,<br/>
+													<?php echo $value["name"]; ?>,<br/>
+													<?php echo $value["country"]; ?>,<br/>
 													<?php echo $value["postal_code"]; ?>.
 												</div>
 											<?php } ?>
