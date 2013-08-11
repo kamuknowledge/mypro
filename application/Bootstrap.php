@@ -45,7 +45,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	 * Initializing Resources
 	 */	
 	public function _initResource() {		
-        $config = new Zend_Config_Ini(__DIR__ . '/configs/application.ini', APPLICATION_ENV);
+        $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
         Zend_Registry::set('config', $config);
 		//self::getDbpassword();
     }
@@ -111,7 +111,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $modules = Application_Model_DataBaseOperations::getModules();
         
         $controllerDirectory = array();
-        $dir = __DIR__;
+        //$dir = __DIR__;
+		$dir = APPLICATION_PATH;
         //echo $dir;exit;
         foreach($modules as $record) {
         	$controllerDirectory[$record['modulename']] =  $dir ."\modules\/".$record['modulename']."\controllers";                
@@ -122,7 +123,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         $router = $front->getRouter();
         $request = $front->getRequest();
-        $front->registerPlugin(new Temp_Plugin_ModuleLayout()); 
+        //$front->registerPlugin(new Temp_Plugin_ModuleLayout()); 
 		        
 		$MySession = new Zend_Session_Namespace('MyPortal');
 		if(isset($MySession->loggedIn) && $MySession->loggedIn) {
