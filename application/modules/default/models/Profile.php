@@ -254,5 +254,36 @@ class Default_Model_Profile extends Application_Model_Validation {
 			throw new Exception($e->getMessage());
 		}
 	}
+	
+	public function edit_member_title(Array $params) {
+		try{
+			$fname = trim($params['fname']);
+			$lname = trim($params['lname']);
+			$gender = trim($params['gender']);
+			$timezone = trim($params['timezone']);
+			$error = 0;
+			if($fname == '') {				// Validation for about us
+            	$this->error->error_first_name = Error_about_us_empty;
+            	$error = 1;
+            }
+			if($lname == '') {				// Validation for about us
+            	$this->error->error_last_name = Error_about_us_empty;
+            	$error = 1;
+            }
+            if($error == 1) {
+            	$this->error->error_profile_title_values = $params;
+            	$error = 0;
+            	return false;
+            }         
+            /*
+             * Validation ends here
+             */
+			$outpt = $this->Profiledb->updateProfiletitle($fname, $lname, $gender, $timezone);
+			return $outpt;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 }
 ?>

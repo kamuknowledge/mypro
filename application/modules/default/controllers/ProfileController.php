@@ -93,6 +93,7 @@ class ProfileController extends Zend_Controller_Action {
 			$UserDetails["address"] = $this->profiledb->getUserAddress();
 			$UserDetails["education"] = $this->profiledb->getUserEducation();
 			$UserDetails["experiance"] = $this->profiledb->getUserExperiance();
+			$UserDetails["timezones"] = $this->profiledb->getTimezones();
 			//print_r($UserDetails);
 			$this->view->UserDetails = $UserDetails;
 			//echo "store/index/index";
@@ -415,6 +416,29 @@ class ProfileController extends Zend_Controller_Action {
 					}
 				}
 			}else{
+				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
+				//return 0;
+			}
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function editmembertitleAction() {
+		try{
+			$params = $this->_getAllParams();	
+			$this->_helper->layout->setLayout('default/empty_layout');
+			$request = $this->getRequest();
+			$Request_Values = $request->getPost();			
+			if ($request->isPost()) {
+				if(!$this->profile->edit_member_title($params)) {
+					$this->view->UserDetails = $this->profiledb->getTimezones();
+				} else {
+					echo 1;
+					exit;
+				}
+			}else{			
 				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
 				//return 0;
 			}

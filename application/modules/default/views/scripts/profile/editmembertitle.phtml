@@ -1,0 +1,44 @@
+<?php
+	$error = $this;
+?>
+<form class="member_profile_title_edit">
+<div class="profile_main_form form">
+	<label>Name:</label>
+	<div class="clear row">
+			<input type="text" size="30" name="fname" id="fname" <?php if($error->error_first_name != '') { echo 'class="error"'; } ?> value="<?php if(is_array($error->error_profile_title_values)) {echo $error->error_profile_title_values['fname'];} ?>"/>
+			<input type="text" size="30" name="lname" id="lname" <?php if($error->error_last_name != '') { echo 'class="error"'; } ?> value="<?php if(is_array($error->error_profile_title_values)) {echo $error->error_profile_title_values['lname'];} ?>"/>
+			<?php 
+					if($error->error_first_name != '') {
+						echo '<label for="first_name" generated="true" class="error">'.$error->error_first_name.'</label>';
+						//echo '<label for="email_id" generated="true" class="" style="color:#FF0000;">' .$error->error_user_email . '</label>';
+						$error->error_first_name = '';
+					}
+			?>
+			<?php 
+					if($error->error_last_name != '') {
+						echo '<label for="last_name" generated="true" class="error">'.$error->error_last_name.'</label>';
+						//echo '<label for="email_id" generated="true" class="" style="color:#FF0000;">' .$error->error_user_email . '</label>';
+						$error->error_last_name = '';
+					}
+			?>
+	</div>
+	<div class="row gender">
+		<?php $gender = (is_array($error->error_profile_title_values)) ? $error->error_profile_title_values['gender'] : ""; ?>
+		<label>Gender : </label><input type="radio" name="gender" id="gender" value="Male" <?php echo ($gender == "Male" || $gender == "") ? "checked" : ""; ?>/><span>Male</span><input type="radio" name="gender" id="gender" value="Female" <?php echo ($gender == "Female") ? "checked" : ""; ?>/><span>Female</span>
+	</div>
+	<label>Time Zone :</label>
+	<div class="row">
+		<select style="width: 55%;" name="timezone" id="timezone">
+			<?php $timezone = (is_array($error->error_profile_title_values)) ? $error->error_profile_title_values['timezone'] : ""; ?>
+			<?php foreach($timezones as $value) { ?>
+			<option value="<?php echo $value["timezone_id"]; ?>" <?php ($timezone == $value["timezone_id"]) ? "selected" : ""; ?>><?php echo $value["timezone_location"]." ".$value["gmt"]; ?></option>
+			<?php } ?>
+		</select>
+	</div>
+	<div class="text-right">
+		<a class="button-dark add" href="javascript:void(0);" id="save_member_profile_title"><span><span>Save</span></span></a>
+		<a class="button-grey add" href="javascript:void(0);" id="cancel_member_profile_title"><span><span>Cancel</span></span></a>
+		<div class="clear"></div>
+	</div>
+</div>
+</form>

@@ -4,6 +4,7 @@ $profile = $this->UserDetails["profile"][0];
 $address = $this->UserDetails["address"];
 $experiance = $this->UserDetails["experiance"];
 $education = $this->UserDetails["education"];
+$timezones = $this->UserDetails["timezones"];
 $present_cmp = $profile["company_name"]." - "."country_name";
 $previous_cmp = "";
 $current_status = $profile["job_title"]." at ".$profile["company_name"];
@@ -25,13 +26,13 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 									<div class="clear">&nbsp;</div>
 								</div>
 								<div class="profile_page_detail">
-									<a href="<?php echo $this->baseUrl('profile/edit/');?>" id="done-editing" class="button-big icon edit"><span><span>Done Editing</span></span></a>
-									<div class="left width-100">
-									<div class="title">
-										<h2 class="title_have_image"><?php echo $profile["firstname"]." ".$profile["lastname"]; ?><span class="icon"></span></h2>
-										<span class="caption"><?php echo $current_status; ?></span>
-									</div>
-										<div class="timezone"><?php echo $profile["timezone_id"]; ?></div>
+									<!--a href="<?php echo $this->baseUrl('profile/edit/');?>" id="done-editing" class="button-big icon edit"><span><span>Done Editing</span></span></a-->
+									<div class="left width-100" id="member_profile_title">
+										<div class="title">
+											<h2 class="title_have_image"><label id="h2_name"><?php echo $profile["firstname"]." ".$profile["lastname"]; ?></label><span class="icon" id="member_profile_title_icon"></span></h2>
+											<span class="caption"><?php echo $current_status; ?></span>
+										</div>
+										<div class="timezone" id="timezone_dis"><?php foreach($timezones as $value) { echo ($value["timezone_id"] == $profile["timezone_id"]) ? $value["timezone_location"]." ".$value["gmt"] : ""; } ?></div>
 										<div class="details">
 											<label>Current:</label><span class="blue"><?php echo $present_cmp; ?></span>
 											<!--label>Previous:</label><span class="blue"><?php echo $previous_cmp; ?></span-->
@@ -44,6 +45,33 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 											<a href="javascript:void(0)" class="button-light blue icon skype"><span><span>vip.veera</span></span></a>
 											<a href="javascript:void(0)" class="button-light blue icon phone"><span><span><?php echo $profile["phonenumber"]; ?></span></span></a>
 										</div>
+									</div>
+									<div class="left width-100" id="member_profile_title_edit" style="display:none">
+										<form class="member_profile_title_edit">
+										<div class="profile_main_form form">
+											<label>Name:</label>
+											<div class="clear row">
+													<input type="text" size="30" name="fname" id="fname" value="<?php echo $profile["firstname"]; ?>"/>
+													<input type="text" size="30" name="lname" id="lname" value="<?php echo $profile["lastname"]; ?>"/>
+											</div>
+											<div class="row gender">
+												<label>Gender : </label><input type="radio" name="gender" id="gender" value="Male" <?php echo ($profile["gender"] == "Male" || $profile["gender"] == "") ? "checked" : ""; ?>/><span>Male</span><input type="radio" name="gender" id="gender" value="Female" <?php echo ($profile["gender"] == "Female") ? "checked" : ""; ?>/><span>Female</span>
+											</div>
+											<label>Time Zone :</label>
+											<div class="row">
+												<select style="width: 55%;" name="timezone" id="timezone">
+													<?php foreach($timezones as $value) { ?>
+													<option value="<?php echo $value["timezone_id"]; ?>" <?php echo ($value["timezone_id"] == $profile["timezone_id"]) ? "selected" : ""; ?>><?php echo $value["timezone_location"]." ".$value["gmt"]; ?></option>
+													<?php } ?>
+												</select>
+											</div>
+											<div class="text-right">
+												<a class="button-dark add" href="javascript:void(0);" id="save_member_profile_title"><span><span>Save</span></span></a>
+												<a class="button-grey add" href="javascript:void(0);" id="cancel_member_profile_title"><span><span>Cancel</span></span></a>
+												<div class="clear"></div>
+											</div>
+										</div>
+										</form>
 									</div>
 									<div class="clear">&nbsp;</div>
 								</div>

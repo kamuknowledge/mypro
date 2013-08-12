@@ -253,5 +253,26 @@ class Default_Model_Profiledb  {
 		}
 		return FALSE;
 	}
+	
+	public function getTimezones() {
+		$query = "SELECT mt.* FROM master_timezones mt WHERE statusid = 1 ORDER BY timezone_location;";
+		$stmt = $this->db->query($query);			
+		return $stmt->fetchAll();
+		return FALSE;
+	}
+	
+	public function updateProfiletitle($fname, $lname, $gender, $timezone) {
+		try {
+			//parent::SetDatabaseConnection();
+			$query = 'UPDATE apmusers SET firstname = "'.$fname.'", lastname = "'.$lname.'", gender = "'.$gender.'", timezone_id = "'.$timezone.'" WHERE userid = "'.$this->userid.'";';
+			//exit;
+			$stmt = $this->db->query($query);
+			//return $stmt->fetchAll();
+			return 1;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 }
 ?>

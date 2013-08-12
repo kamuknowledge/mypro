@@ -267,7 +267,51 @@ $(document).ready(function(){
 				return false;
 			}
 		});
-	});	
+	});
+// Member Profile title icon
+	$("#member_profile_title_icon").live("click", function(){
+		$("#member_profile_title").hide();
+		$("#member_profile_title_edit").show();
+		return false;
+	});
+	$("#cancel_member_profile_title").live("click", function(){
+		$("#member_profile_title_edit").hide();
+		$("#member_profile_title").show();
+		return false;
+	});
+	$("#save_member_profile_title").live("click", function(){
+		$(".member_profile_title_edit").submit();
+		return false;
+	});
+	$(".member_profile_title_edit").validate({
+		submitHandler: function(form) {
+			var str = $(".member_profile_title_edit").serialize();
+			//$("#registration").html("Loading...");
+			var input_data = postArray(".member_profile_title_edit");
+			var fname = input_data.fname;
+			var lname = input_data.lname;
+			var timezone = $("#timezone option:selected").text();
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/editmembertitle",
+				data : str,
+				beforeSend : function() {
+					
+				},
+				success : function(data) {
+					if(data == 1) {
+						$("#h2_name").html(fname+" "+lname);
+						$("#timezone_dis").html(timezone);
+						$("#member_profile_title_edit").hide();
+						$("#member_profile_title").show();
+					} else {
+						$("#member_profile_title_edit").html(data);
+					}
+					return false;
+				}
+			});
+		}
+	});
 });
 function submit_form(){
 	$("#form_about_us").submit();
