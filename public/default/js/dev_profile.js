@@ -312,6 +312,25 @@ $(document).ready(function(){
 			});
 		}
 	});
+	$("#avatar").live("change", function() {
+		$("#upload_image").submit();
+	});
+	$('#upload_image').on('submit', function(e) {
+            e.preventDefault(); // <-- important
+            // $(this).ajaxSubmit({
+                // target: '#output'
+            // });
+			$('#upload_image').ajaxSubmit(function(responseText) { 
+				var out_arr = responseText.split("|");
+				if(out_arr[1]) {
+					$('#popup_content img').attr("src",baseUrl+"/public/uploads/"+out_arr[1]);
+					$('#popup_content').show().fancyBox();
+					//$("#popup_content").show().f
+				} else {
+					alert(responseText);
+				}
+			});
+	});
 });
 function submit_form(){
 	$("#form_about_us").submit();
@@ -326,3 +345,19 @@ function postArray(form){
 	for(var i in form) data[form[i].name] = form[i].value; 
 	return data; 
 }
+// post-submit callback 
+function showResponse(responseText, statusText, xhr, $form)  { 
+    // for normal html responses, the first argument to the success callback 
+    // is the XMLHttpRequest object's responseText property 
+ 
+    // if the ajaxForm method was passed an Options Object with the dataType 
+    // property set to 'xml' then the first argument to the success callback 
+    // is the XMLHttpRequest object's responseXML property 
+ 
+    // if the ajaxForm method was passed an Options Object with the dataType 
+    // property set to 'json' then the first argument to the success callback 
+    // is the json data object returned by the server 
+ 
+    alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
+        '\n\nThe output div should have already been updated with the responseText.'); 
+} 

@@ -21,7 +21,10 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 							<div class="profile_main_page">
 								<div class="profile_page_image">
 									<img src="<?php echo $this->baseUrl('public/default').$profile["image_path"]; ?>" title="GUNNAM CHOWDARY"/>
-									<a class="button-light icon cam" href="javascript:void(0)"><span><span>Edit Profile Picture</span></span></a>
+									<form id="upload_image" name="upload_image" action="<?php echo $this->baseUrl('profile/upload/');?>" method="post">
+										<input id="avatar" type="file" name="avatar" />
+									</form>
+									<!--a class="button-light icon cam" href="javascript:void(0)" id="image_upload"><span>Edit Profile Picture</span></a-->
 									<a href="javascript:void(0)">Delete Photo</a>
 									<div class="clear">&nbsp;</div>
 								</div>
@@ -209,4 +212,8 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 						<div class="clear"></div>
 					</div>
 <div class="clear"></div>
+</div>
+<div id="popup_content" name="popup_content" style="display:none;width:500px;height:500px;">
+	<img src="" width="500" height="auto"/>
+	<input type="button" value="Save" />
 </div>

@@ -47,6 +47,7 @@ class ProfileController extends Zend_Controller_Action {
 		if(!$this->profile->check_login()){ $this->_redirect('/');exit;}		
 		
         $this->_helper->layout->setLayout('default/profile_layout');
+		$this->view->headScript()->appendFile('http://malsup.github.com/jquery.form.js','text/javascript');
 		//$this->setLayoutAction('store/layout');		
 	}
 	
@@ -87,7 +88,7 @@ class ProfileController extends Zend_Controller_Action {
      */
 	
 	public function viewAction() {
-		try{		
+		try{
 			//$this->_helper->layout->disableLayout();
 			$UserDetails["profile"] = $this->profiledb->getProfileDetails();
 			$UserDetails["address"] = $this->profiledb->getUserAddress();
@@ -442,6 +443,37 @@ class ProfileController extends Zend_Controller_Action {
 				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
 				//return 0;
 			}
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function uploadAction() {
+		try{		
+			$params = $this->_getAllParams();	
+			$this->_helper->layout->setLayout('default/empty_layout');
+			// Define a destination
+			$targetFolder = $this->view->baseUrl().'/public/uploads'; // Relative to the root
+
+			if (!empty($_FILES)) {
+				$tempFile = $_FILES['avatar']['tmp_name'];
+				$targetPath = $_SERVER['DOCUMENT_ROOT'] . $targetFolder;
+				$targetFile = rtrim($targetPath,'/') . '/' . $_FILES['avatar']['name'];
+				
+				// Validate the file type
+				$fileTypes = array('jpg','jpeg','gif','png'); // File extensions
+				$fileParts = pathinfo($_FILES['avatar']['name']);
+				
+				if (in_array($fileParts['extension'],$fileTypes)) {
+					move_uploaded_file($tempFile,$targetFile);
+					echo '1|'.$_FILES['avatar']['name'];
+				} else {
+					echo 'Invalid file type.';
+				}
+			}
+			exit;
+			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
