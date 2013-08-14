@@ -1,0 +1,1 @@
+ALTER TABLE `store_products` ADD `show_in_homepage` TINYINT NOT NULL DEFAULT '0' AFTER `product_meta_description` ;
