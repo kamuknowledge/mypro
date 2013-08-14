@@ -77,6 +77,18 @@ class Wall_Model_Wall extends Application_Model_Validation {
             throw new Exception($e->getMessage());
         }
     }
+    
+    public function Insert_Update($uid, $update, $uploads) {
+        try {
+           
+                $this->walldb = new Wall_Model_Walldb();
+                $result = $this->walldb->Insert_Update($uid, $update, $uploads);
+                return $result;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
 }
 
 ?>
