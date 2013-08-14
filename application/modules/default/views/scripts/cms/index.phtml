@@ -1,0 +1,26 @@
+<?php 
+//print_r($this->content_array);
+$content_array = $this->content_array;
+?>
+<div class="main_body">
+<div class="left width-100">
+	<div class="breadcrumbs">
+		<span class="home-icon"></span>
+		<a href="javascript:void(0)" class="home">Home</a>
+		<span class="arrow"></span>
+		<a href="#" class="events"><?php echo $content_array['cms_title'];?></a>
+		<div class="clear"></div>
+	</div>
+	<div id="events_page">
+	
+	
+	<div style="letter-spacing:1px; line-height:25px; font-size:12px; font-family:Geneva,sans-serif;">
+	<?php echo $content_array['cms_description'];?>
+	</div>
+	
+	
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="clear"></div>
+</div>

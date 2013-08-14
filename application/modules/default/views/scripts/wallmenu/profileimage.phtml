@@ -1,0 +1,15 @@
+<?php
+$this->session = new Zend_Session_Namespace('MyClientPortal');
+$displayName = $this->session->name;
+?>
+<div class="contact-profile-pics">
+	<div class="profile_pic_cnt">
+	<a href="<?php echo $this->baseUrl('profile/view/');?>">
+	<img src="<?php echo $this->baseUrl('public/images/avatarDefault.gif'); ?>" alt="" width="148" height="155"  />
+	</a>
+	<div class="prifile_image_label">
+	<label><?php echo $displayName;?></label> 
+	</div>    
+	</div>
+<div class="clear" style="height:3px;"></div>
+</div>

@@ -7,7 +7,7 @@
 			$t.click(function(){
 				$t.parent().css('position','relative');
 				if($('#'+params.containerID).length==0){
-					$t.parent().append('<div id="'+params.containerID+'" class="share pop-up" style="right:'+params.right+'"><div class="container"><span class="arrow-up" style="left: 173px;"></span><div class="content">'+$(params.content).html()+'</div></div></div>')
+					$t.parent().append('<div id="'+params.containerID+'" class="share pop-up" style="right:'+params.right+'"><div class="container"><a class="close-custom" href="javascript:void(0)" style="position:absolute;bottom:5px; right:5px;">X</a><span class="arrow-up" style="left: 173px;"></span><div class="content">'+$(params.content).html()+'</div></div></div>')
 				}else{
 					if($('#'+params.containerID).is(':visible')){
 						$('#'+params.containerID).hide();
@@ -16,6 +16,10 @@
 					}
 				}
 				
+			})
+			$('.close-custom').live('click',function(){
+				
+				$('#'+params.containerID).hide();
 			})
 		return this;
 	};

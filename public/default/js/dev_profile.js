@@ -175,34 +175,169 @@ $(document).ready(function(){
 	});
 	// Experiance Functionality
 	$(".edit_experiance").live("click", function(){
-		var id_str = $(this).parents(".experiance_view").attr('id');
+		var id_str = $(this).attr('id');
 		var id_array = id_str.split("_");
 		var id = id_array[2];
+		if($("#experiance_edit_"+id).html() == "") {
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/addeditexperiance",
+				data : "type=edit&id="+id,
+				beforeSend : function() {
+					//$("#edit_experiance_"+id).hide();
+					if(id != "new")
+					$("#experiance_edit_loading_"+id).show();
+				},
+				success : function(data) {
+					if(id != "new") {
+						$("#experiance_edit_loading_"+id).hide();
+						$("#experiance_view_"+id).hide();
+						$("#experiance_edit_"+id).html(data);
+						$("#experiance_edit_"+id).show();
+					} else {
+						$("#experiance_edit_"+id).html(data);
+						$("#experiance_edit_"+id).show();
+					}
+					return false;
+				}
+			});
+		} else {
+			$("#experiance_view_"+id).hide();
+			$("#experiance_edit_"+id).show();
+		}
+	});
+// Education Functionality
+	$(".edit_education").live("click", function(){
+		var id_str = $(this).attr('id');
+		var id_array = id_str.split("_");
+		var id = id_array[2];
+		if($("#education_edit_"+id).html() == "") {
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/addediteducation",
+				data : "type=edit&id="+id,
+				beforeSend : function() {
+					if(id != "new")
+					$("#education_edit_loading_"+id).show();
+				},
+				success : function(data) {
+					if(id != "new") {
+						$("#education_edit_loading_"+id).hide();
+						$("#education_view_"+id).hide();
+						$("#education_edit_"+id).html(data);
+						$("#education_edit_"+id).show();
+					} else {
+						$("#education_edit_"+id).html(data);
+						$("#education_edit_"+id).show();
+					}
+					return false;
+				}
+			});
+		} else {
+			$("#education_view_"+id).hide();
+			$("#education_edit_"+id).show();
+		}
+	});
+// Personal Information
+	$(".edit_personal").live("click", function(){
 		$.ajax({
 			type : "POST",
-			url : baseUrl+"/profile/addeditexperiance",
-			data : "type=edit&id="+id,
+			url : baseUrl+"/profile/addeditpersonal",
+			data : "type=editform",
 			beforeSend : function() {
-				$("#edit_experiance_"+id).hide();
-				$("#experiance_edit_loading_"+id).show();
+				//$("#personal_edit_loading").show();
 			},
 			success : function(data) {
-				$("#experiance_edit_loading_"+id).hide();
-				if(data == 1) {
-					$("#view_about_us").text(about_us);
-					$("#view_about_us").show();
-				} else {
-					$("#experiance_edit_"+id).html(data);
-					$("#experiance_edit_"+id).show();
-					$("#experiance_view_"+id).hide();
-				}
+				$("#personal_view").html(data);
 				return false;
 			}
 		});
 	});
+// Addreess Information
+	$(".edit_address").live("click", function(){
+		$.ajax({
+			type : "POST",
+			url : baseUrl+"/profile/addeditaddress",
+			data : "type=editform",
+			beforeSend : function() {
+				//$("#personal_edit_loading").show();
+			},
+			success : function(data) {
+				$("#address_view").html(data);
+				return false;
+			}
+		});
+	});
+// Member Profile title icon
+	$("#member_profile_title_icon").live("click", function(){
+		$("#member_profile_title").hide();
+		$("#member_profile_title_edit").show();
+		return false;
+	});
+	$("#cancel_member_profile_title").live("click", function(){
+		$("#member_profile_title_edit").hide();
+		$("#member_profile_title").show();
+		return false;
+	});
+	$("#save_member_profile_title").live("click", function(){
+		$(".member_profile_title_edit").submit();
+		return false;
+	});
+	$(".member_profile_title_edit").validate({
+		submitHandler: function(form) {
+			var str = $(".member_profile_title_edit").serialize();
+			//$("#registration").html("Loading...");
+			var input_data = postArray(".member_profile_title_edit");
+			var fname = input_data.fname;
+			var lname = input_data.lname;
+			var timezone = $("#timezone option:selected").text();
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/editmembertitle",
+				data : str,
+				beforeSend : function() {
+					
+				},
+				success : function(data) {
+					if(data == 1) {
+						$("#h2_name").html(fname+" "+lname);
+						$("#timezone_dis").html(timezone);
+						$("#member_profile_title_edit").hide();
+						$("#member_profile_title").show();
+					} else {
+						$("#member_profile_title_edit").html(data);
+					}
+					return false;
+				}
+			});
+		}
+	});
+	$("#avatar").live("change", function() {
+		$("#upload_image").submit();
+	});
+	$('#upload_image').on('submit', function(e) {
+            e.preventDefault(); // <-- important
+            // $(this).ajaxSubmit({
+                // target: '#output'
+            // });
+			$('#upload_image').ajaxSubmit(function(responseText) { 
+				var out_arr = responseText.split("|");
+				if(out_arr[1]) {
+					$('#popup_content img').attr("src",baseUrl+"/public/uploads/"+out_arr[1]);
+					$('#popup_content').show().fancyBox();
+					//$("#popup_content").show().f
+				} else {
+					alert(responseText);
+				}
+			});
+	});
 });
 function submit_form(){
 	$("#form_about_us").submit();
+}
+function cancel_form(){
+	$("#edit_about_us").hide();
+	$("#view_about_us").show();
 }
 function postArray(form){ 
 	var data = {}; 
@@ -210,3 +345,19 @@ function postArray(form){
 	for(var i in form) data[form[i].name] = form[i].value; 
 	return data; 
 }
+// post-submit callback 
+function showResponse(responseText, statusText, xhr, $form)  { 
+    // for normal html responses, the first argument to the success callback 
+    // is the XMLHttpRequest object's responseText property 
+ 
+    // if the ajaxForm method was passed an Options Object with the dataType 
+    // property set to 'xml' then the first argument to the success callback 
+    // is the XMLHttpRequest object's responseXML property 
+ 
+    // if the ajaxForm method was passed an Options Object with the dataType 
+    // property set to 'json' then the first argument to the success callback 
+    // is the json data object returned by the server 
+ 
+    alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
+        '\n\nThe output div should have already been updated with the responseText.'); 
+} 

@@ -45,7 +45,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	 * Initializing Resources
 	 */	
 	public function _initResource() {		
-        $config = new Zend_Config_Ini(__DIR__ . '/configs/application.ini', APPLICATION_ENV);
+        $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
         Zend_Registry::set('config', $config);
 		//self::getDbpassword();
     }
@@ -84,6 +84,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
     }
     
+	
+	
+	/*
+     * Initializing Router
+     */
+	public function _initRoute(){
+		$frontController  = Zend_Controller_Front::getInstance();	
+		$route = new Zend_Controller_Router_Route('cms/aboutus/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>1));
+		$frontController->getRouter()->addRoute('aboutus',$route);	
+		$route = new Zend_Controller_Router_Route('cms/contactus/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>2));
+		$frontController->getRouter()->addRoute('contactus',$route);
+    }
+
     
     
       
@@ -111,7 +124,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $modules = Application_Model_DataBaseOperations::getModules();
         
         $controllerDirectory = array();
-        $dir = __DIR__;
+        //$dir = __DIR__;
+		$dir = APPLICATION_PATH;
         //echo $dir;exit;
         foreach($modules as $record) {
         	$controllerDirectory[$record['modulename']] =  $dir ."\modules\/".$record['modulename']."\controllers";                
@@ -122,7 +136,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         $router = $front->getRouter();
         $request = $front->getRequest();
-        $front->registerPlugin(new Temp_Plugin_ModuleLayout()); 
+        //$front->registerPlugin(new Temp_Plugin_ModuleLayout()); 
 		        
 		$MySession = new Zend_Session_Namespace('MyPortal');
 		if(isset($MySession->loggedIn) && $MySession->loggedIn) {

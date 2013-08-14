@@ -47,6 +47,10 @@ class MessagingController extends Zend_Controller_Action {
 		$this->message = new Default_Model_Messages();
 		$this->messagesdb = new Default_Model_Messagesdb();
 		
+		
+		/* Check Login */
+		if(!$this->message->check_login()){ $this->_redirect('/');exit;}
+		
 		// Setting Layout
         $this->_helper->layout->setLayout('default/layout');
 

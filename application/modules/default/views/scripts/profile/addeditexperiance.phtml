@@ -1,81 +1,178 @@
 <?php
-	$experiance = $this->UserDetails[0];
+	$error = $this;
+	$experiance = isset($this->UserDetails[0]) ? $this->UserDetails[0] : "";
+	$industry = isset($this->IndustryList) ? $this->IndustryList : "";
+	$country = isset($this->CountryList) ? $this->CountryList : "";
+	$state = isset($this->StateList) ? $this->StateList : "";
+	$experiance_id = $experiance["experience_id"];
+	$company_name = $experiance["company_name"];
+	$job_location = $experiance["job_location"];
+	$country_id = $experiance["country_id"];
+	$job_title = $experiance["job_title"];
+	$industry_id = $experiance["industry_id"];
+	$state_id = $experiance["state_id"];
+	$from_month = $experiance["from_month"];
+	$from_year = $experiance["from_year"];
+	$to_month = $experiance["to_month"];
+	$to_year = $experiance["to_year"];
+	$present_working = $experiance["present_working"];
+	$company_description = $experiance["company_description"];
+	$industry_sel = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['industry'] : $industry_id;
+	$country_sel = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['country'] : $country_id;
+	$state_sel = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['state'] : $state_id;
 ?>
 <script>
 $(document).ready(function(){
-	$("#experiance_form_<?php echo $experiance["experience_id"]; ?>").validate({
+	var save_type = "<?php echo ($experiance_id && $experiance_id != "new") ? "edit" : "new"; ?>";
+	$("#experiance_form_<?php echo $experiance_id; ?>").validate({
 		rules : {
 			company_name : {
 				required : true
-			}			
+			}, 
+			job_title : {
+				required : true
+			},
+			industry : {
+				required : true
+			},
+			job_location : {
+				required : true
+			}
 		},
 		messages : {
 			company_name : {
 				required : "Company name is required."
+			},
+			job_title : {
+				required : "Position is required."
+			},
+			industry : {
+				required : "Industry is required."
+			},
+			job_location : {
+				required : "Industry is required."
 			}
 		},
 		submitHandler: function(form) {
-			var str = $("#experiance_form_<?php echo $experiance["experience_id"]; ?>").serialize();
+			var str = $("#experiance_form_<?php echo $experiance_id; ?>").serialize();
 			//$("#login_user").html("Loading...");
 			$.ajax({
 				type : "POST",
-				url : baseUrl+"/profile/addeditexperiance",
-				data : "type=edit&"+str,
+				url : baseUrl+"/profile/vieweditexperiance",
+				data : "type="+save_type+"&"+str,
 				beforeSend : function() {
-					$("#login_loading").show();
-					$("#login_user").hide();
+					$("#experiance_edit_loading_<?php echo $experiance_id; ?>").show();
 				},
 				success : function(data) {
-					$("#login_loading").hide();
-					$("#login_user").html(data);
-					$("#login_user").show();
+					if(save_type == "new") {
+						$("#experiance_view_<?php echo $experiance_id; ?>").html("");
+						$("#experiance_edit_<?php echo $experiance_id; ?>").html("");
+						$("#experiance_view_<?php echo $experiance_id; ?>").hide();
+						$("#experiance_edit_<?php echo $experiance_id; ?>").hide();
+						if($("#experiance_form_new")) $("#experiance_form_new").remove();
+						$("#experiance_edit_<?php echo $experiance_id; ?>").after(data);
+					} else {
+						$("#experiance_view_<?php echo $experiance_id; ?>").html(data);
+						$("#experiance_edit_loading_<?php echo $experiance_id; ?>").hide();
+						$("#experiance_edit_<?php echo $experiance_id; ?>").hide();
+						$("#experiance_view_<?php echo $experiance_id; ?>").show();
+					}
 					return false;
 				}
 			});
+		}
+	});
+	$("#country").live("change", function() {
+		var selcted = $(this).find("option:selected").val();
+		if(selcted) {
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/getstates",
+				data : "country="+selcted,
+				success : function(data) {
+					$('#state').html('<option value="">Select State..</option>'+data);
+				}
+			});
+		} else {
+			$('#state')
+				.find('option')
+				.remove()
+				.end()
+				.append('<option value="">Select State..</option>')
+				.val('');
 		}
 	});
 });
 function submit_exp_form(form) {
 	$("#"+form).submit();
 }
+function cancel_exp_form(id) {
+	$("#experiance_edit_"+id).hide();
+	$("#experiance_view_"+id).show();
+}
 </script>
-<form name="experiance_form_<?php echo $experiance["experience_id"]; ?>" id="experiance_form_<?php echo $experiance["experience_id"]; ?>">
+<form name="experiance_form_<?php echo $experiance_id; ?>" id="experiance_form_<?php echo $experiance_id; ?>">
 <div class="desc">
 	<div class="add_experience_form form">
 		<div class="left width-50">
 			<div class="row">
 				<label>Company Name:</label>
-				<input type="text" value="<?php echo $experiance["company_name"]; ?>" id="company_name" name="company_name"/>
+				<input type="text" value="<?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['company_name']; } else { echo $company_name; } ?>" id="company_name" name="company_name" <?php if($error->error_company_name != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_company_name != '') {
+						echo '<label for="company_name" generated="true" class="error" style="">' .$error->error_company_name . '</label>';
+						$error->error_company_name = '';
+					}
+				?>
 			</div>
 			<div class="row">
 				<label>Location:</label>
-				<input type="text" value="<?php echo $experiance["job_location"]; ?>" id="job_location" name="job_location"/>
+				<input type="text" value="<?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['job_location']; } else { echo $job_location; } ?>" id="job_location" name="job_location" <?php if($error->error_location_name != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_location_name != '') {
+						echo '<label for="job_location" generated="true" class="error" style="">' .$error->error_location_name . '</label>';
+						$error->error_location_name = '';
+					}
+				?>
 			</div>
 			<div class="row">
 				<label>Country:</label>
 				<select id="country" name="country">
-					<option>Please Select Country..</option>
-					<option><?php echo $experiance["country_id"]; ?></option>
+					<option value="">Please Select Country..</option>
+					<?php foreach($country as $value) { ?>
+					<option value="<?php echo $value["country_id"] ?>" <?php echo ($country_sel == $value["country_id"]) ? "selected" : ""; ?>><?php echo $value["country"] ?></option>
+					<?php } ?>
 				</select>
 			</div>
 		</div>
 		<div class="right width-50">
 			<div class="row">
 				<label>Position:</label>
-				<input type="text" value="<?php echo $experiance["job_title"]; ?>" id="job_title" name="job_title"/>
+				<input type="text" value="<?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['job_title']; } else { echo $job_title; } ?>" id="job_title" name="job_title" <?php if($error->error_position_name != '') { echo 'class="error"'; } ?>/>
+				<?php 
+					if($error->error_position_name != '') {
+						echo '<label for="job_title" generated="true" class="error" style="">' .$error->error_position_name . '</label>';
+						$error->error_position_name = '';
+					}
+				?>
 			</div>
 			<div class="row">
 				<label>Industry:</label>
 				<select id="industry" name="industry">
-					<option>Select Industry..</option>
-					<option><?php echo $experiance["industry_id"]; ?></option>
+					<option value="">Select Industry..</option>
+					<?php foreach($industry as $value) { ?>
+						<option value="<?php echo $value["industry_id"]; ?>" <?php echo ($industry_sel == $value["industry_id"]) ? "selected" : ""; ?>><?php echo $value["industry_name"]; ?></option>
+						<!--option></option-->
+					<?php } ?>
 				</select>
 			</div>
 			<div class="row">
 				<label>State:</label>
 				<select id="state" name="state">
-					<option>Select State..</option>
-					<option><?php echo $experiance["state_id"]; ?></option>
+					<option value="">Select State..</option>
+					<?php foreach($state as $value) { ?>
+						<option value="<?php echo $value["state_id"]; ?>" <?php echo ($state_sel == $value["state_id"]) ? "selected" : ""; ?>><?php echo $value["name"]; ?></option>
+					<?php } ?>
 				</select>
 			</div>
 		</div>
@@ -83,27 +180,50 @@ function submit_exp_form(form) {
 			<label class="width-15">Time Period : </label>
 			<div class="fields-container">
 				<div class="row">
-					<select id="from_month" name="from_month"><option>Month</option><option><?php echo $experiance["from_month"]; ?></option></select>
-					<select id="from_year" name="from_year"><option>Year</option><option><?php echo $experiance["from_year"]; ?></option></select>
-					<select id="to_month" name="to_month"><option>Month</option><option><?php echo $experiance["to_month"]; ?></option></select>
-					<select id="to_year" name="to_year"><option>Year</option><option><?php echo $experiance["to_year"]; ?></option></select>
-					<input type="checkbox" style="margin-top: 7px;"<?php echo ($experiance["present_working"] ? 'checked="checked"' : ""); ?> id="present_working" name="present_working"><label>Present Working Here.</label>
+					<select id="from_month" name="from_month">
+						<option>Month</option>
+						<?php $fmonth = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['from_month'] : $from_month; ?>
+						<?php for($i = 1; $i<=12; $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($fmonth == $i) ? "selected" : ""; ?>><?php echo date("F", mktime(0, 0, 0, $i, 10)); ?></option>
+						<?php } ?>
+					</select>
+					<select id="from_year" name="from_year">
+						<option>Year</option>
+						<?php $fyear = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['from_year'] : $from_year; ?>
+						<?php for($i = 1925; $i <= date("Y"); $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($fyear == $i) ? "selected" : ""; ?>><?php echo $i; ?></option>
+						<?php } ?>
+					</select>
+					<select id="to_month" name="to_month">
+						<option>Month</option>
+						<?php $tmonth = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['to_month'] : $to_month; ?>
+						<?php for($i = 1; $i<= 12; $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($tmonth == $i) ? "selected" : ""; ?>><?php echo date("F", mktime(0, 0, 0, $i, 10)); ?></option>
+						<?php } ?>
+					</select>
+					<select id="to_year" name="to_year">
+						<option>Year</option>
+						<?php $tyear = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['to_year'] : $to_year; ?>
+						<?php for($i = 1925; $i <= date("Y"); $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($tyear == $i) ? "selected" : ""; ?>><?php echo $i; ?></option>
+						<?php } ?>
+					</select>
 					<div class="clear"></div>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<label class="width-15">Description : </label>
-			<textarea style="width: 80%;" rows="6" id="description" name="description"><?php echo $experiance["company_description"]; ?></textarea>
+			<textarea style="width: 80%;" rows="6" id="description" name="description"><?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['description']; } else { echo $company_description; } ?></textarea>
 			<div class="info"  style="margin-left: 15%;"><span class="blue">2500</span> Words Remaining.</div>
 			<div class="text-right">
-				<a class="button-dark add" href="javascript:void(0)" onclick="submit_exp_form('experiance_form_<?php echo $experiance["experience_id"]; ?>')"><span><span>Save</span></span></a>
-				<a class="button-grey add" href="javascript:void(0)"><span><span>Cancel</span></span></a>
+				<a class="button-dark add" href="javascript:void(0)" onclick="submit_exp_form('experiance_form_<?php echo $experiance_id; ?>')"><span><span>Save</span></span></a>
+				<a class="button-grey add" href="javascript:void(0)"onclick="cancel_exp_form('<?php echo $experiance_id; ?>')"><span><span>Cancel</span></span></a>
 				<div class="clear"></div>
 			</div>
 		</div>
 		<div class="clear"></div>
 	</div>
 </div>
-<input type='hidden' id="exp_id" name="exp_id" value="<?php echo $experiance["experience_id"]; ?>" />
+<input type='hidden' id="exp_id" name="exp_id" value="<?php echo $experiance_id; ?>" />
 </form>

@@ -51,11 +51,9 @@ class CategoriesController extends Zend_Controller_Action {
     
 	/**
      * Purpose: Index action
-     *
      * Access is public
      *
      * @param	
-     * 
      * @return  
      */
 	

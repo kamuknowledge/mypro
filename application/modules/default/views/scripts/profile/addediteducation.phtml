@@ -1,0 +1,163 @@
+<?php
+	$error = $this;
+	$education = isset($this->UserDetails[0]) ? $this->UserDetails[0] : "";
+	$education_id = $education["education_id"];
+	$school_name = $education["school_name"];
+	$degree = $education["degree"];
+	$field_of_study = $education["specialization"];
+	$from_month = $education["from_month"];
+	$from_year = $education["from_year"];
+	$to_month = $education["to_month"];
+	$to_year = $education["to_year"];
+	$school_description = $education["education_notes"];
+?>
+<script>
+$(document).ready(function(){
+	var save_type = "<?php echo ($education_id && $education_id != "new") ? "edit" : "new"; ?>";
+	$("#education_form_<?php echo $education_id; ?>").validate({
+		rules : {
+			school_name : {
+				required : true
+			}, 
+			degree : {
+				required : true
+			},
+			field_of_study : {
+				required : true
+			}
+		},
+		messages : {
+			school_name : {
+				required : "School name is required."
+			},
+			degree : {
+				required : "Position is required."
+			},
+			field_of_study : {
+				required : "Industry is required."
+			}
+		},
+		submitHandler: function(form) {
+			var str = $("#education_form_<?php echo $education_id; ?>").serialize();
+			//$("#login_user").html("Loading...");
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/viewediteducation",
+				data : "type="+save_type+"&"+str,
+				beforeSend : function() {
+					$("#education_edit_loading_<?php echo $education_id; ?>").show();
+				},
+				success : function(data) {
+					if(save_type == "new") {
+						$("#education_view_<?php echo $education_id; ?>").html("");
+						$("#education_edit_<?php echo $education_id; ?>").html("");
+						$("#education_view_<?php echo $education_id; ?>").hide();
+						$("#education_edit_<?php echo $education_id; ?>").hide();
+						if($("#education_form_new")) $("#education_form_new").remove();
+						$("#education_edit_<?php echo $education_id; ?>").after(data);
+					} else {
+						$("#education_view_<?php echo $education_id; ?>").html(data);
+						$("#education_edit_loading_<?php echo $education_id; ?>").hide();
+						$("#education_edit_<?php echo $education_id; ?>").hide();
+						$("#education_view_<?php echo $education_id; ?>").show();
+					}
+					return false;
+				}
+			});
+		}
+	});
+});
+function submit_edu_form(form) {
+	$("#"+form).submit();
+}
+function cancel_edu_form(id) {
+	$("#education_edit_"+id).hide();
+	$("#education_view_"+id).show();
+}
+</script>
+<form name="education_form_<?php echo $education_id; ?>" id="education_form_<?php echo $education_id; ?>">
+<div class="desc">
+	<div class="add_experience_form form">
+		<div class="left width-50">
+			<div class="row">
+				<label>School Name:</label>
+				<input type="text" value="<?php if(is_array($error->error_education_values)) { echo $error->error_education_values['school_name']; } else { echo $school_name; } ?>" id="school_name" name="school_name" <?php if($error->error_school_name != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_school_name != '') {
+						echo '<label for="school_name" generated="true" class="error" style="">' .$error->error_school_name . '</label>';
+						$error->error_school_name = '';
+					}
+				?>
+			</div>
+			<div class="row">
+				<label>Time Period:</label>
+				<div class="fields-container">
+					<div class="row">
+					<select id="from_month" name="from_month">
+						<option>Month</option>
+						<?php $fmonth = (is_array($error->error_education_values)) ? $error->error_education_values['from_month'] : $from_month; ?>
+						<?php for($i = 1; $i<=12; $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($fmonth == $i) ? "selected" : ""; ?>><?php echo date("F", mktime(0, 0, 0, $i, 10)); ?></option>
+						<?php } ?>
+					</select>
+					<select id="from_year" name="from_year">
+						<option>Year</option>
+						<?php $fyear = (is_array($error->error_education_values)) ? $error->error_education_values['from_year'] : $from_year; ?>
+						<?php for($i = 1925; $i <= date("Y"); $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($fyear == $i) ? "selected" : ""; ?>><?php echo $i; ?></option>
+						<?php } ?>
+					</select>
+					<select id="to_month" name="to_month">
+						<option>Month</option>
+						<?php $tmonth = (is_array($error->error_education_values)) ? $error->error_education_values['to_month'] : $to_month; ?>
+						<?php for($i = 1; $i<= 12; $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($tmonth == $i) ? "selected" : ""; ?>><?php echo date("F", mktime(0, 0, 0, $i, 10)); ?></option>
+						<?php } ?>
+					</select>
+					<select id="to_year" name="to_year">
+						<option>Year</option>
+						<?php $tyear = (is_array($error->error_education_values)) ? $error->error_education_values['to_year'] : $to_year; ?>
+						<?php for($i = 1925; $i <= date("Y"); $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($tyear == $i) ? "selected" : ""; ?>><?php echo $i; ?></option>
+						<?php } ?>
+					</select>
+					<div class="clear"></div>
+				</div>
+				</div>
+			</div>
+			<div class="row">
+				<label>Degree:</label>
+				<input type="text" value="<?php if(is_array($error->error_education_values)) { echo $error->error_education_values['degree']; } else { echo $degree; } ?>" id="degree" name="degree" <?php if($error->error_degree_name != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_degree_name != '') {
+						echo '<label for="degree" generated="true" class="error" style="">' .$error->error_degree_name . '</label>';
+						$error->error_degree_name = '';
+					}
+				?>
+			</div>
+			<div class="row">
+				<label>Field of Study:</label>
+				<input type="text" value="<?php if(is_array($error->error_education_values)) { echo $error->error_education_values['field_of_study']; } else { echo $field_of_study; } ?>" id="field_of_study" name="field_of_study" <?php if($error->error_field_of_study_name != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_field_of_study_name != '') {
+						echo '<label for="field_of_study" generated="true" class="error" style="">' .$error->error_field_of_study_name . '</label>';
+						$error->error_field_of_study_name = '';
+					}
+				?>
+			</div>
+		</div>
+		<div class="row">
+			<label class="width-15">Description : </label>
+			<textarea style="width: 80%;" rows="6" id="description" name="description"><?php if(is_array($error->error_education_values)) { echo $error->error_education_values['description']; } else { echo $school_description; } ?></textarea>
+			<div class="info"  style="margin-left: 15%;"><span class="blue">2500</span> Words Remaining.</div>
+			<div class="text-right">
+				<a class="button-dark add" href="javascript:void(0);" onclick="submit_edu_form('education_form_<?php echo $education_id; ?>')"><span><span>Save</span></span></a>
+				<a class="button-grey add" href="javascript:void(0);" onclick="cancel_edu_form('<?php echo $education_id; ?>')"><span><span>Cancel</span></span></a>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+<input type='hidden' id="edu_id" name="edu_id" value="<?php echo $education_id; ?>" />
+</form>

@@ -1,0 +1,144 @@
+<?php
+	$error = $this;
+	$profile = $this->UserDetails[0];
+	$dob = explode('-', $profile["date_of_birth"]);
+	$bday = $dob[2];
+	$bmonth = $dob[1];
+	$byear = $dob[0];
+	$marial_status_db = $profile["marital_status"];
+	$interest = $profile["interests"];
+	$phone_number = $profile["phonenumber"];
+	$profile_type = (isset($this->UserDetails[1])) ? 1 : 0;
+	if($profile_type) {
+?>
+<script> 
+var sub_type = "edit";
+$(document).ready(function(){
+	$("#personal_form").validate({
+		submitHandler: function(form) {
+			var str = $("#personal_form").serialize();
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/addeditpersonal",
+				data : "type="+sub_type+"&"+str,
+				beforeSend : function() {
+					//$("#experiance_edit_loading_<?php echo $experiance_id; ?>").show();
+				},
+				success : function(data) {
+					$("#personal_view").html(data);
+					return false;
+				}
+			});
+		}
+	});
+});
+function submit_per_form() {
+	$("#personal_form").submit();
+}
+function cancel_per_form() {
+	sub_type = "view";
+	$("#personal_form").submit();
+}
+</script>
+<form name="personal_form" id="personal_form">
+	<div class="add_experience_form form">
+		<div class="row">
+			<label class="width-15">Birthday : </label>
+			<div class="fields-container">
+					<select name="bmonth" id="bmonth">
+						<option value="00">Month</option>
+						<?php $month = (is_array($error->error_profileinfo_values)) ? $error->error_profileinfo_values['bmonth'] : $bmonth; ?>
+						<?php for($i = 1; $i<=12; $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($month == $i) ? "selected" : ""; ?>><?php echo date("F", mktime(0, 0, 0, $i, 10)); ?></option>
+						<?php } ?>
+					</select>
+					<select name="bday" id="bday">
+						<option value="00">Day</option>
+						<?php $day = (is_array($error->error_profileinfo_values)) ? $error->error_profileinfo_values['bday'] : $bmonth; ?>
+						<?php for($i = 1; $i<=31; $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($day == $i) ? "selected" : ""; ?>><?php echo $i; ?></option>
+						<?php } ?>
+					</select>
+					<select name="byear" id="byear">
+						<option value="0000">Year</option>
+						<?php $year = (is_array($error->error_profileinfo_values)) ? $error->error_profileinfo_values['byear'] : $bmonth; ?>
+						<?php for($i = 1925; $i <= date("Y"); $i++) { ?>
+							<option value="<?php echo $i; ?>" <?php echo ($year == $i) ? "selected" : ""; ?>><?php echo $i; ?></option>
+						<?php } ?>
+					</select>
+					<!--input type="checkbox" style="margin-top: 7px;"><label>Show only month & day to your friends.</label-->
+					<div class="clear"></div>
+			</div>
+		</div>
+		<div class="row">
+			<label>Marital Status :</label>
+			<select name="marial_status" id="marial_status">
+				<?php $marial_status = (is_array($error->error_profileinfo_values)) ? $error->error_profileinfo_values['marial_status'] : $marial_status_db; ?>
+				<option value="">Select</option>
+				<option value="Single" <?php echo ($marial_status == "Single") ? "Selected" : ""; ?>>Single</option>
+				<option value="Married" <?php echo ($marial_status == "Married") ? "Selected" : ""; ?>>Married</option>
+			</select>
+		</div>
+		<div class="row">
+			<label class="width-15">Interests : </label>
+			<textarea style="width: 80%;" rows="6" name="interests" id="interests" <?php if($error->error_interests != '') { echo 'class="error"'; } ?>><?php if(is_array($error->error_profileinfo_values)) {echo $error->error_profileinfo_values['interests'];} else { echo $interest; } ?></textarea>
+			<?php 
+					if($error->error_interests != '') {
+						echo '<label for="interests" generated="true" class="error">'.$error->error_interests.'</label>';
+						$error->error_interests = '';
+					}
+			?>
+			<div class="info"  style="margin-left: 16%;">Examples: Management training. new technologies, investing</div>
+		</div>
+		<div class="left width-50">
+			<div class="row">
+				<label>Phone Number:</label>
+				<input type="text" value="<?php if(is_array($error->error_profileinfo_values)) { echo $error->error_profileinfo_values['phone_number']; } else { echo $phone_number; } ?>" id="phone_number" name="phone_number" <?php if($error->error_phone_number != '') { echo 'class="error"'; } ?> />
+				<?php 
+					if($error->error_phone_number != '') {
+						echo '<label for="phone_number" generated="true" class="error" style="">' .$error->error_phone_number . '</label>';
+						$error->error_phone_number = '';
+					}
+				?>
+			</div>
+		</div>
+		<!--div class="row">
+			<label class="width-15">Honors & Awards : </label>
+			<textarea style="width: 80%;" rows="6" <?php if($error->error_interests != '') { echo 'class="error"'; } ?>><?php if(is_array($error->error_profileinfo_values)) {echo $error->error_profileinfo_values['interests'];} ?></textarea>
+			<?php 
+					if($error->error_interests != '') {
+						echo '<label for="interests" generated="true" class="error">'.$error->error_interests.'</label>';
+						$error->error_interests = '';
+					}
+			?>></textarea>
+		</div>
+		<div class="row">
+			<label class="width-15">Contact For : </label>
+			<textarea style="width: 80%;" rows="6"></textarea>
+			<div class="info"  style="margin-left: 16%;">Tip: Advice for Contacting You</div>
+		</div-->
+		<div class="text-right">
+				<a class="button-dark add" href="javascript:void(0)" onclick="submit_per_form();"><span><span>Save</span></span></a>
+				<a class="button-grey add" href="javascript:void(0)" onclick="cancel_per_form();"><span><span>Cancel</span></span></a>
+				<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</form>
+<?php
+	}
+	else {
+?>
+<ul>
+	<li><label>Birthday : </label><span class="blue"><?php echo $profile["date_of_birth"]; ?></span></li>
+	<li><label>Marital Status : </label><span class="blue"><?php echo $profile["marital_status"]; ?></span></li>
+	<li><label>Interests : </label><span class="blue"><?php echo $profile["interests"]; ?></span></li>
+	<!--li><label>Honors & Awards : </label><span class="blue">Honors & Awards Honors & Awards Honors & Awards</span></li>
+	<li><label>Contact For : </label><span class="blue">Contact For Contact For Contact For</span></li-->
+	<li><label>Phone : </label><span class="blue"><?php echo $profile["phonenumber"]; ?></span></li>
+	<!--li><label>Website : </label><span class="blue">http://www.telugump3lyrics.com</span></li>
+	<li><label>Skype : </label><span class="blue">vip.veera</span></li-->	
+</ul>
+<?php
+	}
+?>

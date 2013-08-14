@@ -62,10 +62,9 @@ $config=Zend_Registry::get('config');
 			
 			<div class="left-body">
 				<div class="left-sidebar">					
-					<?php echo $this->action('index', 'categories', 'default', array('a_parameter'=>'a_value'));?>
-					<div class="clear"><br></div>
 					<?php echo $this->action('index', 'wallmenu', 'default', array('a_parameter'=>'a_value'));?>
-					<?php //echo $this->render('default/side_menu_wall.phtml') ?>
+					<div class="clear"><br></div>
+					<?php echo $this->action('index', 'eventnotifications', 'default', array('a_parameter'=>'a_value'));?>
 				</div>
 				<?php  echo $this->layout()->content ?>
 			</div>

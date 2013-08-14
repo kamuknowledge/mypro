@@ -1,0 +1,35 @@
+<?php
+	$experiance = $this->UserDetails;
+	$error = (isset($experiance["error"])) ? 1 : 0;
+	if($error) {
+		$exp_id = (isset($experiance["exp_id"])) ? $experiance["exp_id"] : 0;
+		echo $this->action('addeditexperiance', 'profile', 'default', array('input_type'=>'error', 'experiance_idd'=>$experiance["exp_id"]));
+	}
+	else {
+		$dis_type = (isset($experiance["dis_type"])) ? 1 : 0;
+		if($dis_type) {
+?>
+<div class="experiance_view" id="experiance_view_<?php echo $experiance["experience_id"]; ?>">
+	<?php } ?>
+	<h2 class="title_have_image exprce"><?php echo $experiance["job_title"]; ?>
+		<span class="edit_experiance edit_experiance_<?php echo $experiance["experience_id"]; ?> icon" id="edit_experiance_<?php echo $experiance["experience_id"]; ?>"></span>
+		<div id="experiance_edit_loading_<?php echo $experiance["experience_id"]; ?>" style="display:none;">
+			<img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" />
+		</div>
+	</h2>
+	<?php
+		$date1 = $experiance["from_year"]."-".$experiance["from_month"]."-1";
+		$date2 = $experiance["to_year"]."-".$experiance["to_month"]."-1";
+		$diff = abs(strtotime($date2) - strtotime($date1));
+		$years = floor($diff / (365*60*60*24));
+		$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+		$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+		$duration = "(".$years." years ".$months." months)";
+	?>
+	<span class="caption"><?php echo $experiance["company_name"]; ?></span>
+	<span class="information"><?php echo ($experiance["from_month"]) ? date("F", mktime(0, 0, 0, $experiance["from_month"], 10)) : ""; ?> <?php echo $experiance["from_year"]; ?> - To <?php echo ($experiance["present_working"]) ? "Present" : (($experiance["to_month"]) ? date("F", mktime(0, 0, 0, $experiance["to_month"], 10)) : "")." ".$experiance["to_year"]; ?> <?php echo $duration; ?> | <?php echo $experiance["job_location"]; ?></span>
+	<p><?php echo $experiance["company_description"]; ?></p>
+<?php if($dis_type) { ?>
+</div>
+<div class="experiance_edit" id="experiance_edit_<?php echo $experiance["experience_id"]; ?>" style="display:none;"></div>
+<?php } } ?>

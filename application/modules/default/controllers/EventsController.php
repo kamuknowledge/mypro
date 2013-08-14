@@ -41,14 +41,16 @@ class EventsController extends Zend_Controller_Action {
      */
 	
 	public function init() { 
-		/*echo "store/index/init";
-		exit;  */
-        $this->_helper->layout->setLayout('default/calendar');
-		//$this->setLayoutAction('store/layout');	
+
+        $this->_helper->layout->setLayout('default/calendar');		
+	
 		$this->events = new Default_Model_Events();
 		$this->eventsdb = new Default_Model_Eventsdb();
-		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_events.css'));
 		
+		/* Check Login */
+		if(!$this->events->check_login()){ $this->_redirect('/');exit;}
+		
+		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/dev_events.css'));
 	}
 	
     
@@ -103,9 +105,9 @@ class EventsController extends Zend_Controller_Action {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
-	}
+	}  
 	 /** 
-	 * Process a create event form using an aja call
+	 * Process a create event form using an ajax call
      * @access is public
 	 * @author Alok Pandey.
 	 * @copyright GetLinc.com, Inc. 
@@ -117,13 +119,80 @@ class EventsController extends Zend_Controller_Action {
 				$data = array();
 				$this->_helper->layout->disableLayout();
 				$post = $this->getRequest()->getPost();
-				$dataCreateEvent = $this->events -> createEvent($post);
+				
+				if(isset($post['event_id']) && !empty($post['event_id'])){
+					$dataCreateEvent = $this->events -> updateEvent($post);
+				} else {
+					$dataCreateEvent = $this->events -> createEvent($post);
+				}
+				//die(print_r($dataCreateEvent));
 				if($dataCreateEvent['error']) {
 					$error_data = $dataCreateEvent;
 					echo json_encode($error_data);
 					die;
 				} else {
-					$data = array('success'=>'Event successfully created.');
+					$data = $dataCreateEvent;
+					echo json_encode($data);
+					die;
+				}
+			}	
+			
+		}
+	
+	}
+	
+	 /** 
+	 * Process a drop event form using an ajax call
+     * @access is public
+	 * @author Alok Pandey.
+	 * @copyright GetLinc.com, Inc. 
+	 * @license GetLinc.com, Inc.
+	*/
+	public function dropAction(){
+		if ($this->getRequest()->isXmlHttpRequest()) {
+			if ($this->getRequest()->isPost()) {
+				$data = array();
+				$this->_helper->layout->disableLayout();
+				$post = $this->getRequest()->getPost();
+				$dataCreateEvent = $this->events -> updateEventDrop($post);
+				//die(print_r($dataCreateEvent));
+				if($dataCreateEvent['error']) {
+					$error_data = $dataCreateEvent;
+					echo json_encode($error_data);
+					die;
+				} else {
+					$data = $dataCreateEvent;
+					echo json_encode($data);
+					die;
+				}
+			}	
+			
+		}
+	
+	}
+	
+	/** 
+	 * Process a create event form using an ajax call
+     * @access is public
+	 * @author Alok Pandey.
+	 * @copyright GetLinc.com, Inc. 
+	 * @license GetLinc.com, Inc.
+	*/
+	public function resizeAction(){
+		if ($this->getRequest()->isXmlHttpRequest()) {
+			if ($this->getRequest()->isPost()) {
+				$data = array();
+				$this->_helper->layout->disableLayout();
+				$post = $this->getRequest()->getPost();
+				//die();
+				$dataCreateEvent = $this->events -> updateEventResize($post['endDate'],$post['eventId']);
+				//die(print_r($dataCreateEvent));
+				if($dataCreateEvent['error']) {
+					$error_data = $dataCreateEvent;
+					echo json_encode($error_data);
+					die;
+				} else {
+					$data = $dataCreateEvent;
 					echo json_encode($data);
 					die;
 				}
@@ -154,12 +223,18 @@ class EventsController extends Zend_Controller_Action {
 						$data[] = array(
 						'id'=>$value['event_id'],
 						'title'=>$value['event_title'],
-						'allday'=>($value['event_all_day']==1)?true:false,
+						'allDay'=>($value['event_all_day']==1)?true:false,
 						'start'=>$value['event_startdate'],
 						'end'=>$value['event_enddate'],
+						'description'=>$value['event_details'],
+						'event_type'=>$value['event_type'],
+						'event_location'=>$value['event_location'],
+						'event_address'=>$value['event_address'],
 						'editable'=>true,
-						'color'=>'#69131E'
-						
+						'color'=>'#69131E',
+						'cache'=> true,
+						'className' => 'event_'.$value['event_id'],
+						'type'=>'event'
 						);
 					}
 				}

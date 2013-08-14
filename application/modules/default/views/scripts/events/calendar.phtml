@@ -1,15 +1,15 @@
 <div class="calendar">
 <h2 class="success_message"></h2>
-<div id="event_calendar"></div>
+<div id="calendar"></div>
 </div>
 
 
-<div id="event_form" style="display:none;top:30;">
+<div id="event_form" style="display:none;">
 			<div class="main_body">
 					<div class="left width-100">
 						<div id="events_page">
 							<div class="header_events">
-								<h2>Create Event</h2>
+								<h2>Create Event </h2>
 								<a id="cancel_event_one" href="javascript:void(0)" class="button-grey add right" onclick="dialoge_close();"><span><span>Cancel</span></span></a>
 								<a id="save_event_one" href="javascript:void(0)" class="button-dark add right" onclick="$('#event_form_body').submit();"><span><span>Save</span></span></a>
 								<div class="clear"></div>
@@ -17,8 +17,9 @@
 							<div class="event-form">
 								<form name="event_form_body" id="event_form_body" action="" method="post" enctype="multipart/form-data">
 								<input type="hidden" id="submit_check" name="submit_check" value="1">
+								<input type="hidden" id="event_id" name="event_id">
 									<div class="heading">
-										<h3>Basic Information</h3><span class="required">Required Information</span>
+										<h3>Basic Information </h3><span class="required">Required Information</span>
 										<div class="clear"></div>
 									</div>
 									<div class="row left width-50 half">

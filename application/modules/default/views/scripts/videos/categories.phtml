@@ -4,7 +4,7 @@
 		<span class="home-icon"></span>
 		<a href="javascript:void(0)" class="home">Home</a>
 		<span class="arrow"></span>
-		<a href="javascript:void(0)" class="events">Video Categories 123</a>
+		<a href="javascript:void(0)" class="events">Video Categories</a>
 		<div class="clear"></div>
 	</div>
 	<div id="events_page">
@@ -15,6 +15,9 @@
 				<input type="text" placeholder="Video Category"/>
 				<input type="submit" value="go"/>
 			</div>
+			<div style="float:right;">
+				<a class="button-dark add right fancybox" href="javascript:void(0)" id="add_category"><span><span>Add Category</span></span></a>
+			</div> 
 			<div class="clear"></div>
 		</div>
 		<div class="grid-view">
@@ -24,88 +27,27 @@
 			
 			
 			<div class="videos_list">
-							
 							<ul>
+							<?php foreach($this->CategoriesList as $key =>$cat_list){ 
+							//if($key)
+							?>
 								<li class="category_border">
 									<div class="product_image">
-										<a href="<?php echo $this->baseUrl('videos/list/');?>">
-										<img src="<?php echo $this->baseUrl('public/default/images/camtwo.jpg');?>"></a>
+										<a href="<?php echo $this->baseUrl('videos/list/').$cat_list['album_id'];?>">
+										<input type="hidden" name="cal_id" value="<?php echo $cat_list['album_id'];?>" />
+										<img src="<?php echo $this->baseUrl('public/default/images/album_category/').$cat_list['album_image'];?>"></a>
 									</div>
 									<div class="product_info category_title">
-										<a href="javascript:void(0)">Canon PowerShot A2300 IS 16.0 MP...vvvvvvvv </a>										
+										<a href="javascript:void(0)"><?php echo $cat_list['album_description'];?> </a>										
 									</div>
 								</li>
-								<li class="category_border">
-									<div class="product_image">
-										<a href="<?php echo $this->baseUrl('videos/list/');?>"><img src="<?php echo $this->baseUrl('public/default/images/camtwo.jpg');?>"></a></a>
-									</div>
-									<div class="product_info category_title">
-										<a href="javascript:void(0)">Canon PowerShot A2300 IS 16.0 MP... </a>										
-									</div>
-								</li>
-								<li class="category_border">
-									<div class="product_image">
-										<a href="<?php echo $this->baseUrl('videos/list/');?>"><img src="<?php echo $this->baseUrl('public/default/images/camtwo.jpg');?>"></a></a>
-									</div>
-									<div class="product_info category_title">
-										<a href="javascript:void(0)">Canon PowerShot A2300 IS 16.0 MP... </a>										
-									</div>
-								</li>
-								<li class="category_border">
-									<div class="product_image">
-										<a href="<?php echo $this->baseUrl('videos/list/');?>"><img src="<?php echo $this->baseUrl('public/default/images/camtwo.jpg');?>"></a></a>
-									</div>
-									<div class="product_info category_title">
-										<a href="javascript:void(0)">Canon PowerShot A2300 IS 16.0 MP... </a>										
-									</div>
-								</li>
+								<?php } ?>
 							</ul>
 							<div class="clear"></div>
 						</div>
 						
 						<div style="height:10px;"></div>
-						
-						<div class="videos_list">
-							
-							<ul>
-								<li class="category_border">
-									<div class="product_image">
-										<a href="<?php echo $this->baseUrl('videos/list/');?>">
-										<img src="<?php echo $this->baseUrl('public/default/images/camtwo.jpg');?>"></a>
-									</div>
-									<div class="product_info category_title">
-										<a href="javascript:void(0)">Canon PowerShot A2300 IS 16.0 MP...vvvvvvvv </a>										
-									</div>
-								</li>
-								<li class="category_border">
-									<div class="product_image">
-										<a href="<?php echo $this->baseUrl('videos/list/');?>"><img src="<?php echo $this->baseUrl('public/default/images/camtwo.jpg');?>"></a></a>
-									</div>
-									<div class="product_info category_title">
-										<a href="javascript:void(0)">Canon PowerShot A2300 IS 16.0 MP... </a>										
-									</div>
-								</li>
-								<li class="category_border">
-									<div class="product_image">
-										<a href="<?php echo $this->baseUrl('videos/list/');?>"><img src="<?php echo $this->baseUrl('public/default/images/camtwo.jpg');?>"></a></a>
-									</div>
-									<div class="product_info category_title">
-										<a href="javascript:void(0)">Canon PowerShot A2300 IS 16.0 MP... </a>										
-									</div>
-								</li>
-								<li class="category_border">
-									<div class="product_image">
-										<a href="<?php echo $this->baseUrl('videos/list/');?>"><img src="<?php echo $this->baseUrl('public/default/images/camtwo.jpg');?>"></a></a>
-									</div>
-									<div class="product_info category_title">
-										<a href="javascript:void(0)">Canon PowerShot A2300 IS 16.0 MP... </a>										
-									</div>
-								</li>
-							</ul>
-							<div class="clear"></div>
-						</div>
-			
-			
+								
 			
 
 		</div>
@@ -113,4 +55,10 @@
 	<div class="clear"></div>
 </div>
 <div class="clear"></div>
+</div>
+<div id="add_category" style="display:none;">
+
+				<label>Email Id<span class="error_class">*</span></label>
+				<input type="text" name="email_id" id="email_id"/>				
+			
 </div>

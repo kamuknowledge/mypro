@@ -47,6 +47,11 @@ class VideosController extends Zend_Controller_Action {
 		$this->videos = new Default_Model_Videos();
 		$this->Videosdb = new Default_Model_Videosdb();
 		
+		
+		/* Check Login */
+		if(!$this->videos->check_login()){ $this->_redirect('/');exit;}
+		
+		
 		// Setting Layout
         $this->_helper->layout->setLayout('default/layout');
 		
@@ -82,10 +87,6 @@ class VideosController extends Zend_Controller_Action {
 			throw new Exception($e->getMessage());
 		}
 	}
-	
-		
-	
-	
 	/**
      * Purpose: Index action
      * Access is public
@@ -97,8 +98,11 @@ class VideosController extends Zend_Controller_Action {
 	public function categoriesAction() {
 		try{	
 			// Code
-			
-			$CategoriesList = $this->Videosdb->getCategoriesList();	
+			$this->session = new Zend_Session_Namespace('MyClientPortal');
+			$userid     = $this->session->userid; 
+			$this->view->title = ":: Video Categories";
+			$CategoriesList = $this->Videosdb->getCategoriesList();		
+			//echo "<pre>";print_r($CategoriesList);exit;
 			$this->view->CategoriesList = $CategoriesList;
 			
 		}catch (Exception $e){
@@ -107,14 +111,9 @@ class VideosController extends Zend_Controller_Action {
 		}
 	}
 	
-	
-	
-	
-	
 	/**
-     * Purpose: Index action
+     * Purpose: Add category action
      * Access is public
-     *
      * @param	
      * @return  
      */
@@ -122,14 +121,48 @@ class VideosController extends Zend_Controller_Action {
 	public function listAction() {
 		try{	
 			// code
+			//echo "test";exit;
+			//echo "my cat id".$this->cat_id;
+			$request = $this->getRequest();
+              $dataGet  = $this->getRequest()->getParam('id',null);       
+          
 
+			$this->session = new Zend_Session_Namespace('MyClientPortal');
+			$userid     = $this->session->userid; // Get login userid
+			$params = $this->_getAllParams();
+			//print_r($params);
+			$CategoriesList = $this->Videosdb->getCategoriesList();	//Get all active category list
+			$this->view->CategoriesList = $CategoriesList; 			//Pass to view file  all active category list
+			$video_list	=	$this->Videosdb->getVideosByCatId($userid);//Pass the login userid for get category user videos
+			//echo "<pre>";print_r($video_list);exit;
+			$this->view->video_list	=	$video_list;	// Pass the data to iew file.
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	/**
+     * Purpose: Add category action
+     * Access is public
+     * @param	
+     * @return  
+     */
+	
+	public function addcategoryAction() {
+		try{	
+			// code
+			echo "test";exit;
 			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
 	}
-
+	
 
 }
 ?>

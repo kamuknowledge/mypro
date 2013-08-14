@@ -1,5 +1,7 @@
 <?php
 $config=Zend_Registry::get('config');
+$this->session = new Zend_Session_Namespace('MyClientPortal');
+$isSignedIn = $this->session->isSignedIn;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -51,19 +53,39 @@ $config=Zend_Registry::get('config');
 		<div class="wrapper right_shadow_wrapper">
 	
 		<!-- <div class="wrapper"> -->
-		
-			<div class="right-sidebar">			
-			<?php echo $this->action('index', 'chat', 'default', array('a_parameter'=>'a_value'));?>
-			<?php echo $this->action('index', 'friendsuggestion', 'default', array('a_parameter'=>'a_value'));?>
-			<?php echo $this->action('index', 'eventnotifications', 'default', array('a_parameter'=>'a_value'));?>			
+			
+			<div class="right-sidebar">
+				<?php 
+				$layout_module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+				$layout_controller = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+				//echo $layout_module;
+				//echo $layout_controller;
+				if($layout_module=='wall' || ($layout_module=='default' && $layout_controller=='messaging') || ($layout_module=='default' && $layout_controller=='videos')){
+					echo $this->action('index', 'chat', 'default', array('a_parameter'=>'a_value'));
+					echo $this->action('index', 'friendsuggestion', 'default', array('a_parameter'=>'a_value'));
+				}else{
+					echo $this->action('index', 'brands', 'default', array('a_parameter'=>'a_value'));
+					echo $this->action('index', 'bestselling', 'default', array('a_parameter'=>'a_value'));
+				}
+				?>
+			
 			</div>
 			
 			<div class="left-body">
-				<div class="left-sidebar">					
-					<?php echo $this->action('index', 'categories', 'default', array('a_parameter'=>'a_value'));?>
+				<div class="left-sidebar">
+					<?php
+					if($layout_module=='wall' || ($layout_module=='default' && $layout_controller=='messaging') || ($layout_module=='default' && $layout_controller=='videos')){
+						echo $this->action('index', 'wallmenu', 'default', array('a_parameter'=>'a_value'));
+						//echo $this->action('index', 'categories', 'default', array('a_parameter'=>'a_value'));
+						echo $this->action('index', 'eventnotifications', 'default', array('a_parameter'=>'a_value'));
+					}else{
+						//echo $this->action('index', 'wallmenu', 'default', array('a_parameter'=>'a_value'));
+						echo $this->action('index', 'categories', 'default', array('a_parameter'=>'a_value'));
+						echo $this->action('index', 'offers', 'default', array('a_parameter'=>'a_value'));
+					}
+					?>
 					<div class="clear"><br></div>
-					<?php echo $this->action('index', 'wallmenu', 'default', array('a_parameter'=>'a_value'));?>
-					<?php //echo $this->render('default/side_menu_wall.phtml') ?>
+					
 				</div>
 				<?php  echo $this->layout()->content ?>
 			</div>
