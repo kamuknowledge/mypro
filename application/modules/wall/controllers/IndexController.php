@@ -28,7 +28,7 @@ class Wall_IndexController extends Zend_Controller_Action {
     public $session; // used for managing session with NAMESPACE portal
     public $error;  // used for managing session with NAMESPACE portalerror
     private $wall;  // used for creating an instance of model, Access is with in the class	
-    public $perpage = 10;
+    public $perpage = 2;
 
     /**
      * Purpose: Initiates sessions with Namespace 'portal' and 'portalerror' 
@@ -114,6 +114,32 @@ class Wall_IndexController extends Zend_Controller_Action {
             throw new Exception($e->getMessage());
         }
     }
+    
+    public function ajaxmessageAction() {
+        try {
+             
+            if($this->_request->isXmlHttpRequest()){
+               $this->_helper->layout->disableLayout();
+            }
+            $update=$this->_getParam('update');
+            $uploads=$this->_getParam('uploads');
+           if(isset($update))
+                {
+                $update=mysql_real_escape_string($update);
+                $uploads=$uploads;
+                $uid=86;
+                $data=$this->wall->Insert_Update($uid,$update,$uploads);
+                $this->view->data=$data;
+                }
+
+
+           
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+    
 
     public function loadcommentsAction() {
         try {

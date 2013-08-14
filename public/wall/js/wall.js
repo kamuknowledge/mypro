@@ -22,6 +22,7 @@ var webcamtotal=2; // Min 2 Max 6 Recommended
 // Update Status
 $(".update_button").click(function() 
 {
+    alert("dhjdfhjd")
 var updateval = $("#update").val();
 
 var uploadvalues=$("#uploadvalues").val();
@@ -45,7 +46,7 @@ $("#flash").show();
 $("#flash").fadeIn(400).html('Loading Update...');
 $.ajax({
 type: "POST",
-url: "message_ajax.php",
+url: baseUrl+"/wall/index/ajaxmessage",
 data: dataString,
 cache: false,
 success: function(html)
@@ -437,7 +438,7 @@ $("#webcam").webcam({
 width: 320,
 height: 240,
 mode: "callback",
- swffile: "js/jscam_canvas_only.swf",
+ swffile: baseUrl+"/public/wall/js/jscam_canvas_only.swf",
 onSave: saveCB,
 onCapture: function () 
 {

@@ -198,16 +198,34 @@ class Wall_Model_Walldb {
         $update = mysql_real_escape_string($update);
         $time = time();
         $ip = $_SERVER['REMOTE_ADDR'];
-        $query = $this->db->query("SELECT msg_id,message FROM `messages` WHERE uid_fk='$uid' order by msg_id desc limit 1");
+        $query = $this->db->query("SELECT wall_message_id,wall_message FROM `user_wall_messages` WHERE userid='$uid' order by wall_message_id desc limit 1");
         $result = $query->fetch($query);
 
         if ($update != $result['message']) {
             $uploads_array = explode(',', $uploads);
             $uploads = implode(',', array_unique($uploads_array));
-            $query = $this->db->query("INSERT INTO `messages` (message, uid_fk, ip,created,uploads) VALUES ('$update', '$uid', '$ip','$time','$uploads')");
-            $newquery = $this->db->query("SELECT M.msg_id, M.uid_fk, M.message, M.created, U.username FROM messages M, users U where M.uid_fk=U.uid and M.uid_fk='$uid' order by M.msg_id desc limit 1 ");
-            $result = $newquery->fetch();
-
+            $query = $this->db->query("INSERT INTO `user_wall_messages` (wall_message, userid, user_ip,createddatetime,statusid) VALUES ('$update', '$uid', '$ip','$time','1')");
+            
+           // $newquery = $this->db->query("SELECT M.msg_id, M.uid_fk, M.message, M.created, U.username FROM messages M, users U where M.uid_fk=U.uid and M.uid_fk='$uid' order by M.msg_id desc limit 1 ");
+            
+            $select =$this->db->select("m.wall_message_id,")
+             ->from(array('m' => 'user_wall_messages'),
+                    array('wall_message_id', 'userid','wall_message','createddatetime'))
+             ->joinLeft(array('u' => 'apmusers'),
+                    'm.userid = u.userid',array('emailid','firstname','lastname'))
+                ->joinLeft(array('ui' => 'user_images'),
+                    'm.userid = ui.userid',array('image_path'))
+                ->where("u.statusid=?",1)
+                    ->where('m.userid=?',$uid)
+                ->order(array('m.wall_message_id DESC'))
+                 ->limitPage(0,1);
+                // echo $select;
+        //exit;
+        $selquery=$this->db->query($select);
+        
+        
+            $result = $selquery->fetch();
+return($result);
             return $result;
         } else {
             return false;
