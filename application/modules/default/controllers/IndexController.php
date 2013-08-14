@@ -39,28 +39,55 @@ class IndexController extends Zend_Controller_Action {
      * @return  
      */
 	
-	public function init() { 
-		/*echo "store/index/init";
-		exit;  */
-        $this->_helper->layout->setLayout('default/layout');
-		//$this->setLayoutAction('store/layout');		
+	public function init() {
+	
+		// Calling DB Operations and Validations Classes
+		$this->index = new Default_Model_index();
+		$this->indexdb = new Default_Model_indexdb();
+		
+		
+        $this->_helper->layout->setLayout('default/layout');				
 	}
 	
     
 	/**
      * Purpose: Index action shows user login screen
-     *
      * Access is public
      *
      * @param	
-     * 
      * @return  
      */
 	
 	public function indexAction() {
 		try{			
-			//echo "store/index/index";
-			//exit; 
+			
+			$ProductsList = $this->indexdb->getProductsList($params);
+			//print_r($ProductsList);
+			
+			$this->view->ProductsList = $ProductsList;
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	/**
+     * Purpose: Index action shows user login screen
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function homebannerAction() {
+		try{			
+			
+			
+			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
