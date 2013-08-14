@@ -84,6 +84,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
     }
     
+	
+	
+	/*
+     * Initializing Router
+     */
+	public function _initRoute(){
+		$frontController  = Zend_Controller_Front::getInstance();	
+		$route = new Zend_Controller_Router_Route('cms/aboutus/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>1));
+		$frontController->getRouter()->addRoute('aboutus',$route);	
+		$route = new Zend_Controller_Router_Route('cms/contactus/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>2));
+		$frontController->getRouter()->addRoute('contactus',$route);
+    }
+
     
     
       

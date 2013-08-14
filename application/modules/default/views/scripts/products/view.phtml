@@ -271,7 +271,7 @@
 					<div id="keyFeatures"></div>
 					<div class="item_left_column" id="description">
 					
-						<h3 class="item_desc_title"><b><?php echo $this->productdetails['product_title'];?>         Price: Rs.8490</b></h3>
+						<h3 class="item_desc_title"><b><?php echo $this->productdetails['product_title'];?></b></h3>
 						<div class="cls"></div>
 					
 						<div class="item_desc_text line">
@@ -283,7 +283,7 @@
 				
 				
 
-
+						<?php if(count($this->ProductAttributesDetails)>0){?>
 						<div id="specifications" class="item_left_column">
 							<h3 class="item_desc_title">
 								<b> Specifications of <?php echo $this->productdetails['product_title'];?></b>
@@ -331,6 +331,7 @@
 							</tbody>
 							</table>
 						</div>
+						<?php }?>
 				
 				
 

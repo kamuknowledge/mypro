@@ -40,6 +40,9 @@ class Default_Model_Cmsdb extends Application_Model_DataBaseOperations {
 	public function __construct(){
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		
+		// DB Connection
+		$this->db=Zend_Registry::get('db');
 	}
 	
 	
@@ -57,12 +60,12 @@ class Default_Model_Cmsdb extends Application_Model_DataBaseOperations {
      * @return  object	Returns status message.	
      */
 	
-	public function getChatList(){
-		try {	
-			//parent::SetDatabaseConnection();
-			//$query = "SELECT category_id, parent_category_id, category_name FROM store_categories where statusid=1";
-			//exit;			
-			//return Application_Model_Db::getResult($query);
+	public function getContent($id){
+		try {			
+			$query = "SELECT * FROM apmcms where statusid=1 AND cms_id=".$id;
+			//exit;
+			$stmt = $this->db->query($query);			
+			return $stmt->fetch();
 			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());

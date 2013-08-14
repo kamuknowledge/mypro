@@ -54,10 +54,14 @@ class CmsController extends Zend_Controller_Action {
 	public function indexAction() {
 		try{	
 			$params = $this->_getAllParams();
-			print_r($params);
+			//print_r($params);
+			$id=$params['id'];
 
 			//cms/index/id/1 - about us
-			//cms/index/id/2 - contact us		
+			//cms/index/id/2 - contact us	
+			
+			$content_array = $this->cmsdb->getContent($id);
+			$this->view->content_array = $content_array;
 			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
