@@ -1,4 +1,5 @@
 <?php
+
 /*
  * ================AllySoft Internal Use only========================
 
@@ -41,17 +42,17 @@ class Wall_IndexController extends Zend_Controller_Action {
      * @return  
      */
     public function init() {
-		
-		/* Set Layout */
+
+        /* Set Layout */
         $this->_helper->layout->setLayout('default/layout');
-		
-		/* Validations Layer Class*/
+
+        /* Validations Layer Class */
         $this->wall = new Wall_Model_Wall();
-		
-		/* Check Login */
-		if(!$this->wall->check_login()){ $this->_redirect('/');exit;}
-		
-		/* Sessions */
+
+        /* Check Login */
+        //if(!$this->wall->check_login()){ $this->_redirect('/');exit;}
+
+        /* Sessions */
         $this->session = new Zend_Session_Namespace('MyClientPortal');
 
         //$this->setLayoutAction('store/layout');		
@@ -119,65 +120,59 @@ class Wall_IndexController extends Zend_Controller_Action {
             throw new Exception($e->getMessage());
         }
     }
-    
+
     public function ajaxmessageAction() {
         try {
-             
-            if($this->_request->isXmlHttpRequest()){
-               $this->_helper->layout->disableLayout();
+
+            if ($this->_request->isXmlHttpRequest()) {
+                $this->_helper->layout->disableLayout();
             }
-            $update=$this->_getParam('update');
-            $uploads=$this->_getParam('uploads');
-           if(isset($update))
-                {
-                $update=mysql_real_escape_string($update);
-                $uploads=$uploads;
-                $uid=86;
-                $data=$this->wall->Insert_Update($uid,$update,$uploads);
-                $this->view->data=$data;
-                }
-
-
-           
+            $update = $this->_getParam('update');
+            $uploads = $this->_getParam('uploads');
+            if (isset($update)) {
+                $update = mysql_real_escape_string($update);
+                $uploads = $uploads;
+                $uid = 86;
+                $data = $this->wall->Insert_Update($uid, $update, $uploads);
+                $this->view->data = $data;
+            }
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());
         }
     }
-    
 
     public function loadcommentsAction() {
         try {
-            if($this->_request->isXmlHttpRequest()){
-               $this->_helper->layout->disableLayout();
+            if ($this->_request->isXmlHttpRequest()) {
+                $this->_helper->layout->disableLayout();
             }
             $msg_id = $this->_getParam("msg_id");
             $msg_uid = $this->_getParam("msg_uid");
-            $second_count=0;
+            $second_count = 0;
             $commentsarray = $this->wall->Comments($msg_id, 0);
-            $x = $this->_getParam("x",1);
-           // echo "<pre>";print_r($commentsarray);
-            $comment_count=0;
+            $x = $this->_getParam("x", 1);
+            // echo "<pre>";print_r($commentsarray);
+            $comment_count = 0;
             if ($x) {
                 $comment_count = count($commentsarray);
-               
-                 $second_count = $comment_count - 2;
-                   
-                if ($comment_count > 2) { 
-                    
+
+                $second_count = $comment_count - 2;
+
+                if ($comment_count > 2) {
+
                     $commentsarray = $this->wall->Comments($msg_id, $second_count);
-                   
                 }
             }
-           
+
             //print_r($commentsarray);
-           
+
             $this->view->comment_count = $comment_count;
             $this->view->commentsarray = $commentsarray;
             //$this->view->userid=$this->session->userid;
-            $this->view->userid=86;
-            $this->view->msg_id=$msg_id;
-            $this->view->msg_uid=$msg_uid;
+            $this->view->userid = 86;
+            $this->view->msg_id = $msg_id;
+            $this->view->msg_uid = $msg_uid;
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());
@@ -186,21 +181,31 @@ class Wall_IndexController extends Zend_Controller_Action {
 
     public function ajaxcommentsAction() {
         try {
-            if($this->_request->isXmlHttpRequest()){
-               $this->_helper->layout->disableLayout();
+            if ($this->_request->isXmlHttpRequest()) {
+                $this->_helper->layout->disableLayout();
             }
             $msg_id = $this->_getParam("msg_id");
             $comment = $this->_getParam("comment");
-            $second_count=0;
-            $ip=$_SERVER['REMOTE_ADDR'];
-           
-           //$uid=$this->session->userid;
-            $uid=86;
-            $cdata=$this->wall->Insert_Comment($uid,$msg_id,$comment,$ip);
+            $second_count = 0;
+            $ip = $_SERVER['REMOTE_ADDR'];
+
+            //$uid=$this->session->userid;
+            $uid = 86;
+            $cdata = $this->wall->Insert_Comment($uid, $msg_id, $comment, $ip);
             $this->view->cdata = $cdata;
-            $this->view->userid=$this->session->userid;
-            $this->view->msg_id=$msg_id;
-           
+            $this->view->userid = $this->session->userid;
+            $this->view->msg_id = $msg_id;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function webcamimageajax() {
+        try {
+            $invalid = "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";
+$xyz="       iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAYAAABxLb1rAAADJUlEQVR4nO3UMQEAAAiAMPuX1hgebAm4mAWImu8AgC8GCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkHVa/ZYGT9KYyQAAAABJRU5ErkJggg==";
+            
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());
@@ -208,4 +213,5 @@ class Wall_IndexController extends Zend_Controller_Action {
     }
 
 }
+
 ?>

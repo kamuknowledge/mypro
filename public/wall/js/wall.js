@@ -367,7 +367,7 @@ pos+= 4;
 if (pos >= 4 * 320 * 240)
  {
 ctx.putImageData(img, 0, 0);
-$.post("webcam_image_ajax.php", {type: "data", image: canvas.toDataURL("image/png")},
+$.post(baseUrl+"/wall/index/webcamimageajax", {type: "data", image: canvas.toDataURL("image/png")},
 function(data)
  {
  
@@ -376,7 +376,7 @@ function(data)
 var dataString = 'webcam='+ 1;
 $.ajax({
 type: "POST",
-url: "webcam_imageload_ajax.php",
+url: baseUrl+"/wall/index/webcamimageloadajax",
 data: dataString,
 cache: false,
 success: function(html){
