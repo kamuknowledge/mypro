@@ -1,0 +1,32 @@
+<table cellpadding="0" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th width='30'><input type="checkbox"/></th>
+						<th >Video Title</th>
+						<th  width='100'>Video Category</th>
+						<th  width='100'>Video</th>
+						<th  width='100'>Date</th>
+						<th  width='100'>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php 
+				if(isset($this->searchvideo) && !empty($this->searchvideo))
+				{
+				foreach($this->searchvideo as $videolist){
+				?>
+					<tr class="odd">
+						<td><input type="checkbox"/></td>
+						<td><?php echo ucwords(strtolower($videolist['file_title']));?></td>
+						<td><?php echo ucwords(strtolower($videolist['album_description']));?></td>
+						<td id="video<?php echo $videolist['file_id'];?>"><input type="hidden" name="videoid" value="<?php echo $videolist['file_path'];?>"><a href="javascript:void(0)" onCLick="video_preview('<?php echo $videolist['file_path'];?>', 'video_<?php echo $videolist['file_id'];?>');" ><img width="120" height="75" src="http://img.youtube.com/vi/<?php echo $videolist['file_path']; ?>/0.jpg"/></a></td>
+						<!--td><?php echo $videolist['file_path']; ?></td-->
+						<td><?php echo date('Y-M-d',strtotime($videolist['createddatetime']));?></td>
+						<td><?php echo date('Y-M-d H:i:s',strtotime($videolist['createddatetime']));?></td>
+						</tr>
+					<?php } }else{ ?>
+					<td colspan="5">Records not found !</td>
+					<?php } ?>
+									
+				</tbody>
+			</table>

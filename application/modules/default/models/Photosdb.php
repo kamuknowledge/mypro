@@ -23,7 +23,7 @@
 *===================================================================================================================
 */
 
-class Default_Model_Videosdb {
+class Default_Model_Photosdb {
 	
 	public $session;
 	private $error;
@@ -75,7 +75,7 @@ class Default_Model_Videosdb {
 				//$select->where('album_description=?',trim($searchWord));
 				 $select->where('album_description LIKE  "%' . trim($searchWord) . '%"');
             }
-			$select->where('album_type_id =?',4);
+			$select->where('album_type_id =?',2);
 			$select->from(array('c' => 'social_album') );
 			//echo $select;
 			$stmt = $this->db->query($select);			
@@ -96,24 +96,13 @@ class Default_Model_Videosdb {
      * @return  object	Returns status message.	
      */
 	
-	public function getVideosByCatId($user_id,$video_cat_id='',$searchWord=''){
+	public function getVideosByCatId($user_id){
 		try {	
 			// Example Method List
-		$userid     = $this->session->userid; // Get login userid
-		//echo $query = "SELECT * FROM social_album_files saf JOIN social_album sa ON saf.album_id = sa.album_id WHERE saf.userid='".$user_id."'";
-			$select= $this->db->select();
-			$select->from(array('saf' => 'social_album_files'),array('file_title','file_path','file_id','file_path','updateddatetime','createddatetime') );
-			$select->joinLeft(array('sa' => 'social_album'),
-                    'saf.album_id = sa.album_id',array('album_description','album_image'));
-			$select->where('saf.userid =?',$user_id);		
-			$select->where('saf.album_id =?',$video_cat_id);
-			if($searchWord !=''){
-				//$select->where('album_description=?',trim($searchWord));
-				 $select->where('saf.file_title LIKE  "%' . trim($searchWord) . '%"');
-            }			
-			//echo $select;
-				//		exit;			
-			$stmt 	= $this->db->query($select);			
+
+		$query = "SELECT * FROM social_album_files saf JOIN social_album sa ON saf.album_id = sa.album_id WHERE saf.userid='".$user_id."'";			
+			//exit;			
+			$stmt 	= $this->db->query($query);			
 			return $stmt->fetchAll();
 		
 		} catch(Exception $e) {
@@ -136,7 +125,7 @@ class Default_Model_Videosdb {
 
 		$query = "INSERT INTO social_album 
 					(album_type_id,album_image,album_description,access_specifiers,createddatetime,statusid,createdby) 
-					values(4,'".$filename."','".$cat_name."','public','".date('Y-m-d H:i:s')."',1,'".$userid."')";			
+					values(2,'".$filename."','".$cat_name."','public','".date('Y-m-d H:i:s')."',1,'".$userid."')";			
 			//exit;			
 			$stmt 	= $this->db->query($query);			
 			//return $stmt->fetchAll();

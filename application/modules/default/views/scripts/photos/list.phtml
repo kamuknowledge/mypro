@@ -4,12 +4,12 @@
 		<span class="home-icon"></span>
 		<a href="javascript:void(0)" class="home">Home</a>
 		<span class="arrow"></span>
-		<a href="javascript:void(0)" class="events">Videos List</a>
+		<a href="javascript:void(0)" class="events">Video`s List</a>
 		<div class="clear"></div>
 	</div>
 	<div id="events_page">
 		<div class="header_events">
-			<h2>Videos</h2>			
+			<h2>Video`s</h2>			
 			<div class="event_search">
 				<input type="text" placeholder="Video Name"/>
 				<input type="submit" value="go"/>
@@ -22,18 +22,17 @@
 				<a href="javascript:void(0)" class="button-light icon tags"><span><span>Tags</span></span></a>	
 			</div>
 			<div class="right">
-			<select style="width:200px" >
+			<select style="width:200px">
 			 <option value=""> Select Category</option>
 			<?php if(isset($this->CategoriesList) && !empty($this->CategoriesList)) {
 			?>
 			
 			<?php 	foreach($this->CategoriesList as $key =>$cat_list){ 
-				echo "<option value='".$cat_list['album_id']."' onclick='select_category(".$cat_list['album_id'].")'>".ucwords(strtolower($cat_list['album_description']))."</option>";
+				echo "<option value='".$cat_list['album_id']."'>".ucwords(strtolower($cat_list['album_description']))."</option>";
 				} }?>
 				</select>
 			</div>
 			<div class="clear"></div>
-			<div id="videolists">
 			<table cellpadding="0" cellspacing="0" width="100%">
 				<thead>
 					<tr>
@@ -42,7 +41,6 @@
 						<th  width='100'>Video Category</th>
 						<th  width='100'>Video</th>
 						<th  width='100'>Date</th>
-						<th  width='100'>Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -54,19 +52,16 @@
 					<tr class="odd">
 						<td><input type="checkbox"/></td>
 						<td><?php echo ucwords(strtolower($videolist['file_title']));?></td>
-						<td><?php echo ucwords(strtolower($videolist['album_description']));?></td>
-						<td id="video<?php echo $videolist['file_id'];?>"><input type="hidden" name="videoid" value="<?php echo $videolist['file_path'];?>"><a href="javascript:void(0)" onCLick="video_preview('<?php echo $videolist['file_path'];?>', 'video_<?php echo $videolist['file_id'];?>');" ><img width="120" height="75" src="http://img.youtube.com/vi/<?php echo $videolist['file_path']; ?>/0.jpg"/></a></td>
-						<!--td><?php echo $videolist['file_path']; ?></td-->
-						<td><?php echo date('Y-M-d',strtotime($videolist['createddatetime']));?></td>
-						<td><?php echo date('Y-M-d H:i:s',strtotime($videolist['createddatetime']));?></td>
-						</tr>
+						<td><?php echo $videolist['album_description'];?></td>
+						<td><img src="<?php echo $this->baseUrl('public/uploads/video_category_images/'.$videolist['album_image']); ?>"/></td>
+						<td><?php echo date('Y-M-d',strtotime('08/10/2013'));?></td>
+					</tr>
 					<?php } }else{ ?>
 					<td colspan="5">Records not found !</td>
 					<?php } ?>
 									
 				</tbody>
 			</table>
-			</div>
 			<div class="grid-view-footer">
 					<a  href="javascript:void(0)" class="left button-light no-text icon refresh"><span><span>Refresh</span></span></a>
 					<span class="right">View 1-10 of 20</span>
@@ -88,11 +83,4 @@
 	<div class="clear"></div>
 </div>
 <div class="clear"></div>
-</div>
-<div id="preview_video"  style="display:none;">
-<div class="register-form containerbox" >
-        <center>
-        <iframe  id="myframe" title="YouTube video player" width="425" height="344" src="" frameborder="0" allowfullscreen></iframe>
-        </center>
-		</div>
 </div>
