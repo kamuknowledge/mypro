@@ -89,8 +89,7 @@ class Default_Model_Indexdb {
 					
 					where
 					sp.statusid=1 
-					
-					
+					AND sp.show_in_homepage=1					
 					ORDER BY ".$orderby." ".$ordertype." LIMIT ".$start.", ".$limit."";
 					
 					// AND spc.category_id = ".$params['id']." AND sp.statusid=1
