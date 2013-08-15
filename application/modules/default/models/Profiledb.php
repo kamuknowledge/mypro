@@ -69,28 +69,18 @@ class Default_Model_Profiledb  {
 	
 	public function getProfileDetails(){
 		try {	
-			//parent::SetDatabaseConnection();
-			/*$query = "SELECT u.* FROM apmusers u
-						LEFT JOIN user_profile up ON up.userid = u.userid AND up.statusid = 1
-						LEFT JOIN user_address ua ON ua.userid = u.userid AND ua.statusid = 1
-						LEFT JOIN user_connections uc ON uc.userid = u.userid AND uc.statusid = 1
-						LEFT JOIN user_education ue ON ue.userid = u.userid AND ue.statusid = 1
-						LEFT JOIN user_experience uex ON uex.userid = u.userid AND uex.statusid = 1
-						LEFT JOIN user_images ui ON ui.userid = u.userid AND ui.statusid = 1
-						LEFT JOIN user_skills_set uss ON uss.userid = u.userid AND uss.statusid = 1
-						WHERE u.userid = '".$this->userid."' AND u.statusid = 1";*/
-			$query = "SELECT u.userid, u.firstname, u.lastname, u.emailid, u.phonenumber, u.display_name, u.date_of_birth, u.gender, u.marital_status, u.timezone_id, up.about_us, up.interests, ui.image_path, ue.job_title, ue.company_name, ued.degree, ued.school_name
-						FROM apmusers u
-						LEFT JOIN user_profile up ON up.userid = u.userid AND up.statusid = 1
-						LEFT JOIN user_images ui ON ui.userid = u.userid AND ui.statusid = 1
-						LEFT JOIN user_experience ue ON ue.userid = u.userid AND ue.experience_id = (SELECT ue1.experience_id FROM user_experience ue1 WHERE ue1.userid = u.userid AND ((ue1.present_working = 1 AND ue1.to_year = 0 AND ue1.to_month = 0) OR (ue1.present_working = 0 AND ue1.to_year != 0 AND ue1.to_month != 0)) AND ue1.statusid = 1 ORDER BY ue1.to_year DESC, ue1.to_month DESC LIMIT 1)
-						LEFT JOIN user_education ued ON ued.userid = u.userid AND ued.education_id = (SELECT ued1.education_id FROM user_education ued1 WHERE ued1.userid = u.userid AND ued1.statusid = 1 ORDER BY ued1.to_year DESC, ued1.to_month DESC LIMIT 1)
-						WHERE u.userid = '".$this->userid."' AND u.statusid = 1;";
-			//exit;			
-			
-			$stmt = $this->db->query($query);			
-			return $stmt->fetchAll();
-			
+			if($this->userid) {
+				$query = "SELECT u.userid, u.firstname, u.lastname, u.emailid, u.phonenumber, u.display_name, u.date_of_birth, u.gender, u.marital_status, u.timezone_id, u.profile_image, up.about_us, up.interests, ui.image_path, ue.job_title, ue.company_name, ued.degree, ued.school_name
+							FROM apmusers u
+							LEFT JOIN user_profile up ON up.userid = u.userid AND up.statusid = 1
+							LEFT JOIN user_images ui ON ui.userid = u.userid AND ui.statusid = 1
+							LEFT JOIN user_experience ue ON ue.userid = u.userid AND ue.experience_id = (SELECT ue1.experience_id FROM user_experience ue1 WHERE ue1.userid = u.userid AND ((ue1.present_working = 1 AND ue1.to_year = 0 AND ue1.to_month = 0) OR (ue1.present_working = 0 AND ue1.to_year != 0 AND ue1.to_month != 0)) AND ue1.statusid = 1 ORDER BY ue1.to_year DESC, ue1.to_month DESC LIMIT 1)
+							LEFT JOIN user_education ued ON ued.userid = u.userid AND ued.education_id = (SELECT ued1.education_id FROM user_education ued1 WHERE ued1.userid = u.userid AND ued1.statusid = 1 ORDER BY ued1.to_year DESC, ued1.to_month DESC LIMIT 1)
+							WHERE u.userid = '".$this->userid."' AND u.statusid = 1;";
+				$stmt = $this->db->query($query);			
+				return $stmt->fetchAll();
+			}
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -99,12 +89,14 @@ class Default_Model_Profiledb  {
 	
 	public function getProfileInfo(){
 		try {
-			$query = "SELECT u.date_of_birth, u.marital_status, u.phonenumber, up.interests FROM apmusers u
-			LEFT JOIN user_profile up ON up.userid = u.userid
-			WHERE u.userid = '".$this->userid."' AND u.statusid = 1;";
-			$stmt = $this->db->query($query);			
-			return $stmt->fetchAll();
-			
+			if($this->userid) {
+				$query = "SELECT u.date_of_birth, u.marital_status, u.phonenumber, up.interests FROM apmusers u
+				LEFT JOIN user_profile up ON up.userid = u.userid
+				WHERE u.userid = '".$this->userid."' AND u.statusid = 1;";
+				$stmt = $this->db->query($query);			
+				return $stmt->fetchAll();
+			}
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -113,16 +105,18 @@ class Default_Model_Profiledb  {
 	
 	public function getUserAddress() {
 		try {	
-			///parent::SetDatabaseConnection();
-			$query = "SELECT ua.address_type, ua.address1, ua.address2, ua.city, ua.street, ua.postal_code, ua.country_id, ua.state_id, mc.country, ms.name 
-			FROM user_address ua 
-			LEFT JOIN master_countries mc ON mc.country_id = ua.country_id
-			LEFT JOIN master_states ms ON ms.state_id = ua.state_id
-			WHERE ua.userid = '".$this->userid."' AND ua.statusid = 1;";
-			//exit;
-			
-			$stmt = $this->db->query($query);			
-			return $stmt->fetchAll();
+			if($this->userid) {
+				$query = "SELECT ua.address_type, ua.address1, ua.address2, ua.city, ua.street, ua.postal_code, ua.country_id, ua.state_id, mc.country, ms.name 
+				FROM user_address ua 
+				LEFT JOIN master_countries mc ON mc.country_id = ua.country_id
+				LEFT JOIN master_states ms ON ms.state_id = ua.state_id
+				WHERE ua.userid = '".$this->userid."' AND ua.statusid = 1;";
+				//exit;
+				
+				$stmt = $this->db->query($query);			
+				return $stmt->fetchAll();
+			}
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -131,15 +125,15 @@ class Default_Model_Profiledb  {
 	
 	public function getUserEducation($id = "") {
 		try {	
-			//parent::SetDatabaseConnection();
-			$query = "SELECT ue.* FROM user_education ue WHERE ue.userid = '".$this->userid."' AND ue.statusid = 1;";
-			//exit;
-			if($id)
-				$query .= " AND ue.education_id = ".$id;
-			$query .= " AND ue.statusid = 1;";
-			$stmt = $this->db->query($query);			
-			return $stmt->fetchAll();
-			
+			if($this->userid) {
+				$query = "SELECT ue.* FROM user_education ue WHERE ue.userid = '".$this->userid."' AND ue.statusid = 1;";
+				if($id)
+					$query .= " AND ue.education_id = ".$id;
+				$query .= " AND ue.statusid = 1;";
+				$stmt = $this->db->query($query);			
+				return $stmt->fetchAll();
+			}
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -148,14 +142,16 @@ class Default_Model_Profiledb  {
 	
 	public function getUserExperiance($id = "") {
 		try {	
-			//parent::SetDatabaseConnection();
-			$query = "SELECT ue.* FROM user_experience ue WHERE ue.userid = '".$this->userid."'";
-			if($id)
-				$query .= " AND ue.experience_id = ".$id;
-			$query .= " AND ue.statusid = 1;";
-			//exit;
-			$stmt = $this->db->query($query);			
-			return $stmt->fetchAll();
+			if($this->userid) {
+				$query = "SELECT ue.* FROM user_experience ue WHERE ue.userid = '".$this->userid."'";
+				if($id)
+					$query .= " AND ue.experience_id = ".$id;
+				$query .= " AND ue.statusid = 1;";
+				//exit;
+				$stmt = $this->db->query($query);			
+				return $stmt->fetchAll();
+			}
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -164,12 +160,12 @@ class Default_Model_Profiledb  {
 	
 	public function updateAboutus($about_us) {
 		try {
-			//parent::SetDatabaseConnection();
-			$query = 'UPDATE user_profile SET about_us = "'.$about_us.'" WHERE userid = "'.$this->userid.'";';
-			//exit;
-			$stmt = $this->db->query($query);
-			//return $stmt->fetchAll();
-			return 1;
+			if($this->userid) {
+				$query = 'UPDATE user_profile SET about_us = "'.$about_us.'" WHERE userid = "'.$this->userid.'";';
+				$stmt = $this->db->query($query);
+				return 1;
+			}
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -178,13 +174,14 @@ class Default_Model_Profiledb  {
 	
 	public function updatePersonalInfo($bmonth, $bday, $byear, $marial_status, $interests, $phone_number) {
 		try {
-			//parent::SetDatabaseConnection();
-			$query = 'UPDATE user_profile SET interests = "'.$interests.'" WHERE userid = "'.$this->userid.'";';
-			$stmt = $this->db->query($query);
-			$query = 'UPDATE apmusers SET phonenumber = "'.$phone_number.'", date_of_birth = "'.$byear."-".$bmonth."-".$bday.'", marital_status = "'.$marial_status.'" WHERE userid = "'.$this->userid.'";';
-			$stmt = $this->db->query($query);
-			//return $stmt->fetchAll();
-			return 1;
+			if($this->userid) {
+				$query = 'UPDATE user_profile SET interests = "'.$interests.'" WHERE userid = "'.$this->userid.'";';
+				$stmt = $this->db->query($query);
+				$query = 'UPDATE apmusers SET phonenumber = "'.$phone_number.'", date_of_birth = "'.$byear."-".$bmonth."-".$bday.'", marital_status = "'.$marial_status.'" WHERE userid = "'.$this->userid.'";';
+				$stmt = $this->db->query($query);
+				return 1;
+			}
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -193,14 +190,15 @@ class Default_Model_Profiledb  {
 	
 	public function createupdateExperiance($exp_id, $company_name, $job_location, $job_title, $country_id, $industry_id, $state_id, $from_month, $from_year, $to_month, $to_year, $present_working, $company_description) {
 		try {
-			// $query = 'UPDATE user_profile SET about_us = "'.$about_us.'" WHERE userid = "'.$this->userid.'";';
-			// $stmt = $this->db->query($query);
-			if($exp_id != "" && $exp_id != "new") {
-				$stmt = $this->db->query("CALL SPuser_experience_edit(?, ?, ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($exp_id,$this->userid,$company_name,$job_title,$job_location,$industry_id,$from_year,$from_month,$to_year,$to_month,$present_working,$company_description,$country_id,$state_id,"Save"));
-			} else {
-				$stmt = $this->db->query("CALL SPuser_experience_add(?, ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($this->userid,$company_name,$job_title,$job_location,$industry_id,$from_year,$from_month,$to_year,$to_month,$present_working,$company_description,$country_id,$state_id,"Save"));
+			if($this->userid) {
+				if($exp_id != "" && $exp_id != "new") {
+					$stmt = $this->db->query("CALL SPuser_experience_edit(?, ?, ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($exp_id,$this->userid,$company_name,$job_title,$job_location,$industry_id,$from_year,$from_month,$to_year,$to_month,$present_working,$company_description,$country_id,$state_id,"Save"));
+				} else {
+					$stmt = $this->db->query("CALL SPuser_experience_add(?, ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($this->userid,$company_name,$job_title,$job_location,$industry_id,$from_year,$from_month,$to_year,$to_month,$present_working,$company_description,$country_id,$state_id,"Save"));
+				}
+				return $stmt->fetchAll();
 			}
-			return $stmt->fetchAll();
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -209,14 +207,15 @@ class Default_Model_Profiledb  {
 	
 	public function createupdateEducation($edu_id, $school_name, $degree, $field_of_study, $from_month, $from_year, $to_month, $to_year, $school_description) {
 		try {
-			// $query = 'UPDATE user_profile SET about_us = "'.$about_us.'" WHERE userid = "'.$this->userid.'";';
-			// $stmt = $this->db->query($query);
-			if($edu_id != "" && $edu_id != "new") {
-				$stmt = $this->db->query("CALL SPuser_education_edit(?, ?, ? , ?, ?, ?, ?, ?, ?, ?, ?)", array($edu_id,$this->userid,$school_name,$degree,$field_of_study,$school_description,$from_year,$from_month,$to_year,$to_month,"Save"));
-			} else {
-				$stmt = $this->db->query("CALL SPuser_education_add(?, ? , ?, ?, ?, ?, ?, ?, ?, ?)", array($this->userid,$school_name,$degree,$field_of_study,$school_description,$from_year,$from_month,$to_year,$to_month,"Create"));
+			if($this->userid) {
+				if($edu_id != "" && $edu_id != "new") {
+					$stmt = $this->db->query("CALL SPuser_education_edit(?, ?, ? , ?, ?, ?, ?, ?, ?, ?, ?)", array($edu_id,$this->userid,$school_name,$degree,$field_of_study,$school_description,$from_year,$from_month,$to_year,$to_month,"Save"));
+				} else {
+					$stmt = $this->db->query("CALL SPuser_education_add(?, ? , ?, ?, ?, ?, ?, ?, ?, ?)", array($this->userid,$school_name,$degree,$field_of_study,$school_description,$from_year,$from_month,$to_year,$to_month,"Create"));
+				}
+				return $stmt->fetchAll();
 			}
-			return $stmt->fetchAll();
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -225,8 +224,11 @@ class Default_Model_Profiledb  {
 	
 	public function updateAddressInfo($home_address1, $home_address2, $home_city, $home_street, $home_postal_code, $home_country_id, $home_state_id, $office_address1, $office_address2, $office_city, $office_street, $office_postal_code, $office_country_id, $office_state_id) {
 		try {
-			$stmt = $this->db->query("CALL SPuser_address(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($this->userid, $home_address1, $home_address2, $home_city, $home_street, $home_postal_code, $home_country_id, $home_state_id, $office_address1, $office_address2, $office_city, $office_street, $office_postal_code, $office_country_id, $office_state_id,"Save"));
-			return $stmt->fetchAll();
+			if($this->userid) {
+				$stmt = $this->db->query("CALL SPuser_address(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($this->userid, $home_address1, $home_address2, $home_city, $home_street, $home_postal_code, $home_country_id, $home_state_id, $office_address1, $office_address2, $office_city, $office_street, $office_postal_code, $office_country_id, $office_state_id,"Save"));
+				return $stmt->fetchAll();
+			}
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -263,12 +265,26 @@ class Default_Model_Profiledb  {
 	
 	public function updateProfiletitle($fname, $lname, $gender, $timezone) {
 		try {
-			//parent::SetDatabaseConnection();
-			$query = 'UPDATE apmusers SET firstname = "'.$fname.'", lastname = "'.$lname.'", gender = "'.$gender.'", timezone_id = "'.$timezone.'" WHERE userid = "'.$this->userid.'";';
-			//exit;
-			$stmt = $this->db->query($query);
-			//return $stmt->fetchAll();
-			return 1;
+			if($this->userid) {
+				$query = 'UPDATE apmusers SET firstname = "'.$fname.'", lastname = "'.$lname.'", gender = "'.$gender.'", timezone_id = "'.$timezone.'" WHERE userid = "'.$this->userid.'";';
+				$stmt = $this->db->query($query);
+				return 1;
+			}
+			return 0;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function update_member_profile($filename="") {
+		try {
+			if($this->userid) {
+				$query = 'UPDATE apmusers SET profile_image = "'.$filename.'" WHERE userid = "'.$this->userid.'";';
+				$stmt = $this->db->query($query);
+				return 1;
+			}
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

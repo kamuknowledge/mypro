@@ -47,7 +47,11 @@ class ProfileController extends Zend_Controller_Action {
 		if(!$this->profile->check_login()){ $this->_redirect('/');exit;}		
 		
         $this->_helper->layout->setLayout('default/profile_layout');
-		$this->view->headScript()->appendFile('http://malsup.github.com/jquery.form.js','text/javascript');
+		$this->view->headLink()->setStylesheet($this->view->baseUrl('public/default/css/jquery.Jcrop.css'));
+		$this->view->headLink()->appendStylesheet($this->view->baseUrl('public/default/css/dev_profile.css'));
+		//$this->view->headScript()->appendFile('http://malsup.github.com/jquery.form.js','text/javascript');
+		$this->view->headScript()->appendFile($this->view->baseUrl('public/default').'/js/jquery.Jcrop.js','text/javascript');
+		$this->view->headScript()->appendFile($this->view->baseUrl('public/default').'/js/jquery.form.js','text/javascript');
 		//$this->setLayoutAction('store/layout');		
 	}
 	
@@ -449,35 +453,166 @@ class ProfileController extends Zend_Controller_Action {
 		}
 	}
 	
+	public function deleteimageAction() {
+		try{
+			if ($this->getRequest()->isXmlHttpRequest()) {
+				$this->profiledb->update_member_profile();
+			}
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
 	public function uploadAction() {
 		try{		
 			$params = $this->_getAllParams();	
 			$this->_helper->layout->setLayout('default/empty_layout');
 			// Define a destination
 			$targetFolder = $this->view->baseUrl().'/public/uploads'; // Relative to the root
-
-			if (!empty($_FILES)) {
-				$tempFile = $_FILES['avatar']['tmp_name'];
-				$targetPath = $_SERVER['DOCUMENT_ROOT'] . $targetFolder;
-				$targetFile = rtrim($targetPath,'/') . '/' . $_FILES['avatar']['name'];
-				
-				// Validate the file type
-				$fileTypes = array('jpg','jpeg','gif','png'); // File extensions
-				$fileParts = pathinfo($_FILES['avatar']['name']);
-				
-				if (in_array($fileParts['extension'],$fileTypes)) {
-					move_uploaded_file($tempFile,$targetFile);
-					echo '1|'.$_FILES['avatar']['name'];
+			$request = $this->getRequest();
+			$Request_Values = $request->getPost();
+			if ($request->isPost()) {
+				if(isset($Request_Values["input_type"])) {
+					$targ_w = $targ_h = 200;
+					$jpeg_quality = 90;
+					$src = $_SERVER['DOCUMENT_ROOT'].$Request_Values["file_src"];
+					if(file_exists( $src )){
+						$src_dst = str_replace("/original/", "/crop_200_200/", $src);
+						$img_r = imagecreatefromjpeg($src);
+						$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+						imagecopyresampled($dst_r,$img_r,0,0,$Request_Values['x'],$Request_Values['y'],
+						$targ_w,$targ_h,$Request_Values['w'],$Request_Values['h']);
+						if(imagejpeg($dst_r,$src_dst,$jpeg_quality) && $Request_Values["file_name"]) {
+							$this->profiledb->update_member_profile($Request_Values["file_name"]);
+						}
+					}
+					exit;
 				} else {
-					echo 'Invalid file type.';
+					if (!empty($_FILES)) {
+						// Validate the file type
+						$fileTypes = array('jpg','jpeg','gif','png'); // File extensions
+						$fileParts = pathinfo($_FILES['avatar']['name']);
+						if (in_array($fileParts['extension'],$fileTypes)) {
+							$image = new SimpleImage();
+							$file_name = "photo_".md5(date("Y-m-d H:i:s")).'.jpg';
+							$size = getImageSize($_FILES['avatar']['tmp_name']);
+							$targetPath = $_SERVER['DOCUMENT_ROOT'] . $targetFolder;
+							$targetPath = rtrim($targetPath,'/') . '/user_images/original/'.$file_name;
+							$max_width = 500;
+							$max_height = 500;
+							$width = $size[0];
+							$height = $size[1];
+							if ($size[0] > $max_width) {
+								$image->load($_FILES['avatar']['tmp_name']);
+								$image->resizeToWidth($max_width);
+								$image->save($targetPath);
+								$width = $max_width;
+							} else {
+								move_uploaded_file($_FILES['avatar']['tmp_name'], $targetPath);
+							}
+							$size = getImageSize($targetPath);
+							if ($size[1] > $max_height) {
+								$image->load($targetPath);
+								$image->resizeToHeight($max_height);
+								$image->save($targetPath);
+								$height = $max_height;
+							}
+							$this->view->UserDetails = array("file_name"=>$file_name,"width"=>$image->getWidth(),"height"=>$image->getHeight());
+						} else {
+							echo '0';
+							exit;
+						}
+					}
 				}
 			}
-			exit;
-			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
 	}
+}
+
+class SimpleImage {
+
+   var $image;
+   var $image_type;
+
+   function load($filename) {
+
+      $image_info = getimagesize($filename);
+      $this->image_type = $image_info[2];
+      if( $this->image_type == IMAGETYPE_JPEG ) {
+
+         $this->image = imagecreatefromjpeg($filename);
+      } elseif( $this->image_type == IMAGETYPE_GIF ) {
+
+         $this->image = imagecreatefromgif($filename);
+      } elseif( $this->image_type == IMAGETYPE_PNG ) {
+
+         $this->image = imagecreatefrompng($filename);
+      }
+   }
+   function save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null) {
+
+      if( $image_type == IMAGETYPE_JPEG ) {
+         imagejpeg($this->image,$filename,$compression);
+      } elseif( $image_type == IMAGETYPE_GIF ) {
+
+         imagegif($this->image,$filename);
+      } elseif( $image_type == IMAGETYPE_PNG ) {
+
+         imagepng($this->image,$filename);
+      }
+      if( $permissions != null) {
+
+         chmod($filename,$permissions);
+      }
+   }
+   function output($image_type=IMAGETYPE_JPEG) {
+
+      if( $image_type == IMAGETYPE_JPEG ) {
+         imagejpeg($this->image);
+      } elseif( $image_type == IMAGETYPE_GIF ) {
+
+         imagegif($this->image);
+      } elseif( $image_type == IMAGETYPE_PNG ) {
+
+         imagepng($this->image);
+      }
+   }
+   function getWidth() {
+
+      return imagesx($this->image);
+   }
+   function getHeight() {
+
+      return imagesy($this->image);
+   }
+   function resizeToHeight($height) {
+
+      $ratio = $height / $this->getHeight();
+      $width = $this->getWidth() * $ratio;
+      $this->resize($width,$height);
+   }
+
+   function resizeToWidth($width) {
+      $ratio = $width / $this->getWidth();
+      $height = $this->getheight() * $ratio;
+      $this->resize($width,$height);
+   }
+
+   function scale($scale) {
+      $width = $this->getWidth() * $scale/100;
+      $height = $this->getheight() * $scale/100;
+      $this->resize($width,$height);
+   }
+
+   function resize($width,$height) {
+      $new_image = imagecreatetruecolor($width, $height);
+      imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
+      $this->image = $new_image;
+   }      
+
 }
 ?>

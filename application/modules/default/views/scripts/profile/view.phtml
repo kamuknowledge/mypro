@@ -5,13 +5,13 @@ $address = $this->UserDetails["address"];
 $experiance = $this->UserDetails["experiance"];
 $education = $this->UserDetails["education"];
 $timezones = $this->UserDetails["timezones"];
-$present_cmp = $profile["company_name"]." - "."country_name";
-$previous_cmp = "";
-$current_status = $profile["job_title"]." at ".$profile["company_name"];
-$recent_education = $profile["degree"]." at ".$profile["school_name"];
+$present_cmp = ($profile["company_name"]) ? $profile["company_name"]." - "."country_name" : "";
+//$previous_cmp = "";
+$current_status = ($profile["job_title"] && $profile["company_name"]) ? $profile["job_title"].(($profile["company_name"]) ? " at ".$profile["company_name"] : "") : "";
+$recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["school_name"] : "";
 
 ?>
-<div class="main_body" style="float:left;">
+<div class="main_body" style="float:left;width:100%;">
 <div class="left width-100">
 						<div class="breadcrumbs">
 							<span class="home-icon"></span><a href="javascript:void(0)" class="home">home</a><span class="arrow"></span><a href="javascript:void(0)" class="events">Profile</a>
@@ -20,12 +20,33 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 						<div class="profile_page">
 							<div class="profile_main_page">
 								<div class="profile_page_image">
-									<img src="<?php echo $this->baseUrl('public/default').$profile["image_path"]; ?>" title="GUNNAM CHOWDARY"/>
-									<form id="upload_image" name="upload_image" action="<?php echo $this->baseUrl('profile/upload/');?>" method="post">
-										<input id="avatar" type="file" name="avatar" />
-									</form>
+									<div align="center">
+									<?php
+										$path = $this->baseUrl('public/uploads')."/user_images/";
+										$image_name = "No_Image_Available.jpg";
+										$image_status = 0;
+										if($profile["profile_image"] && file_exists( $_SERVER['DOCUMENT_ROOT'].$path."crop_200_200/".$profile["profile_image"] )) {
+											$path = $path."crop_200_200/";
+											$image_name = $profile["profile_image"];
+											$image_status = 1;
+										}
+									?>
+									<img src="<?php echo $path.$image_name; ?>" title="GUNNAM CHOWDARY" width="200" height="200"/>
+									<?php ?>
+									</div>
 									<!--a class="button-light icon cam" href="javascript:void(0)" id="image_upload"><span>Edit Profile Picture</span></a-->
-									<a href="javascript:void(0)">Delete Photo</a>
+									<?php if($image_status) { ?>
+									<form id="upload_image" name="upload_image" action="<?php echo $this->baseUrl('profile/upload/');?>" method="post" style="text-align:center;">
+										<div align="center" class="profile_image_change profile_image_edit">Edit Profile Picture</div>
+										<input id="avatar" type="file" name="avatar" class="profile_image_file_button"/>
+									</form>
+									<a href="javascript:void(0);" id="delete_image">Delete Photo</a>
+									<?php } else { ?>
+									<form id="upload_image" name="upload_image" action="<?php echo $this->baseUrl('profile/upload/');?>" method="post" style="text-align:center;">
+										<div align="center" class="profile_image_change profile_image_upload">Upload Profile Picture</div>
+										<input id="avatar" type="file" name="avatar" class="profile_image_file_button"/>
+									</form>
+									<?php } ?>
 									<div class="clear">&nbsp;</div>
 								</div>
 								<div class="profile_page_detail">
@@ -35,17 +56,23 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 											<h2 class="title_have_image"><label id="h2_name"><?php echo $profile["firstname"]." ".$profile["lastname"]; ?></label><span class="icon" id="member_profile_title_icon"></span></h2>
 											<span class="caption"><?php echo $current_status; ?></span>
 										</div>
+										<?php if($profile["timezone_id"]) { ?>
 										<div class="timezone" id="timezone_dis"><?php foreach($timezones as $value) { echo ($value["timezone_id"] == $profile["timezone_id"]) ? $value["timezone_location"]." ".$value["gmt"] : ""; } ?></div>
+										<?php } ?>
 										<div class="details">
+											<?php if($present_cmp) { ?>
 											<label>Current:</label><span class="blue"><?php echo $present_cmp; ?></span>
+											<?php } ?>
 											<!--label>Previous:</label><span class="blue"><?php echo $previous_cmp; ?></span-->
 											<div class="clear">&nbsp;</div>
+											<?php if($recent_education) { ?>
 											<label>Education:</label><span class="blue"><?php echo $recent_education; ?></span>
+											<?php } ?>
 										</div>
 										<div class="clear">&nbsp;</div>
 										<div class="clear">
 											<a href="javascript:void(0)" class="button-light blue icon mail"><span><span><?php echo $profile["emailid"]; ?></span></span></a>
-											<a href="javascript:void(0)" class="button-light blue icon skype"><span><span>vip.veera</span></span></a>
+											<!--a href="javascript:void(0)" class="button-light blue icon skype"><span><span>vip.veera</span></span></a-->
 											<a href="javascript:void(0)" class="button-light blue icon phone"><span><span><?php echo $profile["phonenumber"]; ?></span></span></a>
 										</div>
 									</div>
@@ -213,7 +240,7 @@ $recent_education = $profile["degree"]." at ".$profile["school_name"];
 					</div>
 <div class="clear"></div>
 </div>
-<div id="popup_content" name="popup_content" style="display:none;width:500px;height:500px;">
-	<img src="" width="500" height="auto"/>
-	<input type="button" value="Save" />
+<div id="popup_content" name="popup_content" class="" style="display:none;width:auto;height:auto;">
+	
 </div>
+<div class="modal"><!-- Place at bottom of page --></div>

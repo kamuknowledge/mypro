@@ -1,4 +1,27 @@
 $(document).ready(function(){
+	/*$.fn.fancyBox = function(params){
+		params = $.extend({content: '.main-wrapper'}, params);
+			var $t = $(this); //params.content
+			$('body').append('<div class="transparent"></div>');
+			$t.find('#main-wrapper').append('<a href="javascript:void(0)" class="close">X</a>');
+			$t.addClass('light-box');
+			$('a.close').live('click',function(){
+					$t.hide();
+					$t.removeClass('light-box');
+					$('.transparent').remove();
+					$(this).remove();
+			})
+		return this;
+	};*/
+	$("body").on({
+		ajaxStart: function() { 
+			$(this).addClass("loading"); 
+		},
+		ajaxStop: function() { 
+			$(this).removeClass("loading"); 
+		}    
+	});
+
 	$("#login_user").submit(function(ev) {
 		ev.preventDefault();
 	});
@@ -32,7 +55,6 @@ $(document).ready(function(){
 		},
 		submitHandler: function(form) {
 			var str = $("#login_user").serialize();
-			//$("#login_user").html("Loading...");
 			$.ajax({
 				type : "POST",
 				url : baseUrl+"/signin/login",
@@ -118,7 +140,6 @@ $(document).ready(function(){
 		},
 		submitHandler: function(form) {
 			var str = $("#registration").serialize();
-			//$("#registration").html("Loading...");
 			$.ajax({
 				type : "POST",
 				url : baseUrl+"/signup/register",
@@ -157,10 +178,8 @@ $(document).ready(function(){
 				data : str,
 				beforeSend : function() {
 					$("#edit_about_us").hide();
-					$("#loading_about_us").show();
 				},
 				success : function(data) {
-					$("#loading_about_us").hide();
 					if(data == 1) {
 						$("#view_about_us").text(about_us);
 						$("#view_about_us").show();
@@ -185,12 +204,12 @@ $(document).ready(function(){
 				data : "type=edit&id="+id,
 				beforeSend : function() {
 					//$("#edit_experiance_"+id).hide();
-					if(id != "new")
-					$("#experiance_edit_loading_"+id).show();
+					/*if(id != "new")
+					$("#experiance_edit_loading_"+id).show();*/
 				},
 				success : function(data) {
 					if(id != "new") {
-						$("#experiance_edit_loading_"+id).hide();
+						/*$("#experiance_edit_loading_"+id).hide();*/
 						$("#experiance_view_"+id).hide();
 						$("#experiance_edit_"+id).html(data);
 						$("#experiance_edit_"+id).show();
@@ -217,12 +236,12 @@ $(document).ready(function(){
 				url : baseUrl+"/profile/addediteducation",
 				data : "type=edit&id="+id,
 				beforeSend : function() {
-					if(id != "new")
-					$("#education_edit_loading_"+id).show();
+					/*if(id != "new")
+					$("#education_edit_loading_"+id).show();*/
 				},
 				success : function(data) {
 					if(id != "new") {
-						$("#education_edit_loading_"+id).hide();
+						/*$("#education_edit_loading_"+id).hide();*/
 						$("#education_view_"+id).hide();
 						$("#education_edit_"+id).html(data);
 						$("#education_edit_"+id).show();
@@ -315,21 +334,31 @@ $(document).ready(function(){
 	$("#avatar").live("change", function() {
 		$("#upload_image").submit();
 	});
+	$("#delete_image").live("click", function(){
+		$.ajax({
+			type : "POST",
+			url : baseUrl+"/profile/deleteimage",
+			success : function(data) {
+				location.reload();
+			}
+		});
+	});
 	$('#upload_image').on('submit', function(e) {
-            e.preventDefault(); // <-- important
-            // $(this).ajaxSubmit({
-                // target: '#output'
-            // });
-			$('#upload_image').ajaxSubmit(function(responseText) { 
-				var out_arr = responseText.split("|");
-				if(out_arr[1]) {
-					$('#popup_content img').attr("src",baseUrl+"/public/uploads/"+out_arr[1]);
-					$('#popup_content').show().fancyBox();
-					//$("#popup_content").show().f
-				} else {
-					alert(responseText);
-				}
-			});
+		e.preventDefault(); // <-- important
+		// $(this).ajaxSubmit({
+			// target: '#output'
+		// });
+		$('#upload_image').ajaxSubmit(function(responseText) { 
+			//var out_arr = responseText.split("|");
+			if(responseText == 0) {
+				alert("Invalid file type.");
+			} else {
+				//$('#popup_content img').attr("src",baseUrl+"/public/uploads/"+out_arr[1]);
+				//$('#cropbox').attr("src",baseUrl+"/public/uploads/"+out_arr[1]);
+				$('#popup_content').html(responseText).show().fancyBox();
+				//$("#popup_content").show().f
+			}
+		});
 	});
 });
 function submit_form(){
@@ -345,19 +374,3 @@ function postArray(form){
 	for(var i in form) data[form[i].name] = form[i].value; 
 	return data; 
 }
-// post-submit callback 
-function showResponse(responseText, statusText, xhr, $form)  { 
-    // for normal html responses, the first argument to the success callback 
-    // is the XMLHttpRequest object's responseText property 
- 
-    // if the ajaxForm method was passed an Options Object with the dataType 
-    // property set to 'xml' then the first argument to the success callback 
-    // is the XMLHttpRequest object's responseXML property 
- 
-    // if the ajaxForm method was passed an Options Object with the dataType 
-    // property set to 'json' then the first argument to the success callback 
-    // is the json data object returned by the server 
- 
-    alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
-        '\n\nThe output div should have already been updated with the responseText.'); 
-} 

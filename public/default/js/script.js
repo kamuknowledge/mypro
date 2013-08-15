@@ -96,12 +96,12 @@ $(document).ready(function(){
 			})
 		}
 	})
-	var i = setInterval(function(){
-		var ele = $('#slider ul li.active');
-		if(ele.is(':last-child')){
-			$('#slider ul li:first').trigger('click');
-		}else{
-			ele.next('li').trigger('click');
-		}
-	},2000);	
+	// var i = setInterval(function(){
+		// var ele = $('#slider ul li.active');
+		// if(ele.is(':last-child')){
+			// $('#slider ul li:first').trigger('click');
+		// }else{
+			// ele.next('li').trigger('click');
+		// }
+	// },2000);	
 }) 

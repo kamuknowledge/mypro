@@ -1,0 +1,57 @@
+<script type="text/javascript">
+  $(function(){
+	$(document).ready(function(){
+		$("#cropbox").load(function() {
+		    $('#cropbox').Jcrop({
+			  aspectRatio: 1,
+//			  minSize: [200, 200],
+			  onSelect: updateCoords
+			});
+		}).attr('src', '<?php echo $this->baseUrl('public')."/uploads/user_images/original/".$this->UserDetails["file_name"]; ?>');
+		$('#cropped_image_form').on('submit', function(e) {
+            e.preventDefault(); // <-- important
+            // $(this).ajaxSubmit({
+                // target: '#output'
+            // });
+			$(".upload_image_div").hide();
+			$('#cropped_image_form').ajaxSubmit(function(responseText) { 
+				//var out_arr = responseText.split("|");
+				//alert(responseText);
+				location.reload();
+			});
+		});
+	});
+  });
+  function updateCoords(c)
+  {
+    $('#x').val(c.x);
+    $('#y').val(c.y);
+    $('#w').val(c.w);
+    $('#h').val(c.h);
+  }
+  function checkCoords()
+  {
+    if (parseInt($('#w').val())) return true;
+    alert('Please select a crop region then press submit.');
+    return false;
+  }
+</script>
+<div class="containerbox upload_image_div">
+<img src="" style="width:<?php echo $this->UserDetails["width"]; ?>px;height:<?php echo $this->UserDetails["height"]; ?>px;" id="cropbox"/>
+<div style="text-align:right;" width="100%" height="auto">
+<div style="padding:10px 10px 0px 0px;">
+<form method="post" onsubmit="return checkCoords();" id="cropped_image_form" name="cropped_image_form" action="<?php echo $this->baseUrl('profile/upload/');?>">
+	<input type="hidden" id="x" name="x" />
+	<input type="hidden" id="y" name="y" />
+	<input type="hidden" id="w" name="w" />
+	<input type="hidden" id="h" name="h" />
+	<input type="hidden" id="input_type" name="input_type" value="image" />
+	<input type="hidden" id="file_src" name="file_src" value="<?php echo $this->baseUrl('public')."/uploads/user_images/original/".$this->UserDetails["file_name"]; ?>" />
+	<input type="hidden" id="file_name" name="file_name" value="<?php echo $this->UserDetails["file_name"]; ?>" />
+	<input type="submit" value="Done" class="btn btn-large btn-inverse" style="padding:5px 10px;margin-right:-10px;background:#BF5E26;font-weight:bold;color:#FFFFFF;cursor:pointer;"/>
+</form>
+</div>
+</div>
+<a class="close" href="javascript:void(0)">X</a>
+</div>
+<div class="clear"></div>
