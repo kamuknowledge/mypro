@@ -25,9 +25,9 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 										$path = $this->baseUrl('public/uploads')."/user_images/";
 										$image_name = "No_Image_Available.jpg";
 										$image_status = 0;
-										if($profile["profile_image"] && file_exists( $_SERVER['DOCUMENT_ROOT'].$path."crop_200_200/".$profile["profile_image"] )) {
+										if($profile["image_path"] && file_exists( $_SERVER['DOCUMENT_ROOT'].$path."crop_200_200/".$profile["image_path"] )) {
 											$path = $path."crop_200_200/";
-											$image_name = $profile["profile_image"];
+											$image_name = $profile["image_path"];
 											$image_status = 1;
 										}
 									?>
@@ -38,13 +38,13 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 									<?php if($image_status) { ?>
 									<form id="upload_image" name="upload_image" action="<?php echo $this->baseUrl('profile/upload/');?>" method="post" style="text-align:center;">
 										<div align="center" class="profile_image_change profile_image_edit">Edit Profile Picture</div>
-										<input id="avatar" type="file" name="avatar" class="profile_image_file_button"/>
+										<input id="avatar" type="file" name="avatar" class="profile_image_file_button" style="position: absolute; filter: alpha(opacity=0); font-family: Arial; font-size: 118px; top: 0px; cursor: pointer; right: 0px; opacity: 0;"/>
 									</form>
 									<a href="javascript:void(0);" id="delete_image">Delete Photo</a>
 									<?php } else { ?>
 									<form id="upload_image" name="upload_image" action="<?php echo $this->baseUrl('profile/upload/');?>" method="post" style="text-align:center;">
 										<div align="center" class="profile_image_change profile_image_upload">Upload Profile Picture</div>
-										<input id="avatar" type="file" name="avatar" class="profile_image_file_button"/>
+										<input id="avatar" type="file" name="avatar" class="profile_image_file_button" style="position: absolute; filter: alpha(opacity=0); font-family: Arial; font-size: 118px; top: 0px; cursor: pointer; right: 0px; opacity: 0;"/>
 									</form>
 									<?php } ?>
 									<div class="clear">&nbsp;</div>
@@ -97,7 +97,7 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 											</div>
 											<div class="text-right">
 												<a class="button-dark add" href="javascript:void(0);" id="save_member_profile_title"><span><span>Save</span></span></a>
-												<a class="button-grey add" href="javascript:void(0);" id="cancel_member_profile_title"><span><span>Cancel</span></span></a>
+												<a class="button-grey add common_cancel_btn" href="javascript:void(0);" id="cancel_member_profile_title"><span><span>Cancel</span></span></a>
 												<div class="clear"></div>
 											</div>
 										</div>
@@ -138,7 +138,7 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 													</div>
 													<div class="right">
 														<a class="button-dark add" href="javascript:void(0);" onclick="submit_form()"><span><span>Save</span></span></a>
-														<a class="button-grey add" href="javascript:void(0)" onclick="cancel_form()"><span><span>Cancel</span></span></a>
+														<a class="button-grey add common_cancel_btn" href="javascript:void(0)" onclick="cancel_form()"><span><span>Cancel</span></span></a>
 													</div>
 												</div>
 											</form>

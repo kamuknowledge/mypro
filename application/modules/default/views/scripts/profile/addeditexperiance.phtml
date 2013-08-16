@@ -211,6 +211,12 @@ function cancel_exp_form(id) {
 					<div class="clear"></div>
 				</div>
 			</div>
+			<div class="fields-container">
+				<div class="row">
+					<?php $present = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['present_working'] : $present_working; ?>
+					<input type="checkbox" name="present_working" id="present_working" style="vertical-align: text-bottom;margin-top:8px;" <?php if($present) echo "checked"; ?>/> <label style="margin-top:2px;">Present Working Here</label>
+				</div>
+			</div>
 		</div>
 		<div class="row">
 			<label class="width-15">Description : </label>
@@ -218,7 +224,7 @@ function cancel_exp_form(id) {
 			<div class="info"  style="margin-left: 15%;"><span class="blue">2500</span> Words Remaining.</div>
 			<div class="text-right">
 				<a class="button-dark add" href="javascript:void(0)" onclick="submit_exp_form('experiance_form_<?php echo $experiance_id; ?>')"><span><span>Save</span></span></a>
-				<a class="button-grey add" href="javascript:void(0)"onclick="cancel_exp_form('<?php echo $experiance_id; ?>')"><span><span>Cancel</span></span></a>
+				<a class="button-grey add common_cancel_btn" href="javascript:void(0)"onclick="cancel_exp_form('<?php echo $experiance_id; ?>')"><span><span>Cancel</span></span></a>
 				<div class="clear"></div>
 			</div>
 		</div>

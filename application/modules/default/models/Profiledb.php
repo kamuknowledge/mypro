@@ -280,8 +280,17 @@ class Default_Model_Profiledb  {
 	public function update_member_profile($filename="") {
 		try {
 			if($this->userid) {
-				$query = 'UPDATE apmusers SET profile_image = "'.$filename.'" WHERE userid = "'.$this->userid.'";';
+				$query = "SELECT user_image_id FROM user_images WHERE userid = '".$this->userid."'";
 				$stmt = $this->db->query($query);
+				$result = $stmt->fetchAll();
+				$image_id = (isset($result[0]["user_image_id"])) ? $result[0]["user_image_id"] : "";
+				if($image_id) {
+					$query = 'UPDATE user_images SET image_path = "'.$filename.'", statusid = 1 WHERE user_image_id = "'.$image_id.'";';
+					$stmt = $this->db->query($query);
+				} else {
+					$query = 'INSERT INTO user_images (userid, image_path, is_primary, statusid, createddatetime) values("'.$this->userid.'", "'.$filename.'", 1, 1, NOW());';
+					$stmt = $this->db->query($query);
+				}
 				return 1;
 			}
 			return 0;

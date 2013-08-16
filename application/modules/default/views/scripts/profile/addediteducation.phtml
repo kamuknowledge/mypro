@@ -78,7 +78,7 @@ function cancel_edu_form(id) {
 <form name="education_form_<?php echo $education_id; ?>" id="education_form_<?php echo $education_id; ?>">
 <div class="desc">
 	<div class="add_experience_form form">
-		<div class="left width-50">
+		<div class="left width-60">
 			<div class="row">
 				<label>School Name:</label>
 				<input type="text" value="<?php if(is_array($error->error_education_values)) { echo $error->error_education_values['school_name']; } else { echo $school_name; } ?>" id="school_name" name="school_name" <?php if($error->error_school_name != '') { echo 'class="error"'; } ?> />
@@ -147,12 +147,12 @@ function cancel_edu_form(id) {
 			</div>
 		</div>
 		<div class="row">
-			<label class="width-15">Description : </label>
+			<label class="" style="width:18%">Description : </label>
 			<textarea style="width: 80%;" rows="6" id="description" name="description"><?php if(is_array($error->error_education_values)) { echo $error->error_education_values['description']; } else { echo $school_description; } ?></textarea>
-			<div class="info"  style="margin-left: 15%;"><span class="blue">2500</span> Words Remaining.</div>
+			<div class="info"  style="margin-left: 18%;"><span class="blue">2500</span> Words Remaining.</div>
 			<div class="text-right">
 				<a class="button-dark add" href="javascript:void(0);" onclick="submit_edu_form('education_form_<?php echo $education_id; ?>')"><span><span>Save</span></span></a>
-				<a class="button-grey add" href="javascript:void(0);" onclick="cancel_edu_form('<?php echo $education_id; ?>')"><span><span>Cancel</span></span></a>
+				<a class="button-grey add common_cancel_btn" href="javascript:void(0);" onclick="cancel_edu_form('<?php echo $education_id; ?>')"><span><span>Cancel</span></span></a>
 				<div class="clear"></div>
 			</div>
 		</div>

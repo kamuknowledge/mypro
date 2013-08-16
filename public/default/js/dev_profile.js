@@ -159,6 +159,7 @@ $(document).ready(function(){
 	});
 	// About_us Functionality
 	$(".edit_aboutus").live("click", function(){
+		cancel_all();
 		$("#view_about_us").hide();
 		$("#edit_about_us").show();
 	});
@@ -198,6 +199,7 @@ $(document).ready(function(){
 		var id_array = id_str.split("_");
 		var id = id_array[2];
 		if($("#experiance_edit_"+id).html() == "") {
+			cancel_all();
 			$.ajax({
 				type : "POST",
 				url : baseUrl+"/profile/addeditexperiance",
@@ -221,6 +223,7 @@ $(document).ready(function(){
 				}
 			});
 		} else {
+			cancel_all();
 			$("#experiance_view_"+id).hide();
 			$("#experiance_edit_"+id).show();
 		}
@@ -231,6 +234,7 @@ $(document).ready(function(){
 		var id_array = id_str.split("_");
 		var id = id_array[2];
 		if($("#education_edit_"+id).html() == "") {
+			cancel_all();
 			$.ajax({
 				type : "POST",
 				url : baseUrl+"/profile/addediteducation",
@@ -253,12 +257,14 @@ $(document).ready(function(){
 				}
 			});
 		} else {
+			cancel_all();
 			$("#education_view_"+id).hide();
 			$("#education_edit_"+id).show();
 		}
 	});
 // Personal Information
 	$(".edit_personal").live("click", function(){
+		cancel_all();
 		$.ajax({
 			type : "POST",
 			url : baseUrl+"/profile/addeditpersonal",
@@ -274,6 +280,7 @@ $(document).ready(function(){
 	});
 // Addreess Information
 	$(".edit_address").live("click", function(){
+		cancel_all();
 		$.ajax({
 			type : "POST",
 			url : baseUrl+"/profile/addeditaddress",
@@ -289,6 +296,7 @@ $(document).ready(function(){
 	});
 // Member Profile title icon
 	$("#member_profile_title_icon").live("click", function(){
+		cancel_all();
 		$("#member_profile_title").hide();
 		$("#member_profile_title_edit").show();
 		return false;
@@ -332,6 +340,7 @@ $(document).ready(function(){
 		}
 	});
 	$("#avatar").live("change", function() {
+		cancel_all();
 		$("#upload_image").submit();
 	});
 	$("#delete_image").live("click", function(){
@@ -373,4 +382,9 @@ function postArray(form){
 	form = $(form).serializeArray(); 
 	for(var i in form) data[form[i].name] = form[i].value; 
 	return data; 
+}
+function cancel_all(){
+	$.each($('.common_cancel_btn'), function() {
+		$(this).click();
+	});
 }
