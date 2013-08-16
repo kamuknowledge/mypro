@@ -24,8 +24,8 @@ $config=Zend_Registry::get('config');
 			
 			
 			
-			<a alt="Your Cart" class="" href="javascript:void(0)" id="cart">
-			  <span class="top">0</span>
+			<a alt="Your Cart" class="" href="<?php echo $this->baseUrl('products/viewcart');?>" id="cart">
+			  <span class="top"><?php echo $this->CartCount;?></span>
 			  <span class="label">Cart</span>
 			</a>
 			

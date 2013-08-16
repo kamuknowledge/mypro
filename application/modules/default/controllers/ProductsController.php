@@ -173,7 +173,7 @@ class ProductsController extends Zend_Controller_Action {
 		
 			$request = $this->getRequest();
 			$Request_Values = $request->getPost();	
-			print_r($Request_Values);
+			//print_r($Request_Values);
 			
 			//if ($request->isPost() && isset($Request_Values['product_update_submit']) && $Request_Values['product_update_submit']=='Save')
 			if ($request->isPost())
@@ -188,7 +188,7 @@ class ProductsController extends Zend_Controller_Action {
 		
 				$params = $this->_getAllParams();
 				$this->view->product_id = $params['id'];
-				Print_r($params);			
+				//Print_r($params);			
 				$productdetails = $this->productssdb->getProductDetails($params);			
 				$this->view->headTitle()->append($productdetails['product_title']);
 				$this->view->productdetails = $productdetails;

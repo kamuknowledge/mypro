@@ -60,7 +60,8 @@ class HeadermenuController extends Zend_Controller_Action {
 	public function indexAction() {
 		try{			
 			$this->_helper->layout->disableLayout();
-					
+			$CartCount = $this->headermenudb->getCartCount();
+			$this->view->CartCount = $CartCount['cart_count'];
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

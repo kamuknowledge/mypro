@@ -167,24 +167,37 @@
 														<input type="hidden" name="product_id" value="<?php echo $this->product_id?>" />
 														<?php 
 														$p=0;
-														foreach($this->ProductPriceDetails as $each_ProductPriceDetails){														
-														?>
-														<input type="radio" name="product_price_id" <?php if($p==0){?>checked="checked"<?php }?> value="<?php echo $each_ProductPriceDetails['product_price_id'];?>" />
-														<?php 
-														echo $each_ProductPriceDetails['product_price_description']." &nbsp; ";													
+														foreach($this->ProductPriceDetails as $each_ProductPriceDetails){
+														
+																											
 														
 														if($each_ProductPriceDetails['product_discount']=='0'){
-															echo "Rs.".$each_ProductPriceDetails['product_price'];
-														}else{
-															
+															$price_show_desc = "Rs.".$each_ProductPriceDetails['product_price'];
+															if($p==0){$price_show = $each_ProductPriceDetails['product_price'];}
+															$price_show_attr = $each_ProductPriceDetails['product_price'];
+														}else{															
 															if($each_ProductPriceDetails['product_discount_type']=='Percentage'){
-																echo "Rs.".$each_ProductPriceDetails['product_price']."(".$each_ProductPriceDetails['product_discount']."% Discount)";
+																$price_show_desc = "Rs.".$each_ProductPriceDetails['product_price']."&nbsp;(".$each_ProductPriceDetails['product_discount']."% Discount)";
+																if($p==0){
+																	$price_show = ($each_ProductPriceDetails['product_price']-(($each_ProductPriceDetails['product_price']*$each_ProductPriceDetails['product_discount'])/100));
+																}
+																$price_show_attr = ($each_ProductPriceDetails['product_price']-(($each_ProductPriceDetails['product_price']*$each_ProductPriceDetails['product_discount'])/100));
 															}
 															
 															if($each_ProductPriceDetails['product_discount_type']=='Amount'){
-																echo "Rs.".$each_ProductPriceDetails['product_price']."(Rs.".$each_ProductPriceDetails['product_discount']." Discount)";
+																$price_show_desc = "Rs.".$each_ProductPriceDetails['product_price']."&nbsp;(Rs.".$each_ProductPriceDetails['product_discount']." Discount)";
+																if($p==0){
+																	$price_show = ($each_ProductPriceDetails['product_price']-$each_ProductPriceDetails['product_discount']);
+																}
+																$price_show_attr = ($each_ProductPriceDetails['product_price']-$each_ProductPriceDetails['product_discount']);
 															}
 														}
+														
+														?>
+														<input type="radio" name="product_price_id" onclick="javascript:return showPrice('<?php echo $price_show_attr;?>')" id="product_price_id_<?php echo $each_ProductPriceDetails['product_price_id'];?>" price="<?php echo $price_show_attr;?>" <?php if($p==0){?>checked="checked"<?php }?> value="<?php echo $each_ProductPriceDetails['product_price_id'];?>" />
+														<?php
+														echo $each_ProductPriceDetails['product_price_description']." &nbsp; ";
+														echo $price_show_desc;
 														?>
 														<br>
 														<?php $p++;}?>													
@@ -195,9 +208,15 @@
 									</div>
 								</div>
 								
+								<script type="text/javascript">
+								function showPrice(price){
+									document.getElementById('showPrice_id').innerHTML=parseFloat(price);
+								}
+								</script>
+								
 								<div class="stock-section lastUnit">									
 									<span class="fk-font-finalprice fk-font-big fk-bold final-price">
-									Rs. 8490									
+									Rs. <span id="showPrice_id"><?php echo $price_show;?></span>									
 									</span>
 									<br>
 									<div class="label fksk-label">Inclusive of taxes</div>	
@@ -344,7 +363,7 @@
 			</div>
 			
 			
-			
+			<?php /*
 			<div class="fk-pp-ugc recent-reviews fclear">
 
 					<h3 class="fk-font-big bmargin10 section-title">
@@ -353,7 +372,7 @@
 
 				
 					<!-- Review Box -->
-					<?php /*
+					
 					<div class="fk-pp-ugc-section1">
 							<div class="unit size1of2 ratings-section">
 								<div class="size1of2 unit section1">
@@ -448,7 +467,7 @@
 
 
 
-
+				<?php /*?>
 				<div class="fk-pp-ugc-section2 line">
 					<div class="unit size3of4 helpful-review-container rmargin20">
 							<h3 class="fk-font-big section-title fk-float-left">Most Helpful Reviews</h3>
@@ -508,8 +527,11 @@
 					</div>                    
 				</div>
 				
+				
+				
 			 <div class="fclear"></div>
 			</div>
+			<?php */?>
 
 	<div class="clear"></div>
 	</div>
