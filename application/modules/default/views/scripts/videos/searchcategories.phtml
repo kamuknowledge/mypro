@@ -5,7 +5,7 @@
 ?>
 	<li class="category_border">
 		<div class="product_image" align="center">
-			<a href="<?php echo $this->baseUrl('videos/list/').$cat_list['album_id'];?>">
+			<a href="<?php echo $this->baseUrl('videos/list/cat_id/').$cat_list['album_id'];?>">
 			<input type="hidden" name="cal_id" value="<?php echo $cat_list['album_id'];?>" />
 			<?php 
 			$file	=	$this->baseUrl('public/uploads/video_category_images/'.$cat_list['album_image']);

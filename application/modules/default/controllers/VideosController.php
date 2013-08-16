@@ -174,7 +174,7 @@ class VideosController extends Zend_Controller_Action {
 			$video_list	=	$this->Videosdb->getVideosByCatId($userid,$video_cat_id,$searchWord);//Pass the login userid for get category user videos
 			//echo "<pre>";print_r($video_list);exit;
 			$this->view->searchvideo	=	$video_list;	// Pass the data to iew file.
-			}catch (Exception $e){
+		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
@@ -217,6 +217,46 @@ class VideosController extends Zend_Controller_Action {
 		}
 	}
 	
+	/**
+     * Purpose: Add category action
+     * Access is public
+     * @param	
+     * @return  
+     */
+	
+	public function addnewvideoAction() {
+		try{	
+			$this->_helper->layout->disableLayout();
+			$params = $this->_getAllParams(); 
+			//echo "<pre>";print_r($params);//exit;			
+			$LogoSet = $this->Videosdb->insertVideo($params['video_category'],$params['video_name'],$params['video_path'], $this->session->userid);
+			$this->_redirect('videos/list/cat_id/'.$params['video_category']);
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	/**
+     * Purpose: delete video action
+     * Access is public
+     * @param	intiger fileid
+     * @return  
+     */
+	
+	public function deletevideoAction() {
+		try{
+			$this->_helper->layout->disableLayout(); // Set default layout		
+			$cat_id = $this->_getParam('cat_id');       
+			$file_id = $this->_getParam('file_id');       
+			$video_list	=	$this->Videosdb->deleteVideos($file_id);
+			//echo "<pre>";print_r($video_list);exit;
+			$this->_redirect('videos/list/cat_id/'.$cat_id);
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 
 }
 ?>

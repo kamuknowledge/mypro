@@ -102,15 +102,18 @@ class Default_Model_Videosdb {
 		$userid     = $this->session->userid; // Get login userid
 		//echo $query = "SELECT * FROM social_album_files saf JOIN social_album sa ON saf.album_id = sa.album_id WHERE saf.userid='".$user_id."'";
 			$select= $this->db->select();
-			$select->from(array('saf' => 'social_album_files'),array('file_title','file_path','file_id','file_path','updateddatetime','createddatetime') );
+			$select->from(array('saf' => 'social_album_files'),array('file_title','file_path','album_id','file_id','file_path','updateddatetime','createddatetime') );
 			$select->joinLeft(array('sa' => 'social_album'),
                     'saf.album_id = sa.album_id',array('album_description','album_image'));
-			$select->where('saf.userid =?',$user_id);		
-			$select->where('saf.album_id =?',$video_cat_id);
+			$select->where('saf.userid =?',$user_id);
+			if($video_cat_id != ''){
+				$select->where('saf.album_id =?',$video_cat_id);
+			}
 			if($searchWord !=''){
 				//$select->where('album_description=?',trim($searchWord));
 				 $select->where('saf.file_title LIKE  "%' . trim($searchWord) . '%"');
-            }			
+            }	
+			$select->order(array('saf.file_id DESC'));			
 			//echo $select;
 				//		exit;			
 			$stmt 	= $this->db->query($select);			
@@ -141,6 +144,50 @@ class Default_Model_Videosdb {
 			$stmt 	= $this->db->query($query);			
 			//return $stmt->fetchAll();
 		
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	/**
+     * Purpose: Fetching list
+     * Access is limited to class and extended classes
+     *
+     * @param	varchar	$cond Search condition
+     * @return  object	Returns status message.	
+     */
+	
+	public function insertVideo($cat_id,$vname,$vpath,$userid){
+		try {	
+			// Example Method List
+
+		$query = "INSERT INTO social_album_files (album_id,userid,file_title,file_path,file_access_specifiers,createddatetime,statusid,createdby) 
+					values('".$cat_id."','".$userid."','".$vname."','".$vpath."','public','".date('Y-m-d H:i:s')."',1,'".$userid."')";			
+			//echo $query; exit;			
+			$stmt 	= $this->db->query($query);			
+			//return $stmt->fetchAll();
+		
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	/**
+     * Purpose: Delete video file
+     * Access is limited to class and extended classes
+     *
+     * @param	intiger $file_id	
+    */
+	
+	public function deleteVideos($file_id){
+		try {	
+		//$dbss->delete('social_album_files', array('file_id = ?' => $file_id));
+		$dbss	= "DELETE FROM social_album_files WHERE file_id ='".$file_id."'";	
+		//echo $dbss;exit;
+		$this->db->query($dbss);
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

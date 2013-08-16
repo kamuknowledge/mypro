@@ -64,11 +64,12 @@
 </div>
 <div class="clear"></div>
 </div>
+<!-- Add new video category -->
 <div id="add_category_form" style="display:none;">
 <div class="register-form containerbox">
 		<p>Create you are own category</p>
 		<div class="login-part">
-			<form name="category_form" id="category_form" action="addcategory" method="POST" enctype="multipart/form-data">
+			<form name="category_form" id="category_form" action="<?php echo $this->baseUrl('videos/addcategory');?>" method="POST" enctype="multipart/form-data">
 			<div class="row"><label>Category Name</label><input type="text" id="cat_name" name="cat_name" /></div>
 			<div class="row"><label>Category Image</label><input type="file" id="cat_image" name="cat_image"/></div>
 			<div class="btn-container"><input type="submit" id="sbt_login" name="sbt_login" value="Add"></div>

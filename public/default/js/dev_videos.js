@@ -48,5 +48,23 @@ $(document).ready(function(){
 			$('#videolists').html(msg);
 	   }, "html");
    
-   }  	
+   } 
+
+//Add new video 
+$('#addvideo').live('click',function(){
+	$('#add_video_form').show().fancyBox();
+	});   
+
+
+// Search videos ,
+   search_video = function(){
+  	var search = $('#searchvideo').val(); 
+  	var catId = ''; 
+		$.post(baseUrl + '/videos/searchvideo', { search_word: search,cat_id:catId },
+		   function(msg){
+			$('#videolists').html(msg);
+		   }, "html");
+   
+   }	
+
 });
