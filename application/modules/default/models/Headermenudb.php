@@ -61,8 +61,11 @@ class Default_Model_Headermenudb extends Application_Model_DataBaseOperations {
 	
 	public function getCartCount(){
 		try {
-			$query = "SELECT count(temp_cart_id) as cart_count FROM store_users_temp_cart sutc WHERE sutc.statusid=1 AND (sutc.userid=".$this->session->userid." OR sutc.user_session_id = '".$this->sessionid->session_id."')";
-			//exit;			
+			if(trim($this->session->userid)!=''){
+				$query = "SELECT count(temp_cart_id) as cart_count FROM store_users_temp_cart sutc WHERE sutc.statusid=1 AND (sutc.userid=".$this->session->userid." OR sutc.user_session_id = '".$this->sessionid->session_id."')";
+			}else{
+				$query = "SELECT count(temp_cart_id) as cart_count FROM store_users_temp_cart sutc WHERE sutc.statusid=1 AND (sutc.user_session_id = '".$this->sessionid->session_id."')";
+			}
 			$stmt = $this->db->query($query);			
 			return $stmt->fetch();
 			
