@@ -16,3 +16,21 @@ color: #bd4247;
     margin: 0;
     padding: 0;
 }
+
+
+
+.button-flag-yes {
+    background: url("../../default/images/app-icons.png") no-repeat scroll 0 0 transparent;
+    color: #000000;
+    padding: 3px 3px 6px 18px;
+	background-position: -134px -15px;
+    text-shadow: 1px 1px #FFFFFF;
+}
+
+.button-flag-no {
+    background: url("../../default/images/app-icons.png") no-repeat scroll 0 0 transparent;
+    color: #000000;
+    padding: 3px 3px 6px 18px;
+	background-position: -150px -15px;
+    text-shadow: 1px 1px #FFFFFF;
+}

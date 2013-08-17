@@ -1,0 +1,85 @@
+<?php
+$this->session = new Zend_Session_Namespace('MyClientPortal');
+$this->billingaddress = new Zend_Session_Namespace('MyClientPortalBillingAddress');
+$isSignedIn = $this->session->isSignedIn;
+$displayName = $this->session->name; 
+$config=Zend_Registry::get('config');
+$account = $config->site->paypal->business->account;
+$base_url = $config->site->baseurl;
+?>
+<div class="main_body">
+	<div class="left width-100">
+		<div id="checkoutSteps">
+		
+			<?php 
+			if($isSignedIn==1){
+				$active_tab = 2;
+			}else{
+				$active_tab = 1;
+			}
+			?>
+			
+			
+			<ul class="trigger">
+				<li>
+					<a href="javascript:void(0)" rel="#login_panel"><span>1</span>Login</a>
+				</li>
+				<li>
+					<a href="javascript:void(0)" ><span>2</span>Billing / Shipping Address</a>
+				</li>
+				<li>
+					<a href="javascript:void(0)" ><span>3</span>Order Summary</a>
+				</li>
+				<li class="active">
+					<a href="javascript:void(0)" <?php if($isSignedIn==1){?>rel="#payment_panel"<?php }?>><span>4</span>Payment Options</a>
+				</li>
+			</ul>
+			<div class="container">
+			
+			
+			
+				
+				
+				
+				
+					
+					
+					
+					
+				<div id="payment_panel" style="min-height:400px;" class="cont" style="display:<?php if($active_tab==2){?>block<?php }else{?>none<?php }?>;" >
+				
+					
+					<div class="clear"><br></div>
+					
+					<style type="text/css">					
+					.alert-success {
+						background-color: #F9FFE6;
+						border-color: #5F7A19;
+						border: 1px solid #5F7A19;
+						border-radius: 4px 4px 4px 4px;
+						color: #5F7A19;
+						margin-bottom: 18px;
+						padding: 8px 35px 8px 14px;
+						text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+						font-weight:bold;
+						font-size:14px;
+						line-height:25px;
+					}
+					</style>
+					<br><br><br>
+					<div class="alert-success">
+					<img src="<?php echo $this->baseUrl('public/default/images/success.png');?>" />
+					Your transaction was SUCCESSFUL. <!--You have been charged: $ 58.28-->
+					</div>
+					
+		
+					
+					<div style="clear"><br></div>
+					<div class="clear"></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>

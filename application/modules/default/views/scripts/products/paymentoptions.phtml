@@ -1,0 +1,114 @@
+<?php
+$this->session = new Zend_Session_Namespace('MyClientPortal');
+$this->billingaddress = new Zend_Session_Namespace('MyClientPortalBillingAddress');
+$isSignedIn = $this->session->isSignedIn;
+$displayName = $this->session->name; 
+$config=Zend_Registry::get('config');
+$account = $config->site->paypal->business->account;
+$base_url = $config->site->baseurl;
+?>
+<div class="main_body">
+	<div class="left width-100">
+		<div id="checkoutSteps">
+		
+			<?php 
+			if($isSignedIn==1){
+				$active_tab = 2;
+			}else{
+				$active_tab = 1;
+			}
+			?>
+			
+			
+			<ul class="trigger">
+				<li <?php if($active_tab==1){?>class="active"<?php }?>>
+					<a href="javascript:void(0)" rel="#login_panel"><span>1</span>Login</a>
+				</li>
+				<li>
+					<a href="javascript:void(0)" <?php if($isSignedIn==1){?>rel="#shipping_panel"<?php }?>><span>2</span>Billing / Shipping Address</a>
+				</li>
+				<li>
+					<a href="javascript:void(0)" <?php if($isSignedIn==1){?>rel="#order_summary"<?php }?>><span>3</span>Order Summary</a>
+				</li>
+				<li <?php if($active_tab==2){?>class="active"<?php }?>>
+					<a href="javascript:void(0)" <?php if($isSignedIn==1){?>rel="#payment_panel"<?php }?>><span>4</span>Payment Options</a>
+				</li>
+			</ul>
+			<div class="container">
+			
+			
+			
+				<div id="login_panel" class="cont" style="display:<?php if($active_tab==1){?>block<?php }else{?>none<?php }?>;">
+					<div style="clear:both;"><br></div>
+					
+					<?php if($isSignedIn==1){?>
+						<a href="javascript:void(0)" rel="#shipping_panel">					
+						<?php echo "Hello: ".$displayName;?> Please click here to Continue
+						</a>
+					<?php }else{?>					
+						<a id="signup" class="" href="javascript:void(0)" alt="Your Account">
+						<span class="label" style="padding-left:20px">Click Here For Sign-In</span>
+						</a>
+					<?php }?>
+					
+					<div style="clear:both;"><br></div>
+				</div>
+				
+				
+				
+					
+					
+					
+					
+				<div id="payment_panel" class="cont" style="display:<?php if($active_tab==2){?>block<?php }else{?>none<?php }?>;" >
+				
+					
+					<div class="clear"><br></div>
+					
+					
+					
+					
+					<table width="100%">
+					<tr>
+						<td style="text-align:center;">
+							<img src="<?php echo $this->baseUrl('public/default/images/paypal_verified.gif');?>">
+							<img src="<?php echo $this->baseUrl('public/default/images/paypal-logo-2.jpg');?>">
+						</td>					
+					</tr>
+					<tr>
+						<td style="text-align:center;">
+							<div style="clear:both; height:50px;"></div>							
+							<h3 style="font-size:14px; font-weight:bold; color:#000000;">Amount : Rs. <?php echo  number_format($this->sub_total_product_price, 2, '.', '');?></h3>
+							<div class="clear"><br></div>
+							
+							<form method="post" action="https://www.sandbox.paypal.com/cgi-bin/webscr">
+							<input type="hidden" name="cmd" value="_xclick">
+							<input type="hidden" name="business" value="<?php echo $account;?>">		
+							<input type="hidden" name="item_name" value="Getlinc Member Code : GL<?php echo $this->session->userid;?>">
+							<input type="hidden" name="amount" value="<?php echo $this->sub_total_product_price;?>">
+							<input type="hidden" name="currency_code" value="USD">
+							<input type="hidden" name="item_number" value="<?php echo $this->session->userid;?>">
+							<input type="hidden" name="custom" value="LOAD_FUNDS">
+							<input type="hidden" name="return" value="<?php echo $base_url.$this->baseUrl('products/paymentstatus');?>">
+							<input type="hidden" name="cancel_return" value="<?php echo $base_url.$this->baseUrl('products/paymentcancel');?>">
+							<input type="hidden" name="notify_url" value="<?php echo $base_url.$this->baseUrl('products/ipn');?>">
+							<input class="anchor_link_button" type="submit" name="submit_billing_shipping" value="Make Payment" >
+							</form>
+		
+							
+						</td>					
+					</tr>
+					</table>
+					
+		
+					
+					<div style="clear"><br><br></div>					
+					By clicking the "MAKE PAYMENT" button to agree to pay the amount stated above and payment will be immediately processed.
+					<div class="clear"></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>

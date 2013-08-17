@@ -372,6 +372,60 @@ class ProductsController extends Zend_Controller_Action {
 	try{			
 			$this->view->title = "Order Summary";
 			
+			$ViewCartProductDetails = $this->productssdb->getViewCartProductDetails();
+			$this->view->ViewCartProductDetails = $ViewCartProductDetails;
+		
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function paymentoptionsAction() {
+		try{			
+			$this->view->title = "Payment Options";
+
+			$ViewCartProductDetails_array = $this->productssdb->getViewCartProductDetails();			
+			
+			if(count($ViewCartProductDetails_array)>0){					
+												
+				$sub_total_product_price = 0;
+				foreach($ViewCartProductDetails_array  as $ViewCartProductDetails){									
+									
+					if($ViewCartProductDetails['product_discount']!='0' && trim($ViewCartProductDetails['product_discount_type'])!=''){
+						
+						if(trim($ViewCartProductDetails['product_discount_type'])=='Percentage'){
+							$product_price = $ViewCartProductDetails['product_price'] - (($ViewCartProductDetails['product_price']*$ViewCartProductDetails['product_discount'])/100);
+						}
+						
+						if(trim($ViewCartProductDetails['product_discount_type'])=='Amount'){
+							$product_price = $ViewCartProductDetails['product_price'] - $ViewCartProductDetails['product_discount'];
+						}
+					}else{
+						$product_price = $ViewCartProductDetails['product_price'];
+					}
+					
+					$sub_product_price = $product_price * $ViewCartProductDetails['product_quantity'];
+					
+					$sub_total_product_price = $sub_total_product_price + $sub_product_price;
+					
+				}
+			}
+			
+			$this->view->sub_total_product_price = $sub_total_product_price;
+			
 			$params = $this->_getAllParams();
 			$request = $this->getRequest();
 			$Request_Values = $request->getPost();
@@ -380,6 +434,89 @@ class ProductsController extends Zend_Controller_Action {
 				
 			}
 		
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function paymentstatusAction() {
+	try{			
+			$this->view->title = "Payment Status";		
+			
+			
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function paymentcancelAction() {
+		try{			
+			$this->view->title = "Payment Cancel";		
+			
+			echo "payment cancel";
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function ipnAction() {
+		try{
+			$this->_helper->layout->disableLayout();
+			
+			echo "hi";
+			
+			$to      = 'phpdeveloper.web@gmail.com';			
+			$subject = "IPN Status : ".date('d-m-Y H:i:s')."-".time();			
+			$message = "";
+			$message .= "$_GET: ".print_r($_GET,true);
+			$message .= "$_POST: ".print_r($_POST,true);
+			$message .= "$_REQUEST: ".print_r($_REQUEST,true);
+			$headers = 'From: getlinc@gmail.com' . "\r\n" .'Reply-To: getlinc@gmail.com' . "\r\n" .'X-Mailer: PHP/' . phpversion();
+
+			mail($to, $subject, $message, $headers);
+			echo "hi";
+			exit;
+			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
