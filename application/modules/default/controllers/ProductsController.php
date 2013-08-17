@@ -26,6 +26,7 @@
 class ProductsController extends Zend_Controller_Action { 
 	public $session;	// used for managing session with NAMESPACE portal
 	public $error;		// used for managing session with NAMESPACE portalerror
+	public $billingaddress;
 	private $productss;		// used for creating an instance of model, Access is with in the class	
 	private $productssdb;
 	
@@ -42,6 +43,7 @@ class ProductsController extends Zend_Controller_Action {
 		//Assigning session
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		$this->billingaddress = new Zend_Session_Namespace('MyClientPortalBillingAddress');
 		
 		// Calling DB Operations and Validations Classes
 		$this->productss = new Default_Model_Productss();
@@ -314,9 +316,70 @@ class ProductsController extends Zend_Controller_Action {
 	
 	public function placeorderAction() {
 	try{			
+			$this->view->title = "Place Order";
 			
+			$params = $this->_getAllParams();
+			$request = $this->getRequest();
+			$Request_Values = $request->getPost();
+			if ($request->isPost()) {
+				
+				$this->billingaddress->billing_first_name 		= $params['billing_first_name'];
+				$this->billingaddress->billing_last_name 		= $params['billing_last_name'];
+				$this->billingaddress->billing_email_address 	= $params['billing_email_address'];
+				$this->billingaddress->billing_street_address 	= $params['billing_street_address'];
+				$this->billingaddress->billing_landmark 		= $params['billing_landmark'];
+				$this->billingaddress->billing_address_lane_2 	= $params['billing_address_lane_2'];
+				$this->billingaddress->billing_city 			= $params['billing_city'];
+				$this->billingaddress->billing_state 			= $params['billing_state'];
+				$this->billingaddress->billing_pincode 			= $params['billing_pincode'];
+				$this->billingaddress->billing_phone 			= $params['billing_phone'];
+				
+				$this->billingaddress->shipping_first_name 		= $params['shipping_first_name'];
+				$this->billingaddress->shipping_last_name 		= $params['shipping_last_name'];
+				$this->billingaddress->shipping_email_address 	= $params['shipping_email_address'];
+				$this->billingaddress->shipping_street_address 	= $params['shipping_street_address'];
+				$this->billingaddress->shipping_landmark 		= $params['shipping_landmark'];
+				$this->billingaddress->shipping_address_lane_2 	= $params['shipping_address_lane_2'];
+				$this->billingaddress->shipping_city 			= $params['shipping_city'];
+				$this->billingaddress->shipping_state 			= $params['shipping_state'];
+				$this->billingaddress->shipping_pincode 		= $params['shipping_pincode'];
+				$this->billingaddress->shipping_phone 			= $params['shipping_phone'];
+				$this->billingaddress->submit_billing_shipping 	= $params['submit_billing_shipping'];
+				
+				$this->_redirect('products/ordersummary/');
+			}
+		
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function ordersummaryAction() {
+	try{			
+			$this->view->title = "Order Summary";
 			
-			
+			$params = $this->_getAllParams();
+			$request = $this->getRequest();
+			$Request_Values = $request->getPost();
+			if ($request->isPost()) {
+				
+				
+			}
+		
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
