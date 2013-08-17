@@ -28,3 +28,32 @@
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	text-align:center;	
 }
+
+.button-edit {
+    background: url("../images/app-icons.png") no-repeat scroll 0 0 transparent;
+    color: #000000;
+    padding: 3px 3px 6px 18px;
+	background-position: -153px 3px;
+    text-shadow: 1px 1px #FFFFFF;
+}
+.button-delete {
+    background: url("../images/btn_icons.png") no-repeat scroll 0 0 transparent;
+    color: #000000;
+    padding: 6px 6px 5px 28px;
+    text-shadow: 1px 1px #FFFFFF;
+}
+
+.anchor_link_button {
+    background: linear-gradient(to bottom, #F4801F 0%, #F99E1A 100%) repeat scroll 0 0 transparent;
+    border: 1px solid #E96B02;
+    color: #FFFFFF;
+    margin-top: 10px;
+    padding: 5px 12px;
+}
+.anchor_link_button:hover {
+    background: linear-gradient(to bottom, #F4801F 0%, #F99E1A 100%) repeat scroll 0 0 transparent;
+    border: 1px solid #E96B02;
+    color: #000000;
+    margin-top: 10px;
+    padding: 5px 12px;
+}

@@ -312,7 +312,7 @@ class Default_Model_Productssdb {
 					store_users_temp_cart sutc LEFT JOIN store_products sp  ON (sutc.product_id = sp.product_id)
 					LEFT JOIN store_products_images spi ON (sutc.product_id = spi.product_id AND spi.product_thumbnail=1)
 					LEFT JOIN store_products_price spp ON (sutc.product_id = spp.product_id AND sutc.product_price_id = spp.product_price_id)
-					WHERE sutc.user_session_id = '".$this->sessionid->session_id."' ".$userid_condition."";
+					WHERE sutc.statusid=1 AND (sutc.user_session_id = '".$this->sessionid->session_id."' ".$userid_condition.")";
 			
 			//exit;			
 			$stmt = $this->db->query($query);			
@@ -342,6 +342,50 @@ class Default_Model_Productssdb {
 			//echo $query;exit;
 			$stmt = $this->db->query("CALL SPviewcartinsert(?, ?, ? , ?, ?)", array($product_id,$product_price_id,$session_id,$action,$userid));			
 			return $stmt->fetch();			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	/**
+     * Purpose: Creates product and returns status of the user creation process 
+     *
+     * Access is limited to class and extended classes
+     *    
+     * @return  object	Returns status message.	
+     */
+	public function removeIteam($temp_cart_id){
+		try {
+			$sql_query = "UPDATE store_users_temp_cart SET statusid=3 WHERE temp_cart_id='".$temp_cart_id."'";
+			//exit;
+			$stmt = $this->db->query($sql_query);			
+			return $stmt;			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	/**
+     * Purpose: Creates product and returns status of the user creation process 
+     *
+     * Access is limited to class and extended classes
+     *    
+     * @return  object	Returns status message.	
+     */
+	public function updateIteamQty($temp_cart_id,$product_qty){
+		try {
+			$sql_query = "UPDATE store_users_temp_cart SET product_quantity=".$product_qty." WHERE temp_cart_id='".$temp_cart_id."'";
+			//exit;
+			$stmt = $this->db->query($sql_query);			
+			return $stmt;			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

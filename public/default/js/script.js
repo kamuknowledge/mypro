@@ -39,13 +39,13 @@
 	};
 })(jQuery);
 $(document).ready(function(){
-	/*$('#checkoutSteps ul li a').click(function(){
+	$('#checkoutSteps ul li a').click(function(){
 		$('#checkoutSteps ul li').removeClass('active');
 		$(this).parent().addClass('active');
 		 $('#checkoutSteps .container .cont').hide();
 		 var id = $(this).attr('rel');
 		 $(id).show();
-	});*/
+	});
 	
 	$('#signup').live('click',function(){
 		/*$.ajax({

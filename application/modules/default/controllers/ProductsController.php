@@ -238,5 +238,91 @@ class ProductsController extends Zend_Controller_Action {
 	}
 	
 	
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function removeiteamAction() {
+	try{			
+			$this->_helper->layout->disableLayout();
+			
+			$params = $this->_getAllParams();
+			$temp_cart_id = $params['temp_cart_id'];
+			$removed = $this->productssdb->removeIteam($temp_cart_id);
+			
+			$ViewCartProductDetails = $this->productssdb->getViewCartProductDetails();
+			$this->view->ViewCartProductDetails = $ViewCartProductDetails;
+			
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function viewcartupdateAction() {
+	try{			
+			$this->_helper->layout->disableLayout();
+			$params = $this->_getAllParams();
+			//print_r($params);exit;
+			
+			$temp_cart_id = $params['temp_cart_id'];
+			$product_qty = $params['product_qty'];
+			$updated = $this->productssdb->updateIteamQty($temp_cart_id,$product_qty);
+			
+			$ViewCartProductDetails = $this->productssdb->getViewCartProductDetails();
+			//print_r($ViewCartProductDetails);exit;
+			$this->view->ViewCartProductDetails = $ViewCartProductDetails;
+			
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function placeorderAction() {
+	try{			
+			
+			
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
 }
 ?>

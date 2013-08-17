@@ -3,117 +3,150 @@
 //print_r($this->ViewCartProductDetails);
 ?>
 <div class="main_body">
-					<div class="left width-100">
+<div class="left width-100">
 <div id="cart-table">
-							<div class="cart-header">
-								<span></span>
-								<a href="javascript:void(0)" >Cart <span>(<?php echo count($this->ViewCartProductDetails);?>)</span></a>
-								<div class="clear"></div>
-							</div>
-							<div class="cart-content">
-								<div class="table_cont">
-								
-								
-									<div class="table-header">
-										<div class="row">
-											<div class="col prd_img">&nbsp;</div>
-											<div class="col prd_info">Item Description</div>											
-											<div class="col	prd_price" style="width:100px;">Price</div>
-											<div class="col prd_qty" style="width:50px;">Qty.</div>
-											<div class="col prd_total">Subtotal</div>
-											<div class="col prd_action">&nbsp;</div>
-											<div class="clear"></div>
-										</div>
-									</div>
-								
+	<div class="cart-header">
+		<span></span>
+		<a href="javascript:void(0)" >Cart <span>(<?php echo count($this->ViewCartProductDetails);?>)</span></a>
+		<div class="clear"></div>
+	</div>
+	<div class="cart-content">
+		<div class="table_cont">
+		
+		
+			<div class="table-header" style="background-color:#F2F2F2;">
+				<div class="row">
+					<div class="col prd_img">&nbsp;</div>
+					<div class="col prd_info">Item Description</div>											
+					<div class="col	prd_price" style="width:100px;">Price</div>
+					<div class="col prd_qty" style="width:75px;">Qty.</div>
+					<div class="col prd_total" style="width:100px;">Subtotal</div>
+					<div class="col prd_action" style="width:20px;">&nbsp;</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		
+			
+			
+			<?php if(count($this->ViewCartProductDetails)>0){?>
+			<div class="table-body">
+			
+				<?php
+				$special_array   = array(" ",".",";","|","/",",","'","[","]","{","}","--",":","~","`","!","@","#","$","%","^","&","*","(",")","+","?");
+				$replace = '-';										
+				$sub_total_product_price = 0;
+				foreach($this->ViewCartProductDetails  as $ViewCartProductDetails){?>										
+				<div class="row odd">
+				
+					<div class="col prd_img">
+					<?php if($ViewCartProductDetails['product_title']!=''){?>
+						<img src="<?php echo $this->baseUrl('public/uploads/product_images/').$ViewCartProductDetails['product_image'];?>" title="<?php echo $ViewCartProductDetails['product_title'];?>" alt="<?php echo $ViewCartProductDetails['product_title'];?>" />
+					<?php }else{?>
+						<img src="<?php echo $this->baseUrl('public/uploads/product_images')."/No_Image_Available.jpg";?>" title="<?php echo $ViewCartProductDetails['product_title'];?>" alt="<?php echo $ViewCartProductDetails['product_title'];?>" />
+					<?php }?>
+					</div>
+					
+					<div class="col prd_info">
+						<div class="type">Camera</div>
+						<h2>
+							<a href="<?php echo $this->baseUrl('products/view/id/').$ViewCartProductDetails['product_id'].'/'.str_replace($special_array, $replace,$ViewCartProductDetails['product_title']); ?>">
+							<?php echo $ViewCartProductDetails['product_title'];?>
+							</a>
+							<br>
+							<?php echo $ViewCartProductDetails['product_price_description'];?>
+						</h2>
+						<?php /*<a href="javascript:void(0)" >Move to Wishlist</a>*/?>
+						<?php /*<div class="promotion">Free battery</div>*/?>
+					</div>											
+					<div class="col	prd_price" style="width:100px;">
+					<?php 
+					if($ViewCartProductDetails['product_discount']!='0' && trim($ViewCartProductDetails['product_discount_type'])!=''){
+						
+						if(trim($ViewCartProductDetails['product_discount_type'])=='Percentage'){
+							$product_price = $ViewCartProductDetails['product_price'] - (($ViewCartProductDetails['product_price']*$ViewCartProductDetails['product_discount'])/100);
+						}
+						
+						if(trim($ViewCartProductDetails['product_discount_type'])=='Amount'){
+							$product_price = $ViewCartProductDetails['product_price'] - $ViewCartProductDetails['product_discount'];
+						}
+					}else{
+						$product_price = $ViewCartProductDetails['product_price'];
+					}
+					echo "Rs.".number_format($product_price, 2, '.', '');
+					?>
+					
+					</div>
+					<div class="col prd_qty" style="width:75px;">
+					
+						<span id="product_quantity_field_<?php echo $ViewCartProductDetails['temp_cart_id'];?>" style="display:none;">
+							<input id="product_quantity_<?php echo $ViewCartProductDetails['temp_cart_id'];?>" type="text" maxlength="3" onkeypress="return isMoneyKey(event);" style="width:25px; border:#CCC solid 1px;" value="<?php echo $ViewCartProductDetails['product_quantity'];?>" name="product_quantity_<?php echo $ViewCartProductDetails['temp_cart_id'];?>">
+							<a title="Update Quantity" onclick="javascript:return changeqty('update','<?php echo $ViewCartProductDetails['temp_cart_id'];?>');" href="javascript:return void(0);">  Update</a>
+						</span>
+						
+						<span id="product_quantity_show_<?php echo $ViewCartProductDetails['temp_cart_id'];?>">
+							<?php echo $ViewCartProductDetails['product_quantity'];?>
+							<a class="button-edit" onclick="javascript:return changeqty('chnage','<?php echo $ViewCartProductDetails['temp_cart_id'];?>');" href="javascript:return void(0);"></a>
+						</span>
+
+					</div>
+					<div class="col prd_total" style="width:100px;">
+					Rs.
+					<?php
+					$sub_product_price = $product_price * $ViewCartProductDetails['product_quantity'];
+					echo number_format($sub_product_price, 2, '.', '');
+					$sub_total_product_price = $sub_total_product_price + $sub_product_price;
+					?>					
+					</div>
+					<div class="col prd_action111">
+					
 									
-									<div class="table-body">
-									
-										<?php
-										$special_array   = array(" ",".",";","|","/",",","'","[","]","{","}","--",":","~","`","!","@","#","$","%","^","&","*","(",")","+","?");
-										$replace = '-';										
-										$sub_total_product_price = 0;
-										foreach($this->ViewCartProductDetails  as $ViewCartProductDetails){?>										
-										<div class="row odd">
-										
-											<div class="col prd_img">
-											<?php if($ViewCartProductDetails['product_title']!=''){?>
-												<img src="<?php echo $this->baseUrl('public/uploads/product_images/').$ViewCartProductDetails['product_image'];?>" title="<?php echo $ViewCartProductDetails['product_title'];?>" alt="<?php echo $ViewCartProductDetails['product_title'];?>" />
-											<?php }else{?>
-												<img src="<?php echo $this->baseUrl('public/uploads/product_images')."/No_Image_Available.jpg";?>" title="<?php echo $ViewCartProductDetails['product_title'];?>" alt="<?php echo $ViewCartProductDetails['product_title'];?>" />
-											<?php }?>
-											</div>
-											
-											<div class="col prd_info">
-												<div class="type">Camera</div>
-												<h2>
-													<a href="<?php echo $this->baseUrl('products/view/id/').$ViewCartProductDetails['product_id'].'/'.str_replace($special_array, $replace,$ViewCartProductDetails['product_title']); ?>">
-													<?php echo $ViewCartProductDetails['product_title'];?>
-													</a>
-													<br>
-													<?php echo $ViewCartProductDetails['product_price_description'];?>
-												</h2>
-												<?php /*<a href="javascript:void(0)" >Move to Wishlist</a>*/?>
-												<?php /*<div class="promotion">Free battery</div>*/?>
-											</div>											
-											<div class="col	prd_price" style="width:100px;">
-											<?php 
-											if($ViewCartProductDetails['product_discount']!='0' && trim($ViewCartProductDetails['product_discount_type'])!=''){
-												
-												if(trim($ViewCartProductDetails['product_discount_type'])=='Percentage'){
-													$product_price = $ViewCartProductDetails['product_price'] - (($ViewCartProductDetails['product_price']*$ViewCartProductDetails['product_discount'])/100);
-												}
-												
-												if(trim($ViewCartProductDetails['product_discount_type'])=='Amount'){
-													$product_price = $ViewCartProductDetails['product_price'] - $ViewCartProductDetails['product_discount'];
-												}
-											}else{
-												$product_price = $ViewCartProductDetails['product_price'];
-											}
-											echo "Rs.".number_format($product_price, 2, '.', '');
-											?>
-											
-											</div>
-											<div class="col prd_qty" style="width:50px;"><?php echo $ViewCartProductDetails['product_quantity'];?></div>
-											<div class="col prd_total">
-											Rs.
-											<?php
-											$sub_product_price = $product_price * $ViewCartProductDetails['product_quantity'];
-											echo number_format($sub_product_price, 2, '.', '');
-											$sub_total_product_price = $sub_total_product_price + $sub_product_price;
-											?>
-											</div>
-											<div class="col prd_action">
-											<a href="javascript:void(0)" onclick="javascript:return removeItem('<?php echo $ViewCartProductDetails['temp_cart_id'];?>');" />Delete</a>
-											</div>
-											<div class="clear"></div>
-										</div>
-										<?php }?>
-										
-									</div>
-									<div class="table_footer">
-										<div class="row even">
-											<div class="row">
-												<div class="col"><label>Shipping</label>:<span>Free</span></div>
-											</div>
-											<div class="row">
-												<div class="col">
-													<label>Amount</label>:
-													<span>Rs.<?php echo number_format($sub_total_product_price, 2, '.', '');?></span>
-												</div>
-											</div>
-											<div class="clear"></div>
-										</div>
-									</div>
-								</div>
-								<div class="left">
-										<input  type="button" value="Continue Shopping" id="continue_shopping" >	
-								</div>
-								<div class="right">
-									<input class="checkout" type="button" value="Place Order" >
-								</div>
-								<div class="clear"></div>
-							</div>
+					<a class="button-delete" href="javascript:void(0)" onclick="javascript:return removeItem('<?php echo $ViewCartProductDetails['temp_cart_id'];?>');" ></a>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<?php }?>
+				
+			</div>
+			<div class="table_footer">
+				<div class="row even">
+					<div class="row">
+						<div class="col"><label>Shipping</label>:<span>Free</span></div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<label>Amount</label>:
+							<span>Rs.<?php echo number_format($sub_total_product_price, 2, '.', '');?></span>
 						</div>
-						</div>
-						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+			<?php }else{?>
+			<div style="color:#FF0000; font-size:14px;text-align:center; padding:15px;">
+			Your cart is empty
+			</div>
+			<?php }?>
+			
+			
+		</div>
+		
+		<br>
+		<div class="left" style="clear:both;"></div>
+		
+		<br>
+		<div class="right" style="clear:both;">			
+			<a class="anchor_link_button" id="continue_shopping" href="javascript: return void(0);">Continue Shopping</a>
+			&nbsp;
+			<?php if(count($this->ViewCartProductDetails)>0){?>
+				<a class="anchor_link_button" href="<?php echo $this->baseUrl('products/placeorder');?>">Proceed to checkout</a>
+			<?php }?>
+		</div>
+		
+		
+		<div class="clear"></div>
+	</div>
+</div>
+<div class="view_more_loader" id="ajax_loading"><img src="<?php echo $this->baseUrl('public/default/images')."/ajax-loader.gif" ?>" ></div>
+</div>
+</div>
