@@ -1,11 +1,14 @@
 <?php
+$config=Zend_Registry::get('config');
+$base_url = $config->site->baseurl;
+
 $this->session = new Zend_Session_Namespace('MyClientPortal');
 $isSignedIn = $this->session->isSignedIn;
 $displayName = $this->session->name;
 ?>
 <div class="header-top">
 			<div class="wrapper">
-				<div id="logo"><a href="<?php echo $this->baseUrl(); ?>"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/Logo.png" title="GetLinc.com" alt="getLinc.com"/></a></div>
+				<div id="logo"><a href="<?php echo $base_url; ?>"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/Logo.png" title="GetLinc.com" alt="getLinc.com"/></a></div>
 				
 				
 				<div id="links">

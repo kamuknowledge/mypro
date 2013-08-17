@@ -1,3 +1,6 @@
+<?php
+$config=Zend_Registry::get('config');
+?>
 <div id="footer-links">
 		<div class="wrapper">
 			<div class="block" id="newsletter">
@@ -59,7 +62,8 @@
 			<span>&copy; 1996-2013 GetLinc.com, Inc.</span>
 		</div>
 	</div>
-	
+
+<?php if($config->show->profiler==1){ ?>	
 <br>	
 <center><h1>Profiler</h1></center>
 <?php
@@ -96,3 +100,4 @@ echo "Longest query: \n" . $longestQuery . "\n<br><br>";
 ?>
 </div>
 <br>
+<?php }?>
