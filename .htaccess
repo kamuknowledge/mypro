@@ -10,7 +10,3 @@ RewriteRule ^.*$ index.php [NC,L]
 #RewriteRule ^(.+)/ajax$ /$1/index.php [NC,QSA,L]
 
 #RewriteRule ^.*$ index.php  /abc/ [L]
-
-RewriteRule ^cms/aboutus$ /cms/index/id/1
-RewriteRule ^([a-zA-Z0-9_-]+)/aboutus$ /cms/index/id/1
-

@@ -90,11 +90,31 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      * Initializing Router
      */
 	public function _initRoute(){
-		$frontController  = Zend_Controller_Front::getInstance();	
-		$route = new Zend_Controller_Router_Route('cms/aboutus/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>1));
-		$frontController->getRouter()->addRoute('aboutus',$route);	
-		$route = new Zend_Controller_Router_Route('cms/contactus/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>2));
+		$frontController  = Zend_Controller_Front::getInstance();
+		
+		$route = new Zend_Controller_Router_Route('getlinc/aboutus/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>1));
+		$frontController->getRouter()->addRoute('aboutus',$route);
+		
+		$route = new Zend_Controller_Router_Route('getlinc/contactus/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>2));
 		$frontController->getRouter()->addRoute('contactus',$route);
+		
+		$route = new Zend_Controller_Router_Route('getlinc/terms-and-conditions/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>3));
+		$frontController->getRouter()->addRoute('terms-and-conditions',$route);
+		
+		$route = new Zend_Controller_Router_Route('getlinc/privacy-policy/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>4));
+		$frontController->getRouter()->addRoute('privacy-policy',$route);
+		
+		$route = new Zend_Controller_Router_Route('getlinc/cancellations-and-returns/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>5));
+		$frontController->getRouter()->addRoute('cancellations-and-returns',$route);
+		
+		$route = new Zend_Controller_Router_Route('getlinc/shipping/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>6));
+		$frontController->getRouter()->addRoute('shipping',$route);
+		
+		$route = new Zend_Controller_Router_Route('getlinc/payments/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>7));
+		$frontController->getRouter()->addRoute('payments',$route);
+		
+		$route = new Zend_Controller_Router_Route('getlinc/ordering-and-tracking/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>8));
+		$frontController->getRouter()->addRoute('ordering-and-tracking',$route);
     }
 
     

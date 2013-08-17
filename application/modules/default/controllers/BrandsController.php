@@ -45,6 +45,8 @@ class BrandsController extends Zend_Controller_Action {
 
 		$this->brands = new Default_Model_Brands();
 		$this->brandsdb = new Default_Model_Brandsdb();
+		
+		$this->_helper->layout->setLayout('default/layout');
 	}
 	
     
@@ -60,6 +62,27 @@ class BrandsController extends Zend_Controller_Action {
 		try{			
 			//echo "store/index/index";
 			//exit; 
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function listAction() {
+		try{			
+			
+			//echo "hi";exit;
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
