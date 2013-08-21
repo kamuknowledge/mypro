@@ -393,7 +393,7 @@ class ProfileController extends Zend_Controller_Action {
 								$this->view->OfficeStateList = $this->profiledb->getState($country);
 							}
 						}
-						$this->view->UserDetails[] = array("display"=>"edit");
+						$this->view->UserDetails[1] = array("display"=>"edit");
 					} else if($Request_Values["type"] == "edit"){
 						if(!$this->profile->edit_address_info($params))
 							$this->view->UserDetails[] = array("display"=>"edit");
@@ -458,6 +458,7 @@ class ProfileController extends Zend_Controller_Action {
 			if ($this->getRequest()->isXmlHttpRequest()) {
 				$this->profiledb->update_member_profile();
 			}
+			echo 1;exit;
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

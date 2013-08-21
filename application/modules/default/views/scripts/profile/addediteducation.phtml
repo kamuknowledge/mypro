@@ -49,6 +49,7 @@ $(document).ready(function(){
 				},
 				success : function(data) {
 					if(save_type == "new") {
+						CreateSuccess("Education details added successfully.");
 						$("#education_view_<?php echo $education_id; ?>").html("");
 						$("#education_edit_<?php echo $education_id; ?>").html("");
 						$("#education_view_<?php echo $education_id; ?>").hide();
@@ -56,6 +57,7 @@ $(document).ready(function(){
 						if($("#education_form_new")) $("#education_form_new").remove();
 						$("#education_edit_<?php echo $education_id; ?>").after(data);
 					} else {
+						CreateSuccess("Education details updated successfully.");
 						$("#education_view_<?php echo $education_id; ?>").html(data);
 						$("#education_edit_loading_<?php echo $education_id; ?>").hide();
 						$("#education_edit_<?php echo $education_id; ?>").hide();

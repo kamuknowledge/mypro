@@ -126,7 +126,9 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 										<h2 class="title_have_image about">About<span class="edit_aboutus icon"></span></h2>
 									</div>
 										<div class="desc" id="view_about_us">
-											<?php echo $profile["about_us"]; ?>
+											<?php if($profile["about_us"]) echo $profile["about_us"]; else { ?>
+											<div class="add_about edit_aboutus" id="mem_abt_edit" > <a href="javascript:void(0)"></a>Add About</div>
+											<?php } ?>
 										</div>
 										<div class="desc about" style="display:none;" id="edit_about_us">
 											<form name="form_about_us" id="form_about_us" method="POST" action="#">
@@ -186,7 +188,7 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 										<?php foreach($education as $key => $value) { ?>
 										<div class="education_view" id="education_view_<?php echo $value["education_id"]; ?>">
 											<h2 class="title_have_image educat"><?php echo $value["school_name"]; ?><span class="edit_education edit_education_<?php echo $value["education_id"]; ?> icon" id="edit_education_<?php echo $value["education_id"]; ?>"></span><div id="education_edit_loading_<?php echo $value["education_id"]; ?>" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div></h2>
-											<span class="caption"><?php echo $value["school_name"].", ".$value["specialization"]; ?></span>
+											<span class="caption"><?php echo $value["school_name"].($value["specialization"] ? ", ".$value["specialization"] : ""); ?></span>
 											<span class="information"><?php echo ($value["from_month"]) ? date("F", mktime(0, 0, 0, $value["from_month"], 10)) : 0; ?> <?php echo $value["from_year"]; ?> - To <?php echo ($value["present_working"]) ? "Present" : (($value["to_month"]) ? date("F", mktime(0, 0, 0, $value["to_month"], 10)) : 0)." ".$value["to_year"]; ?></span>
 											<p><?php echo $value["education_notes"]; ?></p>
 										</div>
@@ -201,16 +203,20 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 										<a href="javascript:void(0);" class="edit_personal" id="edit_personal"><span>+</span>Add/Change</a>
 									</div>
 									<div class="desc personal_view" id="personal_view">
+										<?php if($profile["date_of_birth"] != "0000-00-00" || $profile["marital_status"] || $profile["interests"] || $profile["phonenumber"]) { ?>
 										<ul>
-											<li><label>Birthday : </label><span class="blue"><?php echo $profile["date_of_birth"]; ?></span></li>
+											<li><label>Birthday : </label><span class="blue"><?php echo ($profile["date_of_birth"] != "0000-00-00") ? $profile["date_of_birth"] : ""; ?></span></li>
 											<li><label>Marital Status : </label><span class="blue"><?php echo $profile["marital_status"]; ?></span></li>
 											<li><label>Interests : </label><span class="blue"><?php echo $profile["interests"]; ?></span></li>
 											<!--li><label>Honors & Awards : </label><span class="blue">Honors & Awards Honors & Awards Honors & Awards</span></li>
 											<li><label>Contact For : </label><span class="blue">Contact For Contact For Contact For</span></li-->
-											<li><label>Personal : </label><span class="blue"><?php echo $profile["phonenumber"]; ?></span></li>
+											<li><label>Personal : </label><span class="blue"><?php echo ($profile["phonenumber"]) ? $profile["phonenumber"] : ""; ?></span></li>
 											<!--li><label>Website : </label><span class="blue">http://www.telugump3lyrics.com</span></li>
 											<li><label>Skype : </label><span class="blue">vip.veera</span></li-->
 										</ul>
+										<?php } else { ?>
+										<div class="add_about edit_personal" id="mem_contact"> <a href="javascript:void(0)"></a>Add Personal Information</div>
+										<?php } ?>
 									</div>
 								</div>
 								<div class="profile_info_block">
@@ -219,16 +225,21 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 										<a href="javascript:void(0)" class="edit_address" id="edit_address"><span>+</span>Add/Change</a>
 									</div>
 										<div class="desc address_view" id="address_view">
-											<?php foreach($address as $key => $value) { ?>
+											<?php $addr_flag = 0; if(count($address) > 0) { foreach($address as $key => $value) { ?>
+											<?php if($value["address1"] || $value["address2"] || $value["street"] || $value["city"] || $value["name"] || $value["country"] || $value["postal_code"]) { $addr_flag = 1; ?>
 												<div class="left width-50">
 													<h3><?php echo $value["address_type"]; ?></h3>
-													<?php echo $value["address1"].", ".$value["address2"]; ?>,<br/>
-													<?php echo $value["street"]; ?>,<br/>
-													<?php echo $value["city"]; ?>,<br/>
-													<?php echo $value["name"]; ?>,<br/>
-													<?php echo $value["country"]; ?>,<br/>
+													<?php echo $value["address1"].($value["address2"] ? ", ".$value["address2"] : ""); echo ($value["street"]) ? "," : ""; ?><br/>
+													<?php echo $value["street"]; echo ($value["city"]) ? "," : ""; ?><br/>
+													<?php echo $value["city"]; echo ($value["name"]) ? "," : ""; ?><br/>
+													<?php echo $value["name"]; echo ($value["country"]) ? "," : ""; ?><br/>
+													<?php echo $value["country"]; echo ($value["postal_code"]) ? "," : ""; ?><br/>
 													<?php echo $value["postal_code"]; ?>.
 												</div>
+											<?php } } } else { $addr_flag = 1; ?>
+											<div class="add_about edit_address" id="mem_contact"> <a href="javascript:void(0)"></a>Add Address</div>
+											<?php } if(!$addr_flag) { ?>
+											<div class="add_about edit_address" id="mem_contact"> <a href="javascript:void(0)"></a>Add Address</div>
 											<?php } ?>
 											<div class="clear"></div>
 										</div>
@@ -244,3 +255,4 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 	
 </div>
 <div class="modal"><!-- Place at bottom of page --></div>
+<div id="member_success_msg" class="member_success_msg" style="display: none;"></div>

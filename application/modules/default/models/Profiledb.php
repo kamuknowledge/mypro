@@ -126,7 +126,7 @@ class Default_Model_Profiledb  {
 	public function getUserEducation($id = "") {
 		try {	
 			if($this->userid) {
-				$query = "SELECT ue.* FROM user_education ue WHERE ue.userid = '".$this->userid."' AND ue.statusid = 1;";
+				$query = "SELECT ue.* FROM user_education ue WHERE ue.userid = '".$this->userid."' AND ue.statusid = 1";
 				if($id)
 					$query .= " AND ue.education_id = ".$id;
 				$query .= " AND ue.statusid = 1;";
@@ -161,8 +161,15 @@ class Default_Model_Profiledb  {
 	public function updateAboutus($about_us) {
 		try {
 			if($this->userid) {
-				$query = 'UPDATE user_profile SET about_us = "'.$about_us.'" WHERE userid = "'.$this->userid.'";';
-				$stmt = $this->db->query($query);
+				$rows = $this->db->fetchAll('SELECT * FROM user_profile WHERE userid = "'.$this->userid.'"');
+				$numRows = sizeof($rows);
+				if($numRows > 0) {
+					$query = 'UPDATE user_profile SET about_us = "'.$about_us.'", statusid = 1, updateddatetime = NOW() WHERE userid = "'.$this->userid.'";';
+					$stmt = $this->db->query($query);
+				} else {
+					$query = 'INSERT INTO user_profile (userid, about_us, createddatetime, statusid, createdby) VALUES ('.$this->userid.', "'.$about_us.'", NOW(), 1, '.$this->userid.');';
+					$stmt = $this->db->query($query);
+				}
 				return 1;
 			}
 			return 0;

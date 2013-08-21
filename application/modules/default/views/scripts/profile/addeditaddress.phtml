@@ -41,6 +41,7 @@ $(document).ready(function(){
 					//$("#experiance_edit_loading_<?php echo $experiance_id; ?>").show();
 				},
 				success : function(data) {
+					CreateSuccess("Address details saved successfully.");
 					$("#address_view").html(data);
 					return false;
 				}
@@ -252,17 +253,22 @@ function cancel_per_form() {
 <?php
 	}
 	else {
-?>
-<?php foreach($address as $key => $value) { ?>
+	$addr_flag = 0; 
+	if(count($address) > 0) { foreach($address as $key => $value) { 
+	if($value["address1"] || $value["address2"] || $value["street"] || $value["city"] || $value["name"] || $value["country"] || $value["postal_code"]) { $addr_flag = 1; ?>
 <div class="left width-50">
 	<h3><?php echo $value["address_type"]; ?></h3>
-	<?php echo $value["address1"].", ".$value["address2"]; ?>,<br/>
-	<?php echo $value["street"]; ?>,<br/>
-	<?php echo $value["city"]; ?>,<br/>
-	<?php echo $value["name"]; ?>,<br/>
-	<?php echo $value["country"]; ?>,<br/>
+	<?php echo $value["address1"].($value["address2"] ? ", ".$value["address2"] : ""); echo ($value["street"]) ? "," : ""; ?><br/>
+	<?php echo $value["street"]; echo ($value["city"]) ? "," : ""; ?><br/>
+	<?php echo $value["city"]; echo ($value["name"]) ? "," : ""; ?><br/>
+	<?php echo $value["name"]; echo ($value["country"]) ? "," : ""; ?><br/>
+	<?php echo $value["country"]; echo ($value["postal_code"]) ? "," : ""; ?><br/>
 	<?php echo $value["postal_code"]; ?>.
 </div>
+<?php } } } else { $addr_flag = 1; ?>
+<div class="add_about edit_address" id="mem_contact"> <a href="javascript:void(0)"></a>Add Address</div>
+<?php } if(!$addr_flag) { ?>
+<div class="add_about edit_address" id="mem_contact"> <a href="javascript:void(0)"></a>Add Address</div>
 <?php } ?>
 <div class="clear"></div>
 <?php

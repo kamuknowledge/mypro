@@ -25,6 +25,7 @@ $(document).ready(function(){
 					//$("#experiance_edit_loading_<?php echo $experiance_id; ?>").show();
 				},
 				success : function(data) {
+					CreateSuccess("Personal data saved successfully.");
 					$("#personal_view").html(data);
 					return false;
 				}
@@ -93,7 +94,7 @@ function cancel_per_form() {
 		<div class="left width-50">
 			<div class="row">
 				<label>Phone Number:</label>
-				<input type="text" style="width:35%;" value="<?php if(is_array($error->error_profileinfo_values)) { echo $error->error_profileinfo_values['phone_number']; } else { echo $phone_number; } ?>" id="phone_number" name="phone_number" <?php if($error->error_phone_number != '') { echo 'class="error"'; } ?> />
+				<input type="text" style="width:35%;" value="<?php if(is_array($error->error_profileinfo_values)) { echo $error->error_profileinfo_values['phone_number']; } else { echo ($phone_number) ? $phone_number : ""; } ?>" id="phone_number" name="phone_number" <?php if($error->error_phone_number != '') { echo 'class="error"'; } ?> />
 				<?php 
 					if($error->error_phone_number != '') {
 						echo '<label for="phone_number" generated="true" class="error" style="">' .$error->error_phone_number . '</label>';
@@ -128,17 +129,21 @@ function cancel_per_form() {
 <?php
 	}
 	else {
+	if($profile["date_of_birth"] != "0000-00-00" || $profile["marital_status"] || $profile["interests"] || $profile["phonenumber"]) {
 ?>
 <ul>
-	<li><label>Birthday : </label><span class="blue"><?php echo $profile["date_of_birth"]; ?></span></li>
+	<li><label>Birthday : </label><span class="blue"><?php echo ($profile["date_of_birth"] != "0000-00-00") ? $profile["date_of_birth"] : ""; ?></span></li>
 	<li><label>Marital Status : </label><span class="blue"><?php echo $profile["marital_status"]; ?></span></li>
 	<li><label>Interests : </label><span class="blue"><?php echo $profile["interests"]; ?></span></li>
 	<!--li><label>Honors & Awards : </label><span class="blue">Honors & Awards Honors & Awards Honors & Awards</span></li>
 	<li><label>Contact For : </label><span class="blue">Contact For Contact For Contact For</span></li-->
-	<li><label>Phone : </label><span class="blue"><?php echo $profile["phonenumber"]; ?></span></li>
+	<li><label>Phone : </label><span class="blue"><?php echo ($profile["phonenumber"]) ? $profile["phonenumber"] : ""; ?></span></li>
 	<!--li><label>Website : </label><span class="blue">http://www.telugump3lyrics.com</span></li>
 	<li><label>Skype : </label><span class="blue">vip.veera</span></li-->	
 </ul>
+<?php } else { ?>
+<div class="add_about edit_personal" id="mem_contact"> <a href="javascript:void(0)"></a>Add Personal Information</div>
+<?php } ?>
 <?php
 	}
 ?>

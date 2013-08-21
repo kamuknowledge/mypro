@@ -80,3 +80,50 @@ body.loading {
 body.loading .modal {
     display: block;
 }
+.edit_aboutus{
+	height:19px;
+}
+#view_about_us{
+	padding:0 !important;
+	margin:15px 1px 1px 40px !important;
+}
+#edit_about_us textarea{
+	height: 150px !important;
+	resize: vertical;
+	font: normal 12px/18px arial;
+	padding: 5px;
+}
+.add_about{
+	background:#F9F9F9;left:0;position:relative;top:0;float:none;cursor:pointer;text-align:center;padding:20px 0;margin:20px 10px 10px 12px;font:bold 18px Arial;color:#1378bb;border-radius:3px;border:1px dashed #ccc;
+}
+.add_about:hover{
+	background: #f1f1f1;
+	color: #333;
+}
+.add_about a{
+background: url(../../images/plus_icons.png) no-repeat 0 0px;
+width: 35px;
+height: 14px;
+display:inline-block;
+}
+.add_about:hover a{
+background: url(../../images/plus_icons.png) no-repeat 0 -26px;
+}
+.profile_info_block .header h2{
+	font-weight:bold;
+	color: #333;
+}
+.member_success_msg{
+	top:0;
+	z-index: 99999;
+	width: 768px;
+	left:20%;
+	position: fixed;
+	color: green;
+	font-size: 14px;
+	background: #E5FBC4;
+	padding: 5px;
+	font-weight: bold;
+	text-align: center;
+	border: 1px solid green;
+}

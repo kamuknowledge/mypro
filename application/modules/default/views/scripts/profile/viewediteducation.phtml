@@ -11,13 +11,13 @@
 ?>
 <div class="education_view" id="education_view_<?php echo $education["education_id"]; ?>">
 	<?php } ?>
-	<h2 class="title_have_image exprce"><?php echo $education["job_title"]; ?>
+	<h2 class="title_have_image exprce"><?php echo $education["school_name"]; ?>
 		<span class="edit_education edit_education_<?php echo $education["education_id"]; ?> icon" id="edit_education_<?php echo $education["education_id"]; ?>"></span>
 		<div id="education_edit_loading_<?php echo $education["education_id"]; ?>" style="display:none;">
 			<img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" />
 		</div>
 	</h2>
-	<span class="caption"><?php echo $education["school_name"]; ?></span>
+	<span class="caption"><?php echo $education["school_name"].($education["specialization"] ? ", ".$education["specialization"] : ""); ?></span>
 	<span class="information"><?php echo ($education["from_month"]) ? date("F", mktime(0, 0, 0, $education["from_month"], 10)) : ""; ?> <?php echo $education["from_year"]; ?> - To <?php echo (($education["to_month"]) ? date("F", mktime(0, 0, 0, $education["to_month"], 10)) : "")." ".$education["to_year"]; ?></span>
 	<p><?php echo $education["education_notes"]; ?></p>
 <?php if($dis_type) { ?>

@@ -165,9 +165,9 @@ $(document).ready(function(){
 	});
 	$("#form_about_us").validate({
 		rules : {
-			about_us : {
-				required : true
-			}
+			// about_us : {
+				// required : true
+			// }
 		},
 		submitHandler: function(form) {
 			var str = $("#form_about_us").serializeArray();
@@ -182,7 +182,12 @@ $(document).ready(function(){
 				},
 				success : function(data) {
 					if(data == 1) {
-						$("#view_about_us").text(about_us);
+						CreateSuccess("About me saved successfully.");
+						if(about_us == ""){
+							$("#view_about_us").html('<div class="add_about edit_aboutus" id="mem_abt_edit"> <a href="javascript:void(0)"></a>Add About</div>');
+						} else {
+							$("#view_about_us").text(about_us);
+						}
 						$("#view_about_us").show();
 					} else {
 						$("#edit_about_us").html(data);
@@ -327,6 +332,7 @@ $(document).ready(function(){
 				},
 				success : function(data) {
 					if(data == 1) {
+						CreateSuccess("Basic member details saved successfully.");
 						$("#h2_name").html(fname+" "+lname);
 						$("#timezone_dis").html(timezone);
 						$("#member_profile_title_edit").hide();
@@ -348,6 +354,7 @@ $(document).ready(function(){
 			type : "POST",
 			url : baseUrl+"/profile/deleteimage",
 			success : function(data) {
+				CreateSuccess("Image deleted successfully.");
 				location.reload();
 			}
 		});
@@ -369,6 +376,18 @@ $(document).ready(function(){
 			}
 		});
 	});
+	$(".present_working").live("click", function() {
+		var id = $(this).attr("id");
+		var id = id.replace("present_working_","");
+		var check = ($(this).attr("checked")) ? true : false;
+		if(check) {
+			$("#to_month_"+id).hide();
+			$("#to_year_"+id).hide();
+		} else {
+			$("#to_month_"+id).show();
+			$("#to_year_"+id).show();
+		}
+	});
 });
 function submit_form(){
 	$("#form_about_us").submit();
@@ -387,4 +406,12 @@ function cancel_all(){
 	$.each($('.common_cancel_btn'), function() {
 		$(this).click();
 	});
+}
+function CreateSuccess(val){
+	var elem = $(".member_success_msg");
+	elem.html(val);
+	elem.slideDown("slow");
+	setTimeout(function(){
+		elem.slideUp("slow");
+	},3000);
 }
