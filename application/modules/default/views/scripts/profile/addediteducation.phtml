@@ -79,6 +79,7 @@ function submit_edu_form(form) {
 function cancel_edu_form(id) {
 	$("#education_edit_"+id).hide();
 	$("#education_view_"+id).show();
+	if($(".edit_education_bar")) $(".edit_education_bar").show();
 }
 function mem_edu_delete(id) {
 	$.ajax({

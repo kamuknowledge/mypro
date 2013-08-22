@@ -115,6 +115,7 @@ function submit_exp_form(form) {
 function cancel_exp_form(id) {
 	$("#experiance_edit_"+id).hide();
 	$("#experiance_view_"+id).show();
+	if($(".edit_experiance_bar")) $(".edit_experiance_bar").show();
 }
 function mem_exp_delete(id) {
 	$.ajax({

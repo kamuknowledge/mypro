@@ -205,6 +205,7 @@ $(document).ready(function(){
 		var id = id_array[2];
 		if($("#experiance_edit_"+id).html() == "") {
 			cancel_all();
+			if($(".edit_experiance_bar")) $(".edit_experiance_bar").hide();
 			$.ajax({
 				type : "POST",
 				url : baseUrl+"/profile/addeditexperiance",
@@ -229,6 +230,7 @@ $(document).ready(function(){
 			});
 		} else {
 			cancel_all();
+			if($(".edit_experiance_bar")) $(".edit_experiance_bar").hide();
 			$("#experiance_view_"+id).hide();
 			$("#experiance_edit_"+id).show();
 		}
@@ -240,6 +242,7 @@ $(document).ready(function(){
 		var id = id_array[2];
 		if($("#education_edit_"+id).html() == "") {
 			cancel_all();
+			if($(".edit_education_bar")) $(".edit_education_bar").hide();
 			$.ajax({
 				type : "POST",
 				url : baseUrl+"/profile/addediteducation",
@@ -263,6 +266,7 @@ $(document).ready(function(){
 			});
 		} else {
 			cancel_all();
+			if($(".edit_education_bar")) $(".edit_education_bar").hide();
 			$("#education_view_"+id).hide();
 			$("#education_edit_"+id).show();
 		}
