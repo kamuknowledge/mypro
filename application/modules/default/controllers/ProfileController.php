@@ -397,11 +397,14 @@ class ProfileController extends Zend_Controller_Action {
 								$this->view->OfficeStateList = $this->profiledb->getState($country);
 							}
 						}
-						$this->view->UserDetails[1] = array("display"=>"edit");
+						$this->view->UserDetails[2] = array("display"=>"edit");
 					} else if($Request_Values["type"] == "edit"){
+						$error = 0;
 						if(!$this->profile->edit_address_info($params))
-							$this->view->UserDetails[] = array("display"=>"edit");
+							$error = 1;
 						$this->view->UserDetails = $this->profiledb->getUserAddress();
+						if($error)
+							$this->view->UserDetails[2] = array("display"=>"edit");
 						foreach($this->view->UserDetails as $value) {
 							$country = isset($value["country_id"]) ? $value["country_id"] : "";
 							if($value["address_type"] == "Home") {
