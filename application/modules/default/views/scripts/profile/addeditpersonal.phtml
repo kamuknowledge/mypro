@@ -25,6 +25,7 @@ $(document).ready(function(){
 					//$("#experiance_edit_loading_<?php echo $experiance_id; ?>").show();
 				},
 				success : function(data) {
+					if(sub_type != "view")
 					CreateSuccess("Personal data saved successfully.");
 					$("#personal_view").html(data);
 					return false;

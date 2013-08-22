@@ -111,6 +111,10 @@ class Default_Model_Profile extends Application_Model_Validation {
 			$to_month = trim($params['to_month']);
 			$to_year = trim($params['to_year']);
 			$present_working = trim($params['present_working']);
+			if($present_working) {
+				$to_month = "";
+				$to_year = "";
+			}
 			$company_description = trim($params['description']);
 			$error = 0;
 			if($company_name == '') {				// Validation for about us

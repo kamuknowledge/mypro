@@ -48,20 +48,24 @@ $(document).ready(function(){
 					$("#education_edit_loading_<?php echo $education_id; ?>").show();
 				},
 				success : function(data) {
-					if(save_type == "new") {
-						CreateSuccess("Education details added successfully.");
-						$("#education_view_<?php echo $education_id; ?>").html("");
-						$("#education_edit_<?php echo $education_id; ?>").html("");
-						$("#education_view_<?php echo $education_id; ?>").hide();
-						$("#education_edit_<?php echo $education_id; ?>").hide();
-						if($("#education_form_new")) $("#education_form_new").remove();
-						$("#education_edit_<?php echo $education_id; ?>").after(data);
+					if(data == 1) {
+						reloadEducation();
 					} else {
-						CreateSuccess("Education details updated successfully.");
-						$("#education_view_<?php echo $education_id; ?>").html(data);
-						$("#education_edit_loading_<?php echo $education_id; ?>").hide();
-						$("#education_edit_<?php echo $education_id; ?>").hide();
-						$("#education_view_<?php echo $education_id; ?>").show();
+						if(save_type == "new") {
+							CreateSuccess("Education details added successfully.");
+							$("#education_view_<?php echo $education_id; ?>").html("");
+							$("#education_edit_<?php echo $education_id; ?>").html("");
+							$("#education_view_<?php echo $education_id; ?>").hide();
+							$("#education_edit_<?php echo $education_id; ?>").hide();
+							if($("#education_form_new")) $("#education_form_new").remove();
+							$("#education_edit_<?php echo $education_id; ?>").after(data);
+						} else {
+							CreateSuccess("Education details updated successfully.");
+							$("#education_view_<?php echo $education_id; ?>").html(data);
+							$("#education_edit_loading_<?php echo $education_id; ?>").hide();
+							$("#education_edit_<?php echo $education_id; ?>").hide();
+							$("#education_view_<?php echo $education_id; ?>").show();
+						}
 					}
 					return false;
 				}
@@ -75,6 +79,19 @@ function submit_edu_form(form) {
 function cancel_edu_form(id) {
 	$("#education_edit_"+id).hide();
 	$("#education_view_"+id).show();
+}
+function mem_edu_delete(id) {
+	$.ajax({
+		url: baseUrl+"/profile/deleteeducation",
+		type: "post",
+		data: "id="+id,
+		success: function(data) {
+			if(data == 1) {
+				reloadEducation();
+				CreateSuccess("Education has been deleted successfully.");
+			}
+		}
+	});
 }
 </script>
 <form name="education_form_<?php echo $education_id; ?>" id="education_form_<?php echo $education_id; ?>">
@@ -155,6 +172,7 @@ function cancel_edu_form(id) {
 			<div class="text-right">
 				<a class="button-dark add" href="javascript:void(0);" onclick="submit_edu_form('education_form_<?php echo $education_id; ?>')"><span><span>Save</span></span></a>
 				<a class="button-grey add common_cancel_btn" href="javascript:void(0);" onclick="cancel_edu_form('<?php echo $education_id; ?>')"><span><span>Cancel</span></span></a>
+				<a class="delete_text" href="javascript:void(0)" onclick="mem_edu_delete('<?php echo $education_id; ?>')">Remove this position</a>
 				<div class="clear"></div>
 			</div>
 		</div>

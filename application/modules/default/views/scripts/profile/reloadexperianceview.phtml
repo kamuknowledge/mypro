@@ -1,0 +1,29 @@
+<?php
+$experiance = $this->UserDetails["experiance"];
+?>
+<div class="header">
+	<h2 class="title_have_image exprce">Experience Details</h2>
+	<a class="edit_experiance edit_experiance_new" id="edit_experiance_new" href="javascript:void(0)"><span>+</span>Add a Position</a>
+</div>
+	<div class="desc experiance_views">
+	<div class="experiance_view" id="experiance_view_new" style="display:none;"></div>
+	<div class="experiance_edit" id="experiance_edit_new" style="display:none;"></div>
+	<?php foreach($experiance as $key => $value) { ?>
+	<div class="experiance_view" id="experiance_view_<?php echo $value["experience_id"]; ?>">
+		<h2 class="title_have_image exprce"><?php echo $value["job_title"]; ?><span class="edit_experiance edit_experiance_<?php echo $value["experience_id"]; ?> icon" id="edit_experiance_<?php echo $value["experience_id"]; ?>"></span><div id="experiance_edit_loading_<?php echo $value["experience_id"]; ?>" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div></h2>
+		<span class="caption"><?php echo $value["company_name"]; ?></span>
+		<?php
+			$date1 = $value["from_year"]."-".$value["from_month"]."-1";
+			$date2 = $value["to_year"]."-".$value["to_month"]."-1";
+			$diff = abs(strtotime($date2) - strtotime($date1));
+			$years = floor($diff / (365*60*60*24));
+			$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+			$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+			$duration = "(".$years." years ".$months." months)";
+		?>
+		<span class="information"><?php echo ($value["from_month"]) ? date("F", mktime(0, 0, 0, $value["from_month"], 10)) : 0; ?> <?php echo $value["from_year"]; ?> - To <?php echo ($value["present_working"]) ? "Present" : (($value["to_month"]) ? date("F", mktime(0, 0, 0, $value["to_month"], 10)) : 0)." ".$value["to_year"]; ?> <?php echo $duration; ?> | <?php echo $value["job_location"]; ?></span>
+		<p><?php echo $value["company_description"]; ?></p>
+	</div>
+	<div class="experiance_edit" id="experiance_edit_<?php echo $value["experience_id"]; ?>" style="display:none;"></div>
+	<?php } ?>									
+	</div>

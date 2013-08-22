@@ -415,3 +415,21 @@ function CreateSuccess(val){
 		elem.slideUp("slow");
 	},3000);
 }
+function reloadExperiance() {
+	$.ajax({
+		type : "POST",
+		url : baseUrl+"/profile/reloadexperianceview",
+		success : function(data) {
+			$(".all_experiances_view").html(data);
+		}
+	});
+}
+function reloadEducation() {
+	$.ajax({
+		type : "POST",
+		url : baseUrl+"/profile/reloadeducationview",
+		success : function(data) {
+			$(".all_education_view").html(data);
+		}
+	});
+}
