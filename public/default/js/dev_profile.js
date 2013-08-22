@@ -72,6 +72,50 @@ $(document).ready(function(){
 			});
 		}
 	});
+	
+	$("#login_header").validate({
+		rules : {
+			email_id : {
+				required : true,
+				email : true
+			},
+			password : {
+				required : true
+			}
+		},
+		messages : {
+			email_id : {
+				required : "Email id is required.",
+				email : "Email id is invalid."
+			},
+			password : {
+				required : "Password is required."
+			}
+		},
+		onkeyup: false,
+		errorPlacement: function(error,element){
+			alert(error.html());
+			return false;
+	    },
+		submitHandler: function(form) {
+			var str = $("#login_header").serialize();
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/signin/loginheader",
+				data : str,
+				beforeSend : function() {
+					/*$("#login_loading").show();
+					$("#login_user").hide();*/
+				},
+				success : function(data) {
+					//$("#login_loading").hide();
+					$("#login_header").html(data);
+					//$("#login_user").show();
+					return false;
+				}
+			});
+		}
+	});
 		
 	$("#registration").validate({
 		rules : {
