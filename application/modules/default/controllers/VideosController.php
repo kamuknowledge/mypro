@@ -144,7 +144,7 @@ class VideosController extends Zend_Controller_Action {
 	
 	public function listAction() {
 		try{	
-			$video_cat_id = $this->_getParam('cat_id');       
+			/*$video_cat_id = $this->_getParam('cat_id');       
           	$userid     = $this->session->userid; // Get login userid
 			//print_r($params);
 			$CategoriesList = $this->Videosdb->getCategoriesList();	//Get all active category list
@@ -152,6 +152,67 @@ class VideosController extends Zend_Controller_Action {
 			$video_list	=	$this->Videosdb->getVideosByCatId($userid,$video_cat_id);//Pass the login userid for get category user videos
 			//echo "<pre>";print_r($video_list);exit;
 			$this->view->video_list	=	$video_list;	// Pass the data to iew file.
+			*/
+			$userid     = $this->session->userid;
+			$params = $this->_getAllParams();
+			//$video_cat_id = $params['cat_id'];
+			$params['limit'] = 2;
+			$this->view->limit = $params['limit'];
+			$params['orderby'] = 'file_title';
+			$params['ordertype'] = 'ASC';
+			
+			if(!isset($params['start'])){$params['start'] = '0';}
+			if(isset($params['start'])){$this->view->start = $params['start'];}
+			
+			$this->view->cat_id = $params['cat_id'];
+			$video_list	=	$this->Videosdb->getVideosByCatId($userid,$params);//Pass the login userid for get category user videos
+			//echo "<pre>";print_r($video_list);exit;
+			$this->view->video_list	=	$video_list;
+			$CategoriesList = $this->Videosdb->getCategoriesList();	//Get all active category list
+			$this->view->CategoriesList = $CategoriesList; 			//Pass to view file  all active category list
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	/**
+     * Purpose: Add category action
+     * Access is public
+     * @param	
+     * @return  
+     */
+	
+	public function listajaxAction() {
+		try{	
+			/*$video_cat_id = $this->_getParam('cat_id');       
+          	$userid     = $this->session->userid; // Get login userid
+			//print_r($params);
+			$CategoriesList = $this->Videosdb->getCategoriesList();	//Get all active category list
+			$this->view->CategoriesList = $CategoriesList; 			//Pass to view file  all active category list
+			$video_list	=	$this->Videosdb->getVideosByCatId($userid,$video_cat_id);//Pass the login userid for get category user videos
+			//echo "<pre>";print_r($video_list);exit;
+			$this->view->video_list	=	$video_list;	// Pass the data to iew file.
+			*/
+			$this->_helper->layout->disableLayout(); // Set default layout		
+			$userid     = $this->session->userid;
+			$params = $this->_getAllParams();
+			//$video_cat_id = $params['cat_id'];
+			$params['limit'] = 2;
+			$this->view->limit = $params['limit'];
+			$params['orderby'] = 'file_title';
+			$params['ordertype'] = 'ASC';
+			
+			if(isset($params['start'])){$params['start'] = $params['start']+$params['limit'];}
+			if(isset($params['start'])){$this->view->start = $params['start'];}
+			
+			$this->view->cat_id = $params['cat_id'];
+			$video_list	=	$this->Videosdb->getVideosByCatId($userid,$params);//Pass the login userid for get category user videos
+			//echo "<pre>";print_r($video_list);exit;
+			$this->view->video_list	=	$video_list;
+			$CategoriesList = $this->Videosdb->getCategoriesList();	//Get all active category list
+			$this->view->CategoriesList = $CategoriesList; 			//Pass to view file  all active category list
+			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -168,10 +229,22 @@ class VideosController extends Zend_Controller_Action {
 	public function searchvideoAction() {
 		try{
 			$this->_helper->layout->disableLayout(); // Set default layout		
-			$video_cat_id = $this->_getParam('cat_id');       
+			//$video_cat_id = $this->_getParam('cat_id');       
 			$searchWord = $this->_getParam('search_word')?$this->_getParam('search_word'):'';    
           	$userid     = $this->session->userid; // Get login userid
-			$video_list	=	$this->Videosdb->getVideosByCatId($userid,$video_cat_id,$searchWord);//Pass the login userid for get category user videos
+			
+			$params = $this->_getAllParams();
+			//$video_cat_id = $params['cat_id'];
+			$params['limit'] = 2;
+			$this->view->limit = $params['limit'];
+			$params['orderby'] = 'file_title';
+			$params['ordertype'] = 'ASC';
+			
+			if(isset($params['start'])){$params['start'] = 0;}
+			if(isset($params['start'])){$this->view->start = $params['start'];}
+			
+			$this->view->cat_id = $params['cat_id'];
+			$video_list	=	$this->Videosdb->getVideosByCatId($userid,$params,$searchWord);//Pass the login userid for get category user videos
 			//echo "<pre>";print_r($video_list);exit;
 			$this->view->searchvideo	=	$video_list;	// Pass the data to iew file.
 		}catch (Exception $e){
@@ -257,6 +330,31 @@ class VideosController extends Zend_Controller_Action {
 			throw new Exception($e->getMessage());
 		}
 	}
-
+	/**
+     * Purpose: Edit videos
+     * Access 	Public
+     * @param	intiger video_id
+     * @return  array
+     */
+	
+	public function editvideoAction() { 
+		try{	
+			$this->_helper->layout->disableLayout();
+			$videoId = $this->_getParam('video_id'); 
+			$video_data	=	$this->Videosdb->getVideosByVideoId($this->session->userid,$videoId);
+			//echo $video_data['file_title'];exit;
+			//echo "<pre>";print_r($video_data);exit;
+			$this->view->video_data	=	$video_data;	// Pass the data to iew file.
+			//$this->view->video_data	=	$video_data;	// Pass the data to iew file.
+			exit;
+			//$this->_redirect('videos/categories');
+			// code
+			//echo "test";exit;
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 }
 ?>

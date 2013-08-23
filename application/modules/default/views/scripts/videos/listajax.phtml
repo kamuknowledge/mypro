@@ -1,0 +1,37 @@
+
+<table>				
+				<tbody>
+				<?php 
+				if(isset($this->video_list) && !empty($this->video_list))
+				{
+				foreach($this->video_list as $videolist){
+				?>
+					<tr class="odd">
+						<td width='30'><input type="checkbox"/></td>
+						<td width='200'><?php echo ucwords(strtolower($videolist['file_title']));?></td>
+						<td width='100' ><?php echo ucwords(strtolower($videolist['album_description']));?></td>
+						<td width='200' id="video<?php echo $videolist['file_id'];?>"><input type="hidden" name="videoid" value="<?php echo $videolist['file_path'];?>"><a href="javascript:void(0)" onCLick="video_preview('<?php echo $videolist['file_path'];?>', 'video_<?php echo $videolist['file_id'];?>');" ><img width="120" height="75" src="http://img.youtube.com/vi/<?php echo $videolist['file_path']; ?>/0.jpg"/></a></td>
+						<!--td><?php echo $videolist['file_path']; ?></td-->
+						<td width='100'><?php echo date('Y-M-d',strtotime($videolist['createddatetime']));?></td>
+						<td width='100'> <a class="button-edit" href="javascript:void(0)"  onClick="edit_video(<?php echo $videolist['file_id']; ?>)";></a> | <a class="button-delete" href="<?php echo $this->baseUrl('videos/deletevideo/file_id/').$videolist['file_id']."/cat_id/".$videolist['album_id']; ?>";></a></td>
+					
+						</tr>
+					<?php } }else{ ?>
+					<td colspan="5">Records not found !</td>
+					<?php } ?>
+									
+				</tbody>
+			</table>
+			
+			<div class="grid-view-footer">
+					<?php 
+if(count($this->video_list)>=$this->limit){?>
+<div class="more_box" id="<?php echo $this->start;?>">
+<input type="hidden" name="cid" id="cid" value="<?php echo $this->cat_id;?>" />
+	<div class="view_more_loader" id="video_view_more_loading" style="display:none;"><img src="<?php echo $this->baseUrl('public/default/images')."/ajax-loader.gif" ?>" ></div>
+	<div class="view_more_products" id="video_view_more">View More..</div>
+</div>
+<?php }?>
+					<div class="clear"></div>
+			</div>
+</div>			

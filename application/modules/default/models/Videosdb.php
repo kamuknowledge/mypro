@@ -96,28 +96,53 @@ class Default_Model_Videosdb {
      * @return  object	Returns status message.	
      */
 	
-	public function getVideosByCatId($user_id,$video_cat_id='',$searchWord=''){
+	public function getVideosByCatId($user_id,$params='',$searchWord=''){
 		try {	
-			// Example Method List
-		$userid     = $this->session->userid; // Get login userid
-		//echo $query = "SELECT * FROM social_album_files saf JOIN social_album sa ON saf.album_id = sa.album_id WHERE saf.userid='".$user_id."'";
+			//echo $query = "SELECT * FROM social_album_files saf JOIN social_album sa ON saf.album_id = sa.album_id WHERE saf.userid='".$user_id."'";
 			$select= $this->db->select();
 			$select->from(array('saf' => 'social_album_files'),array('file_title','file_path','album_id','file_id','file_path','updateddatetime','createddatetime') );
 			$select->joinLeft(array('sa' => 'social_album'),
                     'saf.album_id = sa.album_id',array('album_description','album_image'));
 			$select->where('saf.userid =?',$user_id);
-			if($video_cat_id != ''){
-				$select->where('saf.album_id =?',$video_cat_id);
+			if($params['cat_id'] != ''){
+				$select->where('saf.album_id =?',$params['cat_id']);
 			}
 			if($searchWord !=''){
 				//$select->where('album_description=?',trim($searchWord));
 				 $select->where('saf.file_title LIKE  "%' . trim($searchWord) . '%"');
             }	
-			$select->order(array('saf.file_id DESC'));			
+			$select->order(array('saf.file_title ASC'));			
+			$select->limit($params['limit'], $params['start']);			
 			//echo $select;
 				//		exit;			
 			$stmt 	= $this->db->query($select);			
 			return $stmt->fetchAll();
+		
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	/**
+     * Purpose: Fetching list
+     * Access is limited to class and extended classes
+     *
+     * @param	varchar	$cond Search condition
+     * @return  object	Returns status message.	
+     */
+	
+	public function getVideosByVideoId($user_id,$video_id=''){
+		try {	
+			//echo $query = "SELECT * FROM social_album_files saf JOIN social_album sa ON saf.album_id = sa.album_id WHERE saf.userid='".$user_id."'";
+			$select= $this->db->select();
+			$select->from(array('saf' => 'social_album_files'),array('file_title','file_path','album_id','file_id','updateddatetime','createddatetime') );
+			$select->where('userid =?',$user_id);
+			$select->where('file_id =?',$video_id);
+			//echo $select;
+			//			exit;			
+			$stmt 	= $this->db->query($select);			
+			return $stmt->fetch();
 		
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
