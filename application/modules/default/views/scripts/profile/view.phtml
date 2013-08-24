@@ -23,7 +23,8 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 									<div align="center">
 									<?php
 										$path = $this->baseUrl('public/uploads')."/user_images/";
-										$image_name = "No_Image_Available.jpg";
+										//$image_name = "No_Image_Available.jpg";
+										$image_name = "profile.png";										
 										$image_status = 0;
 										if($profile["image_path"] && file_exists( $_SERVER['DOCUMENT_ROOT'].$path."crop_200_200/".$profile["image_path"] )) {
 											$path = $path."crop_200_200/";
@@ -108,9 +109,8 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 								<div class="clear"></div>
 								<div class="profile-information">
 									<div class="left width-20">
-										<strong style="position: relative; line-height: 2;">My Referral Id <img src="images/refferalicon.png" style="position: absolute; right: -2px; top: -1px;" valign="middle"/></strong>
-										<br/>
-										http://example.com/?refid=<?php echo $profile["userid"]; ?>
+										<strong style="position: relative; line-height: 2; font-size:14px;">
+										Complete Your Profile</strong>										
 									</div>
 									<div class="frnds_infor">
 										<img src="images/relation_icon.png" />

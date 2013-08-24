@@ -40,17 +40,22 @@
 	
 	
 	
-		<div style="float:left; width:80%; margin:10px 0px 10px 15px;">
+		<div style="float:left; width:60%; margin:10px 0px 10px 15px;">
 		<?php  echo $this->layout()->content ?>
 		</div>
 	
 		<!-- <div class="wrapper"> -->	
-						
-			<div style="float:right; width:17%; margin:10px 15px 10px 0px;">			
-			<?php echo $this->action('index', 'chat', 'default', array('a_parameter'=>'a_value'));?>
+		
+			<div style="float:left; width:18%; margin:10px 0px 10px 15px;">			
 			<?php echo $this->action('index', 'friendsuggestion', 'default', array('a_parameter'=>'a_value'));?>
-			<?php echo $this->action('index', 'eventnotifications', 'default', array('a_parameter'=>'a_value'));?>			
+			<?php echo $this->action('index', 'eventnotifications', 'default', array('a_parameter'=>'a_value'));?>
 			</div>
+						
+			<div style="float:right; width:18%; margin:10px 15px 10px 0px;">			
+			<?php echo $this->action('index', 'chat', 'default', array('a_parameter'=>'a_value'));?>					
+			</div>
+			
+			<div class="clear"></div>
 					
 			
 	
