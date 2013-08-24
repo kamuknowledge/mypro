@@ -2,7 +2,7 @@
 				<thead>
 					<tr>
 						<th width='30'><input type="checkbox"/></th>
-						<th >Video Title</th>
+						<th width='200'>Video Title</th>
 						<th  width='100'>Video Category</th>
 						<th  width='100'>Video</th>
 						<th  width='100'>Date</th>
@@ -16,19 +16,31 @@
 				foreach($this->searchvideo as $videolist){
 				?>
 					<tr class="odd">
-						<td><input type="checkbox"/></td>
-						<td><?php echo ucwords(strtolower($videolist['file_title']));?></td>
-						<td><?php echo ucwords(strtolower($videolist['album_description']));?></td>
-						<td id="video<?php echo $videolist['file_id'];?>"><input type="hidden" name="videoid" value="<?php echo $videolist['file_path'];?>"><a href="javascript:void(0)" onCLick="video_preview('<?php echo $videolist['file_path'];?>', 'video_<?php echo $videolist['file_id'];?>');" ><img width="120" height="75" src="http://img.youtube.com/vi/<?php echo $videolist['file_path']; ?>/0.jpg"/></a></td>
+						<td width='30'><input type="checkbox"/></td>
+						<td width='200'><?php echo ucwords(strtolower($videolist['file_title']));?></td>
+						<td width='100'> <?php echo ucwords(strtolower($videolist['album_description']));?></td>
+						<td width='100'id="video<?php echo $videolist['file_id'];?>"><input type="hidden" name="videoid" value="<?php echo $videolist['file_path'];?>"><a href="javascript:void(0)" onCLick="video_preview('<?php echo $videolist['file_path'];?>', 'video_<?php echo $videolist['file_id'];?>');" ><img width="120" height="75" src="http://img.youtube.com/vi/<?php echo $videolist['file_path']; ?>/0.jpg"/></a></td>
 						<!--td><?php echo $videolist['file_path']; ?></td-->
-						<td><?php echo date('Y-M-d',strtotime($videolist['createddatetime']));?></td>
-						<td> <a class="button-edit" href="javascript:void(0)"  onClick="edit_video(<?php echo $videolist['file_id']; ?>)";></a> | <a class="button-delete" href="<?php echo $this->baseUrl('videos/delete/file_id/').$videolist['file_id']; ?>";></a></td>
+						<td width='100'><?php echo date('Y-M-d',strtotime($videolist['createddatetime']));?></td>
+						<td width='100'> <a class="button-edit" href="javascript:void(0)"  onClick="edit_video(<?php echo $videolist['file_id']; ?>)";></a> | <a class="button-delete" href="<?php echo $this->baseUrl('videos/delete/file_id/').$videolist['file_id']; ?>";></a></td>
 					
 
 						</tr>
+						
 					<?php } }else{ ?>
-					<td colspan="5">Records not found !</td>
+					<tr class="grid-view-footer"><td  colspan="6">Records not found !</td></tr>
 					<?php } ?>
 									
 				</tbody>
 			</table>
+		
+					<?php 
+if(count($this->searchvideo)>=$this->limit){?>
+<div class="more_box grid-view-footer" id="<?php echo $this->start;?>">
+<input type="hidden" name="cid" id="cid" value="<?php echo $this->cat_id;?>" />
+	<div class="view_more_loader" id="video_view_more_loading" style="display:none;"><img src="<?php echo $this->baseUrl('public/default/images')."/ajax-loader.gif" ?>" ></div>
+	<div class="view_more_products" id="video_view_more">View More..</div>
+</div><div class="clear"></div>
+<?php }?>
+					
+		

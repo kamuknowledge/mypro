@@ -72,17 +72,24 @@ $('#addvideo').live('click',function(){
    alert(videoid);
   		$.post(baseUrl + '/videos/editvideo', { video_id: videoid },
 		   function(msg){
-			$('#editvideo_form').show().fancyBox();
+		   alert(msg);
+			//$.fancyBox.showActivity(msg);
+			$('#editvideo_form').show().fancyBox(msg);
+			//$.fancyBox(msg);
 			//$('#videolists').html(msg);
 		   }, "html");
+		   
+		   
    
    }
+
 //View more video
 
 
 	$("#video_view_more").live('click',function() {
 	
 		var ID=$(".more_box:last").attr("id");
+		$('#'+ID).removeClass();
 		var cid=$("#cid").val();
 		//alert(ID);
 		//alert("Handler for .click() called.");
@@ -94,7 +101,8 @@ $('#addvideo').live('click',function(){
 					$("#video_view_more_loading").show();
 					$("#video_view_more").hide();
 				},
-				success : function(data) {					
+				success : function(data) {	
+					
 					$("#"+ID).html(data);					
 					return false;
 				}
