@@ -4,16 +4,19 @@
 		<span class="home-icon"></span>
 		<a href="javascript:void(0)" class="home">Home</a>
 		<span class="arrow"></span>
-		<a href="javascript:void(0)" class="events">Video`s List</a>
+		<a href="javascript:void(0)" class="events">Photo List</a>
 		<div class="clear"></div>
 	</div>
 	<div id="events_page">
 		<div class="header_events">
-			<h2>Video`s</h2>			
+			<h2>Photos</h2>			
 			<div class="event_search">
-				<input type="text" placeholder="Video Name"/>
-				<input type="submit" value="go"/>
+				<input type="text" placeholder="Photo Name" name="searchphoto" id="searchphoto"/>
+				<input type="submit" value="go" onClick="search_photo();" />
 			</div>
+			<div style="float:right;">
+				<a class="button-dark add right fancybox" href="javascript:void(0)" id="addphoto"><span><span>Add Photo</span></span></a>
+			</div> 
 			<div class="clear"></div>
 		</div>
 		<div class="grid-view">
@@ -22,65 +25,97 @@
 				<a href="javascript:void(0)" class="button-light icon tags"><span><span>Tags</span></span></a>	
 			</div>
 			<div class="right">
-			<select style="width:200px">
+			<select style="width:200px" >
 			 <option value=""> Select Category</option>
 			<?php if(isset($this->CategoriesList) && !empty($this->CategoriesList)) {
 			?>
 			
 			<?php 	foreach($this->CategoriesList as $key =>$cat_list){ 
-				echo "<option value='".$cat_list['album_id']."'>".ucwords(strtolower($cat_list['album_description']))."</option>";
+				echo "<option value='".$cat_list['album_id']."' onclick='select_category(".$cat_list['album_id'].")'>".ucwords(strtolower($cat_list['album_description']))."</option>";
 				} }?>
 				</select>
 			</div>
 			<div class="clear"></div>
+			<div id="photolists">
 			<table cellpadding="0" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th width='30'><input type="checkbox"/></th>
-						<th >Video Title</th>
-						<th  width='100'>Video Category</th>
-						<th  width='100'>Video</th>
+						<th width='200'>Photo Title</th>
+						<th  width='100'>Photo Category</th>
+						<th  width='200'>Photo</th>
 						<th  width='100'>Date</th>
+						<th  width='100'>Action</th>
 					</tr>
 				</thead>
 				<tbody>
 				<?php 
-				if(isset($this->video_list) && !empty($this->video_list))
+				if(isset($this->photo_list) && !empty($this->photo_list))
 				{
-				foreach($this->video_list as $videolist){
+				foreach($this->photo_list as $photolist){
 				?>
 					<tr class="odd">
-						<td><input type="checkbox"/></td>
-						<td><?php echo ucwords(strtolower($videolist['file_title']));?></td>
-						<td><?php echo $videolist['album_description'];?></td>
-						<td><img src="<?php echo $this->baseUrl('public/uploads/video_category_images/'.$videolist['album_image']); ?>"/></td>
-						<td><?php echo date('Y-M-d',strtotime('08/10/2013'));?></td>
-					</tr>
+						<td width='30'><input type="checkbox"/></td>
+						<td width='200'><?php echo ucwords(strtolower($photolist['file_title']));?></td>
+						<td width='100'><?php echo ucwords(strtolower($photolist['album_description']));?></td>
+						<td width='100' id="video<?php echo $photolist['file_id'];?>"><input type="hidden" name="videoid" value="<?php echo $photolist['file_path'];?>"><a href="javascript:void(0)" onCLick="video_preview('<?php echo $photolist['file_path'];?>', 'video_<?php echo $photolist['file_id'];?>');" ><img width="120" height="75" src="http://img.youtube.com/vi/<?php echo $photolist['file_path']; ?>/0.jpg"/></a></td>
+						<!--td><?php echo $photolist['file_path']; ?></td-->
+						<td width='100'><?php echo date('Y-M-d',strtotime($photolist['createddatetime']));?></td>
+						<td width='100'> <a id="editvideo" class="button-edit fancy" href="javascript:void(0)"  onClick="edit_video(<?php echo $photolist['file_id']; ?>)";></a> | <a class="button-delete" href="<?php echo $this->baseUrl('photos/deletephoto/file_id/').$photolist['file_id']."/cat_id/".$photolist['album_id']; ?>";></a></td>
+					
+						</tr>
 					<?php } }else{ ?>
-					<td colspan="5">Records not found !</td>
+					<tr class="grid-view-footer"><td colspan="5">Records not found !</td></tr>
 					<?php } ?>
-									
+					
 				</tbody>
 			</table>
-			<div class="grid-view-footer">
-					<a  href="javascript:void(0)" class="left button-light no-text icon refresh"><span><span>Refresh</span></span></a>
-					<span class="right">View 1-10 of 20</span>
-					<div class="pagention text-center">
-						<a  href="javascript:void(0)" class="button-light icon First"><span><span>First</span></span></a>
-						<a  href="javascript:void(0)" class="button-light icon prev"><span><span>Prev</span></span></a>
-						<span class="info">Page 1 of 2</span>
-						<a  href="javascript:void(0)" class="button-light icon next"><span><span>Next</span></span></a>
-						<a  href="javascript:void(0)" class="button-light icon last"><span><span>last</span></span></a>
-						<select>
-							<option>1</option>
-							<option>2</option>
-						</select>
-					</div>
-					<div class="clear"></div>
-			</div>
+			
+		<?php 
+if(count($this->photo_list)>=$this->limit){?>
+<input type="hidden" name="cid" id="cid" value="<?php echo $this->cat_id;?>" />
+<div class="more_box grid-view-footer" id="<?php echo $this->start;?>">
+	<div class="view_more_loader" id="video_view_more_loading" style="display:none;"><img src="<?php echo $this->baseUrl('public/default/images')."/ajax-loader.gif" ?>" ></div>
+	<div class="view_more_products" id="video_view_more">View More..</div>
+</div><div class="clear"></div>
+<?php }?>	
+					
+		
+		</div>	
 		</div>
 	</div>
+	
 	<div class="clear"></div>
+
+		
 </div>
 <div class="clear"></div>
 </div>
+<!-- Add new video file -->
+<div id="add_photo_form" style="display:none;">
+<div class="register-form containerbox">
+		<p>Create new Photo file</p>
+		<div class="login-part">
+			<form name="photoform" id="photoform" action="<?php echo $this->baseUrl('photos/addnewphoto');?>" method="POST" >
+			<div class="row"><label>Photo Name</label><input type="text" id="photoname" name="photoname" /></div>
+			<div class="row"><label>Choose Photo</label>
+			<input type="file" id="photo_file" name="photo_file"/></div>
+			<div class="row"><label>Photo Category</label>
+			<select style="width:200px" name="photo_category">
+			 <option value=""> Select Category</option>
+			<?php if(isset($this->CategoriesList) && !empty($this->CategoriesList)) {
+			?>
+			
+			<?php 	foreach($this->CategoriesList as $key =>$cat_list){ 
+				echo "<option value='".$cat_list['album_id']."' >".ucwords(strtolower($cat_list['album_description']))."</option>";
+				} }?>
+				</select></div>
+			<div class="btn-container"><input type="submit" id="sbt_login" name="sbt_login" value="Add Photo"></div>
+			</form>
+			<div id="login_loading" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div>
+		</div>	
+	</div>		
+			
+</div>
+<!-- Add new video file -->
+

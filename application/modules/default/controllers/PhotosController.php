@@ -94,7 +94,7 @@ class PhotosController extends Zend_Controller_Action {
      * @return  array
      */
 	
-	public function photocategoriesAction() {
+	public function categoriesAction() {
 		try{	
 		
 			$userid     = $this->session->userid; 
@@ -144,29 +144,62 @@ class PhotosController extends Zend_Controller_Action {
 	
 	public function listAction() {
 		try{	
-			// code
-			//echo "test";exit;
-			//echo "my cat id".$this->cat_id;
-			$request = $this->getRequest();
-              $dataGet  = $this->getRequest()->getParam('id',null);       
-          
-
-			
 			$userid     = $this->session->userid; // Get login userid
 			$params = $this->_getAllParams();
+			$params['limit'] = 2;
+			$this->view->limit = $params['limit'];
+			$params['orderby'] = 'file_title';
+			$params['ordertype'] = 'ASC';
+			
+			if(!isset($params['start'])){$params['start'] = '0';}
+			if(isset($params['start'])){$this->view->start = $params['start'];}
+			
+			$this->view->cat_id = $params['cat_id'];
 			//print_r($params);
 			$CategoriesList = $this->Photosdb->getCategoriesList();	//Get all active category list
 			$this->view->CategoriesList = $CategoriesList; 			//Pass to view file  all active category list
-			$video_list	=	$this->Photosdb->getVideosByCatId($userid);//Pass the login userid for get category user videos
+			$photo_list	=	$this->Photosdb->getPhotosByCatId($userid,$params);//Pass the login userid for get category user videos
 			//echo "<pre>";print_r($video_list);exit;
-			$this->view->video_list	=	$video_list;	// Pass the data to iew file.
+			$this->view->photo_list	=	$photo_list;	// Pass the data to iew file.
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
 	}
 	
+	/**
+     * Purpose: Add category action
+     * Access is public
+     * @param	
+     * @return  
+     */
 	
+	public function listajaxAction() {
+		try{	
+			
+			$this->_helper->layout->disableLayout(); // Set default layout		
+			$userid     = $this->session->userid;
+			$params = $this->_getAllParams();
+			$params['limit'] = 2;
+			$this->view->limit = $params['limit'];
+			$params['orderby'] = 'file_title';
+			$params['ordertype'] = 'ASC';
+			
+			if(isset($params['start'])){$params['start'] = $params['start']+$params['limit'];}
+			if(isset($params['start'])){$this->view->start = $params['start'];}
+			
+			$this->view->cat_id = $params['cat_id'];
+			$photo_list	=	$this->Photosdb->getPhotosByCatId($userid,$params);//Pass the login userid for get category user videos
+			//echo "<pre>";print_r($video_list);exit;
+			$this->view->photo_list	=	$photo_list;
+			$CategoriesList = $this->Photosdb->getCategoriesList();	//Get all active category list
+			$this->view->CategoriesList = $CategoriesList; 			//Pass to view file  all active category list
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 	
 	
 	/**
@@ -180,7 +213,7 @@ class PhotosController extends Zend_Controller_Action {
 		try{	
 			$this->_helper->layout->disableLayout();
 			$params = $this->_getAllParams(); 
-//echo "<pre>";print_r($params);exit;			
+			//echo "<pre>";print_r($params);exit;			
 			$upload = new Zend_File_Transfer();                                    
 				
 				//$upload = new Zend_File_Transfer_Adapter_Http();                                
@@ -188,12 +221,12 @@ class PhotosController extends Zend_Controller_Action {
 				foreach ($files as $file => $info) {
 					if($upload->isValid($file)){
 						$filename = time().$info['name'];
-						$upload->addFilter('Rename', APPLICATION_PATH.'/../public/uploads/video_category_images/'.$filename, 1);
+						$upload->addFilter('Rename', APPLICATION_PATH.'/../public/uploads/photo_category_images/'.$filename, 1);
 						$upload->receive($file);
 						$LogoSet = $this->Photosdb->insertVideocategory($params['cat_name'],$filename, $this->session->userid);
 					}
 				}
-		$this->_redirect('photos/photocategories');
+		$this->_redirect('photos/categories');
 
 			  
 			// code
@@ -205,6 +238,93 @@ class PhotosController extends Zend_Controller_Action {
 		}
 	}
 	
+/**
+     * Purpose: Add category action
+     * Access is public
+     * @param	
+     * @return  
+     */
+	
+	public function addnewphotoAction() {
+		try{	
+			$this->_helper->layout->disableLayout();
+			$params = $this->_getAllParams(); 
+			echo "<pre>";print_r($params);//exit;	
 
+			$upload = new Zend_File_Transfer();                                    
+				
+				//$upload = new Zend_File_Transfer_Adapter_Http();                                
+				$files = $upload->getFileInfo();
+				foreach ($files as $file => $info) {
+					if($upload->isValid($file)){
+					// echo "test";
+						$filename = time().$info['name'];
+						$upload->addFilter('Rename', APPLICATION_PATH.'/../public/uploads/photo_images/'.$filename, 1);
+						$upload->receive($file);
+						$LogoSet = $this->Photosdb->insertPhoto($params['photo_category'],$params['photoname'],$filename, $this->session->userid);
+					}
+				}
+				print_r($params);
+				echo $LogoSet;exit;				
+			//$LogoSet = $this->Photosdb->insertVideo($params['video_category'],$params['video_name'],$params['video_path'], $this->session->userid);
+			//$this->_redirect('photos/list/cat_id/'.$params['photo_category']);
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	/**
+     * Purpose: Add category action
+     * Access is public
+     * @param	
+     * @return  
+     */
+	
+	public function searchphotoAction() {
+		try{
+			$this->_helper->layout->disableLayout(); // Set default layout		
+			//$video_cat_id = $this->_getParam('cat_id');       
+			$searchWord = $this->_getParam('search_word')?$this->_getParam('search_word'):'';    
+          	$userid     = $this->session->userid; // Get login userid
+			
+			$params = $this->_getAllParams();
+			//$video_cat_id = $params['cat_id'];
+			$params['limit'] = 2;
+			$this->view->limit = $params['limit'];
+			$params['orderby'] = 'file_title';
+			$params['ordertype'] = 'ASC';
+			
+			if(isset($params['start'])){$params['start'] = $params['start']+$params['limit'];}else{ $params['start'] =0; }
+			if(isset($params['start'])){ $this->view->start = $params['start'];}
+			
+			$this->view->cat_id = $params['cat_id'];
+			$video_list	=	$this->Photosdb->getPhotosByCatId($userid,$params,$searchWord);//Pass the login userid for get category user videos
+			//echo "<pre>";print_r($video_list);print_r($params);exit;
+			$this->view->searchphoto	=	$video_list;	// Pass the data to iew file.
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	/**
+     * Purpose: delete photo action
+     * Access is public
+     * @param	intiger fileid
+     * @return  
+     */
+	
+	public function deletephotoAction() {
+		try{
+			$this->_helper->layout->disableLayout(); // Set default layout		
+			$cat_id = $this->_getParam('cat_id');       
+			$file_id = $this->_getParam('file_id');       
+			$video_list	=	$this->Photosdb->deletePhoto($file_id);
+			//echo "<pre>";print_r($video_list);exit;
+			$this->_redirect('photos/list/cat_id/'.$cat_id);
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 }
 ?>
