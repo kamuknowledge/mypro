@@ -58,10 +58,20 @@
 						<td width='30'><input type="checkbox"/></td>
 						<td width='200'><?php echo ucwords(strtolower($photolist['file_title']));?></td>
 						<td width='100'><?php echo ucwords(strtolower($photolist['album_description']));?></td>
-						<td width='100' id="video<?php echo $photolist['file_id'];?>"><input type="hidden" name="videoid" value="<?php echo $photolist['file_path'];?>"><a href="javascript:void(0)" onCLick="video_preview('<?php echo $photolist['file_path'];?>', 'video_<?php echo $photolist['file_id'];?>');" ><img width="120" height="75" src="http://img.youtube.com/vi/<?php echo $photolist['file_path']; ?>/0.jpg"/></a></td>
+						<td width='100' id="video<?php echo $photolist['file_id'];?>">
+						<input type="hidden" name="videoid" value="<?php echo $photolist['file_path'];?>">
+						<a href="javascript:void(0)" onCLick="video_preview('<?php echo $photolist['file_path'];?>', 'video_<?php echo $photolist['file_id'];?>');" >
+						<?php 
+						$file	=	$this->baseUrl('public/uploads/photo_images/'.$photolist['file_path']);
+						if($photolist['file_path']!=''){?>
+						<img width="120" height="75" src="<?php echo $file;?>">
+						<?php }else{?>
+						<img width="120" height="75" src="<?php echo $this->baseUrl('public/uploads/photo_images/No_Image_Available.jpg');?>">
+						<?php }?>				
+						</a></td>
 						<!--td><?php echo $photolist['file_path']; ?></td-->
-						<td width='100'><?php echo date('Y-M-d',strtotime($photolist['createddatetime']));?></td>
-						<td width='100'> <a id="editvideo" class="button-edit fancy" href="javascript:void(0)"  onClick="edit_video(<?php echo $photolist['file_id']; ?>)";></a> | <a class="button-delete" href="<?php echo $this->baseUrl('photos/deletephoto/file_id/').$photolist['file_id']."/cat_id/".$photolist['album_id']; ?>";></a></td>
+						<td width='100'><?php echo date('Y-M-d',strtotime($photolist['updateddatetime']));?></td>
+						<td width='100'> <a id="editvideo" class="button-edit fancy" href="javascript:void(0)"  onClick="edit_photo(<?php echo $photolist['file_id']; ?>)";></a> | <a class="button-delete" href="<?php echo $this->baseUrl('photos/deletephoto/file_id/').$photolist['file_id']."/cat_id/".$photolist['album_id']; ?>";></a></td>
 					
 						</tr>
 					<?php } }else{ ?>
@@ -96,7 +106,7 @@ if(count($this->photo_list)>=$this->limit){?>
 <div class="register-form containerbox">
 		<p>Create new Photo file</p>
 		<div class="login-part">
-			<form name="photoform" id="photoform" action="<?php echo $this->baseUrl('photos/addnewphoto');?>" method="POST" >
+			<form name="photoform" id="photoform" action="<?php echo $this->baseUrl('photos/addnewphoto');?>" method="POST" enctype='multipart/form-data' >
 			<div class="row"><label>Photo Name</label><input type="text" id="photoname" name="photoname" /></div>
 			<div class="row"><label>Choose Photo</label>
 			<input type="file" id="photo_file" name="photo_file"/></div>
@@ -117,5 +127,6 @@ if(count($this->photo_list)>=$this->limit){?>
 	</div>		
 			
 </div>
-<!-- Add new video file -->
 
+<!-- Add new video file -->
+<div id="myphoto_edit" style="display:none;"></div>

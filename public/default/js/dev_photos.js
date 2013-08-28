@@ -51,15 +51,12 @@ $('#addphoto').live('click',function(){
    }	
  
 // Edit videos
-   edit_video = function(videoid){
-   //alert(videoid);
-  		$.post(baseUrl + '/videos/editvideo', { video_id: videoid },
+   edit_photo = function(id){
+   //alert(id);
+  		$.post(baseUrl + '/photos/editphoto', { photo_id: id },
 		   function(msg){
-		  // alert(msg);
-			//$.fancyBox.showActivity(msg);
-			$('#editvideo_form').show().fancyBox(msg);
-			//$.fancyBox(msg);
-			//$('#photolists').html(msg);
+		 $('#myphoto_edit').html(msg);
+			$('#myphoto_edit').show().fancyBox(msg);
 		   }, "html");
 		   
 		   

@@ -342,12 +342,30 @@ class VideosController extends Zend_Controller_Action {
 			$this->_helper->layout->disableLayout();
 			$videoId = $this->_getParam('video_id'); 
 			$video_data	=	$this->Videosdb->getVideosByVideoId($this->session->userid,$videoId);
-			//echo $video_data['file_title'];exit;
-			//echo "<pre>";print_r($video_data);exit;
+			//echo "<pre>"; print_r($video_data);exit;
 			$this->view->video_data	=	$video_data;	// Pass the data to iew file.
 			$CategoriesList = $this->Videosdb->getCategoriesList();	//Get all active category list
 			$this->view->CategoriesList = $CategoriesList; 			//Pass to view file  all active category list
 					
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	/**
+     * Purpose: Update videos
+     * Access 	Public
+     * @param	Post data,
+     * @return  intiger
+     */
+	
+	public function updatevideoAction() { 
+		try{	
+			$this->_helper->layout->disableLayout();
+			$params = $this->_getAllParams(); 
+			$video_data	=	$this->Videosdb->updateVideo($params,$this->session->userid);
+			$this->_redirect('videos/list/cat_id/'.$params['evideo_category']);
+
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

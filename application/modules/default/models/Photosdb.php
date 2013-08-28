@@ -106,6 +106,7 @@ class Default_Model_Photosdb {
 			$select->joinLeft(array('sa' => 'social_album'),
                     'saf.album_id = sa.album_id',array('album_description','album_image'));
 			$select->where('saf.userid =?',$user_id);
+			$select->where('sa.album_type_id =?',2);
 			if($params['cat_id'] != ''){
 				$select->where('saf.album_id =?',$params['cat_id']);
 			}
@@ -134,7 +135,29 @@ class Default_Model_Photosdb {
      * @return  object	Returns status message.	
      */
 	
-	public function insertVideocategory($cat_name,$filename,$userid){
+	public function getPhotosByPhotoId($user_id,$id=''){
+		try {	
+			$select= $this->db->select();
+			$select->from(array('saf' => 'social_album_files'),array('file_title','file_path','album_id','file_id','updateddatetime','createddatetime') );
+			$select->where('userid =?',$user_id);
+			$select->where('file_id =?',$id);
+			$stmt 	= $this->db->query($select);			
+			return $stmt->fetch();
+		
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	/**
+     * Purpose: Fetching list
+     * Access is limited to class and extended classes
+     *
+     * @param	varchar	$cond Search condition
+     * @return  object	Returns status message.	
+     */
+	
+	public function insertPhotocategory($cat_name,$filename,$userid){
 		try {	
 			// Example Method List
 
@@ -162,11 +185,11 @@ class Default_Model_Photosdb {
 		try {	
 			// Example Method List
 		$query = "INSERT INTO social_album_files (album_id,userid,file_title,file_path,file_access_specifiers,createddatetime,statusid,createdby) 
-					values('".$cat_id."','".$userid."','".$vname."','".$pfile."','public','".date('Y-m-d H:i:s')."',1,'".$userid."')";			
+					values('".$cat_id."','".$userid."','".$pname."','".$pfile."','public','".date('Y-m-d H:i:s')."',1,'".$userid."')";			
 						
 			$stmt 	= $this->db->query($query);	
 			//echo $stmt; exit;			
-			return $stmt->fetchAll();
+			//return $stmt->fetchAll();
 		
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
@@ -191,5 +214,27 @@ class Default_Model_Photosdb {
 			throw new Exception($e->getMessage());
 		}
 	}
+		/**
+     * Purpose: Update the video list
+     *
+     * @param	$params 
+     * @return  object	Returns status message.	
+     */
+	
+	public function updatePhoto($params,$file_name,$userid){
+		try {	
+			// Example Method List
+
+		$query = "UPDATE social_album_files SET album_id='".$params['photo_category']."',file_title='".$params['photo_name']."', file_path='".$file_name."',
+							lastupdatedby='".$userid."' WHERE file_id='".$params['file_id']."'"; 
+		//echo $query;exit;
+		$this->db->query($query);			
+		
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+
 }
 ?>

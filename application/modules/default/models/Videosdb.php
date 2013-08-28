@@ -104,6 +104,7 @@ class Default_Model_Videosdb {
 			$select->joinLeft(array('sa' => 'social_album'),
                     'saf.album_id = sa.album_id',array('album_description','album_image'));
 			$select->where('saf.userid =?',$user_id);
+			$select->where('sa.album_type_id =?',4);
 			if($params['cat_id'] != ''){
 				$select->where('saf.album_id =?',$params['cat_id']);
 			}
@@ -139,6 +140,7 @@ class Default_Model_Videosdb {
 			$select->from(array('saf' => 'social_album_files'),array('file_title','file_path','album_id','file_id','updateddatetime','createddatetime') );
 			$select->where('userid =?',$user_id);
 			$select->where('file_id =?',$video_id);
+			
 			//echo $select;
 			//			exit;			
 			$stmt 	= $this->db->query($select);			
@@ -218,5 +220,26 @@ class Default_Model_Videosdb {
 			throw new Exception($e->getMessage());
 		}
 	}
+	/**
+     * Purpose: Update the video list
+     *
+     * @param	$params 
+     * @return  object	Returns status message.	
+     */
+	
+	public function updateVideo($params,$userid){
+		try {	
+			// Example Method List
+
+		$query = "UPDATE social_album_files SET album_id='".$params['evideo_category']."',file_title='".$params['evideo_name']."', file_path='".$params['evideo_path']."',
+							lastupdatedby='".$userid."' WHERE file_id='".$params['file_id']."'"; 
+		$this->db->query($query);			
+		
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
 }
 ?>

@@ -5,8 +5,10 @@
 		<p>Edit video file</p>
 		<?php //echo "<pre>";print_r($video_data); echo "venu<br>"; print_r($editvideo);?>
 		<div class="login-part">
-			<form name="editv_form" id="editv_form" action="<?php echo $this->baseUrl('videos/editvideo');?>" method="POST" >
-			<div class="row"><label>Video Name</label><input type="text" id="evideo_name" name="evideo_name" value="<?php echo $this->video_data['file_title'];?>" /></div>
+			<form name="editv_form" id="editv_form" action="<?php echo $this->baseUrl('videos/updatevideo/file_id/'). $this->video_data['file_id'];?>" method="POST" >
+			<div class="row"><label>Video Name</label><input type="text" id="evideo_name" name="evideo_name" value="<?php echo $this->video_data['file_title'];?>" />
+			
+			</div>
 			<div class="row"><label>Video Path Example:- http://youtu.be/C7FYmj7fMDs</label>
 			<input type="text" id="evideo_path" name="evideo_path" value="<?php echo $this->video_data['file_path'];?>"/></div>
 			<div class="row"><label>Video category</label>

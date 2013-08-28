@@ -10,10 +10,16 @@
 						<td width='30'><input type="checkbox"/></td>
 						<td width='200'><?php echo ucwords(strtolower($videolist['file_title']));?></td>
 						<td width='100' ><?php echo ucwords(strtolower($videolist['album_description']));?></td>
-						<td width='200' id="video<?php echo $videolist['file_id'];?>"><input type="hidden" name="videoid" value="<?php echo $videolist['file_path'];?>"><a href="javascript:void(0)" onCLick="video_preview('<?php echo $videolist['file_path'];?>', 'video_<?php echo $videolist['file_id'];?>');" ><img width="120" height="75" src="http://img.youtube.com/vi/<?php echo $videolist['file_path']; ?>/0.jpg"/></a></td>
+						<td width='200' id="video<?php echo $videolist['file_id'];?>"><input type="hidden" name="videoid" value="<?php echo $videolist['file_path'];?>"><a href="javascript:void(0)" onCLick="video_preview('<?php echo $videolist['file_path'];?>', 'video_<?php echo $videolist['file_id'];?>');" >
+							<?php					 $file	=	$this->baseUrl('public/uploads/photo_images/'.$videolist['file_path']);
+						if($videolist['file_path']!=''){?>
+						<img width="120" height="75" src="<?php echo $file;?>">
+						<?php }else{?>
+						<img width="120" height="75" src="<?php echo $this->baseUrl('public/uploads/photo_images/No_Image_Available.jpg');?>">
+						<?php }?>	</a></td>			
 						<!--td><?php echo $videolist['file_path']; ?></td-->
-						<td width='100'><?php echo date('Y-M-d',strtotime($videolist['createddatetime']));?></td>
-						<td width='100'> <a class="button-edit" href="javascript:void(0)"  onClick="edit_video(<?php echo $videolist['file_id']; ?>)";></a> | <a class="button-delete" href="<?php echo $this->baseUrl('videos/deletevideo/file_id/').$videolist['file_id']."/cat_id/".$videolist['album_id']; ?>";></a></td>
+						<td width='100'><?php echo date('Y-M-d',strtotime($videolist['updateddatetime']));?></td>
+						<td width='100'> <a class="button-edit" href="javascript:void(0)"  onClick="edit_photo(<?php echo $videolist['file_id']; ?>)";></a> | <a class="button-delete" href="<?php echo $this->baseUrl('photos/deletephoto/file_id/').$videolist['file_id']."/cat_id/".$videolist['album_id']; ?>";></a></td>
 					
 						</tr>
 					<?php } }else{ ?>

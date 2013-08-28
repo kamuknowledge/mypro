@@ -6,7 +6,7 @@
 * Copy Right Header Information*
 *-----------------------------------------------------------------*
 * Project	:	GetLinc
-* File		:	Videos.php 
+* File		:	photos.php 
 * Module	:	Default Module
 * Owner		:	RAM's 
 * Purpose	:	This class is used for internal messaging operations for all user types
@@ -98,7 +98,7 @@ class PhotosController extends Zend_Controller_Action {
 		try{	
 		
 			$userid     = $this->session->userid; 
-			$this->view->title = ":: Video Categories";
+			$this->view->title = ":: photo Categories";
 			$CategoriesList = $this->Photosdb->getCategoriesList();		
 			//echo "<pre>";print_r($CategoriesList);exit;
 			$this->view->CategoriesList = $CategoriesList;
@@ -124,7 +124,7 @@ class PhotosController extends Zend_Controller_Action {
 			$searchWord = $this->_getParam('search_word');
 			
 			$userid     = $this->session->userid; 
-			$this->view->title = ":: Video Categories";
+			$this->view->title = ":: Photo Categories";
 			//exit;
 			$CatList = $this->Photosdb->getCategoriesList($searchWord);		
 			//echo "<pre>";print_r($CatList);exit;
@@ -158,7 +158,7 @@ class PhotosController extends Zend_Controller_Action {
 			//print_r($params);
 			$CategoriesList = $this->Photosdb->getCategoriesList();	//Get all active category list
 			$this->view->CategoriesList = $CategoriesList; 			//Pass to view file  all active category list
-			$photo_list	=	$this->Photosdb->getPhotosByCatId($userid,$params);//Pass the login userid for get category user videos
+			$photo_list	=	$this->Photosdb->getPhotosByCatId($userid,$params);//Pass the login userid for get category user photos
 			//echo "<pre>";print_r($video_list);exit;
 			$this->view->photo_list	=	$photo_list;	// Pass the data to iew file.
 		}catch (Exception $e){
@@ -189,7 +189,7 @@ class PhotosController extends Zend_Controller_Action {
 			if(isset($params['start'])){$this->view->start = $params['start'];}
 			
 			$this->view->cat_id = $params['cat_id'];
-			$photo_list	=	$this->Photosdb->getPhotosByCatId($userid,$params);//Pass the login userid for get category user videos
+			$photo_list	=	$this->Photosdb->getPhotosByCatId($userid,$params);//Pass the login userid for get category user photos
 			//echo "<pre>";print_r($video_list);exit;
 			$this->view->photo_list	=	$photo_list;
 			$CategoriesList = $this->Photosdb->getCategoriesList();	//Get all active category list
@@ -223,7 +223,7 @@ class PhotosController extends Zend_Controller_Action {
 						$filename = time().$info['name'];
 						$upload->addFilter('Rename', APPLICATION_PATH.'/../public/uploads/photo_category_images/'.$filename, 1);
 						$upload->receive($file);
-						$LogoSet = $this->Photosdb->insertVideocategory($params['cat_name'],$filename, $this->session->userid);
+						$LogoSet = $this->Photosdb->insertPhotocategory($params['cat_name'],$filename, $this->session->userid);
 					}
 				}
 		$this->_redirect('photos/categories');
@@ -249,7 +249,7 @@ class PhotosController extends Zend_Controller_Action {
 		try{	
 			$this->_helper->layout->disableLayout();
 			$params = $this->_getAllParams(); 
-			echo "<pre>";print_r($params);//exit;	
+			//echo "<pre>";print_r($params);//exit;	
 
 			$upload = new Zend_File_Transfer();                                    
 				
@@ -264,10 +264,9 @@ class PhotosController extends Zend_Controller_Action {
 						$LogoSet = $this->Photosdb->insertPhoto($params['photo_category'],$params['photoname'],$filename, $this->session->userid);
 					}
 				}
-				print_r($params);
-				echo $LogoSet;exit;				
-			//$LogoSet = $this->Photosdb->insertVideo($params['video_category'],$params['video_name'],$params['video_path'], $this->session->userid);
-			//$this->_redirect('photos/list/cat_id/'.$params['photo_category']);
+				//print_r($params);
+				//echo $LogoSet;exit;				
+			$this->_redirect('photos/list/cat_id/'.$params['photo_category']);
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
@@ -321,6 +320,62 @@ class PhotosController extends Zend_Controller_Action {
 			$video_list	=	$this->Photosdb->deletePhoto($file_id);
 			//echo "<pre>";print_r($video_list);exit;
 			$this->_redirect('photos/list/cat_id/'.$cat_id);
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	/**
+     * Purpose: Edit videos
+     * Access 	Public
+     * @param	intiger video_id
+     * @return  array
+     */
+	
+	public function editphotoAction() { 
+		try{	
+			$this->_helper->layout->disableLayout();
+			$photoId = $this->_getParam('photo_id'); 
+			$photo_data	=	$this->Photosdb->getPhotosByPhotoId($this->session->userid,$photoId);
+			//echo "<pre>"; print_r($video_data);exit;
+			$this->view->photo_data	=	$photo_data;	// Pass the data to iew file.
+			$CategoriesList = $this->Photosdb->getCategoriesList();	//Get all active category list
+			$this->view->CategoriesList = $CategoriesList; 			//Pass to view file  all active category list
+					
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	/**
+     * Purpose: Update videos
+     * Access 	Public
+     * @param	Post data,
+     * @return  intiger
+     */
+	
+	public function updatephotoAction() { 
+		try{	
+			$this->_helper->layout->disableLayout();
+			$params = $this->_getAllParams();
+			//echo "<pre>";print_R($params);//exit;			
+			$upload = new Zend_File_Transfer();                                    
+				
+				//$upload = new Zend_File_Transfer_Adapter_Http();                                
+				$files = $upload->getFileInfo();
+				foreach ($files as $file => $info) {
+					if($upload->isValid($file)){
+					 //echo "test";
+						$filename = time().$info['name'];
+						$upload->addFilter('Rename', APPLICATION_PATH.'/../public/uploads/photo_images/'.$filename, 1);
+						$upload->receive($file);
+						$video_data	=	$this->Photosdb->updatePhoto($params,$filename,$this->session->userid);
+
+					}
+				}
+				//exit;
+			$this->_redirect('photos/list/cat_id/'.$params['photo_category']);
+
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

@@ -69,15 +69,11 @@ $('#addvideo').live('click',function(){
  
 // Edit videos
    edit_video = function(videoid){
-   alert(videoid);
-  		$.post(baseUrl + '/videos/editvideo', { video_id: videoid },
+   		$.post(baseUrl + '/videos/editvideo', { video_id: videoid },
 		   function(msg){
-		   alert(msg);
-			//$.fancyBox.showActivity(msg);
-			$('#editvideo_form').show().fancyBox(msg);
-			//$.fancyBox(msg);
-			//$('#videolists').html(msg);
-		   }, "html");
+			$('#myvideo_edit').html(msg);
+			$('#myvideo_edit').show().fancyBox(msg);
+			}, "html");
 		   
 		   
    
