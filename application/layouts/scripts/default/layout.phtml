@@ -60,7 +60,7 @@ $isSignedIn = $this->session->isSignedIn;
 				$layout_controller = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
 				//echo $layout_module;
 				//echo $layout_controller;
-				if($layout_module=='wall' || ($layout_module=='default' && $layout_controller=='messaging') || ($layout_module=='default' && $layout_controller=='videos')){
+				if($layout_module=='wall' || ($layout_module=='default' && $layout_controller=='messaging') || ($layout_module=='default' && $layout_controller=='videos') || ($layout_module=='default' && $layout_controller=='photos')){
 					echo $this->action('index', 'chat', 'default', array('a_parameter'=>'a_value'));
 					echo $this->action('index', 'friendsuggestion', 'default', array('a_parameter'=>'a_value'));
 				}else{
@@ -74,7 +74,7 @@ $isSignedIn = $this->session->isSignedIn;
 			<div class="left-body">
 				<div class="left-sidebar">
 					<?php
-					if($layout_module=='wall' || ($layout_module=='default' && $layout_controller=='messaging') || ($layout_module=='default' && $layout_controller=='videos')){
+					if($layout_module=='wall' || ($layout_module=='default' && $layout_controller=='messaging') || ($layout_module=='default' && $layout_controller=='videos') || ($layout_module=='default' && $layout_controller=='photos')){
 						echo $this->action('index', 'wallmenu', 'default', array('a_parameter'=>'a_value'));
 						//echo $this->action('index', 'categories', 'default', array('a_parameter'=>'a_value'));
 						echo $this->action('index', 'eventnotifications', 'default', array('a_parameter'=>'a_value'));
