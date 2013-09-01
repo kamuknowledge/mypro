@@ -216,8 +216,9 @@ class ProfileController extends Zend_Controller_Action {
 						$this->view->UserDetails = $results[0];
 					} else if($edit_exp_id) {
 						if($this->profile->add_edit_experiance($params)) {
-							$results = $this->profiledb->getUserExperiance($edit_exp_id);
-							$this->view->UserDetails = $results[0];
+							/*$results = $this->profiledb->getUserExperiance($edit_exp_id);
+							$this->view->UserDetails = $results[0];*/
+							echo 1;exit;
 						} else {
 							// Load form with error messages
 							$this->view->UserDetails = array("error"=>1, "exp_id"=>$edit_exp_id);
@@ -226,9 +227,10 @@ class ProfileController extends Zend_Controller_Action {
 				} else if(isset($Request_Values["type"]) && $Request_Values["type"] == "new") {
 					$exp_id = $this->profile->add_edit_experiance($params);
 					if($exp_id) {
-						$results = $this->profiledb->getUserExperiance($exp_id);
+						/*$results = $this->profiledb->getUserExperiance($exp_id);
 						$results[0]["dis_type"] = "new";
-						$this->view->UserDetails = $results[0];
+						$this->view->UserDetails = $results[0];*/
+						echo 1;exit;
 					} else {
 						// Load form with error messages
 						$this->view->UserDetails = array("error"=>1, "exp_id"=>"new");
@@ -317,8 +319,9 @@ class ProfileController extends Zend_Controller_Action {
 						$this->view->UserDetails = $results[0];
 					} else if($edit_edu_id) {
 						if($this->profile->add_edit_education($params)) {
-							$results = $this->profiledb->getUserEducation($edit_edu_id);
-							$this->view->UserDetails = $results[0];
+							// $results = $this->profiledb->getUserEducation($edit_edu_id);
+							// $this->view->UserDetails = $results[0];
+							echo 1; exit;
 						} else {
 							// Load form with error messages
 							$this->view->UserDetails = array("error"=>1, "edu_id"=>$edit_edu_id);
@@ -327,9 +330,10 @@ class ProfileController extends Zend_Controller_Action {
 				} else if(isset($Request_Values["type"]) && $Request_Values["type"] == "new") {
 					$edu_id = $this->profile->add_edit_education($params);
 					if($edu_id) {
-						$results = $this->profiledb->getUserEducation($edu_id);
-						$results[0]["dis_type"] = "new";
-						$this->view->UserDetails = $results[0];
+						// $results = $this->profiledb->getUserEducation($edu_id);
+						// $results[0]["dis_type"] = "new";
+						// $this->view->UserDetails = $results[0];
+						echo 1; exit;
 					} else {
 						// Load form with error messages
 						$this->view->UserDetails = array("error"=>1, "edu_id"=>"new");
@@ -393,11 +397,14 @@ class ProfileController extends Zend_Controller_Action {
 								$this->view->OfficeStateList = $this->profiledb->getState($country);
 							}
 						}
-						$this->view->UserDetails[1] = array("display"=>"edit");
+						$this->view->UserDetails[2] = array("display"=>"edit");
 					} else if($Request_Values["type"] == "edit"){
+						$error = 0;
 						if(!$this->profile->edit_address_info($params))
-							$this->view->UserDetails[] = array("display"=>"edit");
+							$error = 1;
 						$this->view->UserDetails = $this->profiledb->getUserAddress();
+						if($error)
+							$this->view->UserDetails[2] = array("display"=>"edit");
 						foreach($this->view->UserDetails as $value) {
 							$country = isset($value["country_id"]) ? $value["country_id"] : "";
 							if($value["address_type"] == "Home") {
@@ -531,6 +538,58 @@ class ProfileController extends Zend_Controller_Action {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
+	}
+	public function reloadexperianceviewAction() {
+		try {
+			$this->_helper->layout->setLayout('default/empty_layout');
+			$UserDetails["experiance"] = $this->profiledb->getUserExperiance();
+			$this->view->UserDetails = $UserDetails;
+		} catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		} 
+	}
+	public function deleteexperianceAction() {
+		try{
+			if ($this->getRequest()->isXmlHttpRequest()) {
+				$request = $this->getRequest();
+				$Request_Values = $request->getPost();
+				if ($request->isPost()) {
+					$this->profiledb->delete_user_experiance($Request_Values["id"]);
+					echo 1;
+				}
+			}
+			exit;
+		} catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		} 
+	}
+	public function deleteeducationAction() {
+		try{
+			if ($this->getRequest()->isXmlHttpRequest()) {
+				$request = $this->getRequest();
+				$Request_Values = $request->getPost();
+				if ($request->isPost()) {
+					$this->profiledb->delete_user_education($Request_Values["id"]);
+					echo 1;
+				}
+			}
+			exit;
+		} catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		} 
+	}
+	public function reloadeducationviewAction() {
+		try {
+			$this->_helper->layout->setLayout('default/empty_layout');
+			$UserDetails["education"] = $this->profiledb->getUserEducation();
+			$this->view->UserDetails = $UserDetails;
+		} catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		} 
 	}
 }
 

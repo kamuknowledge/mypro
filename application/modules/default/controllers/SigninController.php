@@ -68,7 +68,7 @@ class SigninController extends Zend_Controller_Action {
 		}
 	}
 	/**
-     * Purpose: User registration page 
+     * Purpose: User login page 
      *
      * Access is public
      *
@@ -77,6 +77,41 @@ class SigninController extends Zend_Controller_Action {
      * @return  
      */
 	public function loginAction() {
+		try{
+			$this->view->title = "Login User";
+			$params = $this->_getAllParams();	
+			$this->_helper->layout->setLayout('default/empty_layout');
+			$request = $this->getRequest();
+			$Request_Values = $request->getPost();			
+			if ($request->isPost()) {
+				if(!$this->signin->login($params)) {
+					// return 1;
+					// redirect to current url
+					
+				} else {
+					//return 0;
+					echo "<script>window.location.reload();</script>";
+					exit;
+				}
+			}else{			
+				//$this->view->countrieslist = $this->merchantdb->getCountriesList();
+				//return 0;
+			}
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	/**
+     * Purpose: User header login page 
+     *
+     * Access is public
+     *
+     * @param	
+     * 
+     * @return  
+     */
+	public function loginheaderAction() {
 		try{
 			$this->view->title = "Login User";
 			$params = $this->_getAllParams();	

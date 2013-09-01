@@ -5,7 +5,7 @@ $address = $this->UserDetails["address"];
 $experiance = $this->UserDetails["experiance"];
 $education = $this->UserDetails["education"];
 $timezones = $this->UserDetails["timezones"];
-$present_cmp = ($profile["company_name"]) ? $profile["company_name"]." - "."country_name" : "";
+$present_cmp = ($profile["company_name"]) ? $profile["company_name"].($profile["country_name"] ? " - ".$profile["country_name"] : "") : "";
 //$previous_cmp = "";
 $current_status = ($profile["job_title"] && $profile["company_name"]) ? $profile["job_title"].(($profile["company_name"]) ? " at ".$profile["company_name"] : "") : "";
 $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["school_name"] : "";
@@ -23,7 +23,8 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 									<div align="center">
 									<?php
 										$path = $this->baseUrl('public/uploads')."/user_images/";
-										$image_name = "No_Image_Available.jpg";
+										//$image_name = "No_Image_Available.jpg";
+										$image_name = "profile.png";										
 										$image_status = 0;
 										if($profile["image_path"] && file_exists( $_SERVER['DOCUMENT_ROOT'].$path."crop_200_200/".$profile["image_path"] )) {
 											$path = $path."crop_200_200/";
@@ -108,9 +109,8 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 								<div class="clear"></div>
 								<div class="profile-information">
 									<div class="left width-20">
-										<strong style="position: relative; line-height: 2;">My Referral Id <img src="images/refferalicon.png" style="position: absolute; right: -2px; top: -1px;" valign="middle"/></strong>
-										<br/>
-										http://example.com/?refid=<?php echo $profile["userid"]; ?>
+										<strong style="position: relative; line-height: 2; font-size:14px;">
+										Complete Your Profile</strong>										
 									</div>
 									<div class="frnds_infor">
 										<img src="images/relation_icon.png" />
@@ -148,7 +148,7 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 										</div>
 										<div id="login_loading" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div>
 								</div>
-								<div class="profile_info_block">
+								<div class="profile_info_block all_experiances_view">
 									<div class="header">
 										<h2 class="title_have_image exprce">Experience Details</h2>
 										<a class="edit_experiance edit_experiance_new" id="edit_experiance_new" href="javascript:void(0)"><span>+</span>Add a Position</a>
@@ -156,10 +156,11 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 										<div class="desc experiance_views">
 										<div class="experiance_view" id="experiance_view_new" style="display:none;"></div>
 										<div class="experiance_edit" id="experiance_edit_new" style="display:none;"></div>
+										<?php if(count($experiance) > 0 ) { ?>
 										<?php foreach($experiance as $key => $value) { ?>
 										<div class="experiance_view" id="experiance_view_<?php echo $value["experience_id"]; ?>">
 											<h2 class="title_have_image exprce"><?php echo $value["job_title"]; ?><span class="edit_experiance edit_experiance_<?php echo $value["experience_id"]; ?> icon" id="edit_experiance_<?php echo $value["experience_id"]; ?>"></span><div id="experiance_edit_loading_<?php echo $value["experience_id"]; ?>" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div></h2>
-											<span class="caption"><?php echo $value["company_name"]; ?></span>
+											<span class="caption"><?php echo $value["company_name"].($value["job_location"] ? ", ".$value["job_location"] : ""); ?></span>
 											<?php
 												$date1 = $value["from_year"]."-".$value["from_month"]."-1";
 												$date2 = $value["to_year"]."-".$value["to_month"]."-1";
@@ -169,15 +170,17 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 												$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
 												$duration = "(".$years." years ".$months." months)";
 											?>
-											<span class="information"><?php echo ($value["from_month"]) ? date("F", mktime(0, 0, 0, $value["from_month"], 10)) : 0; ?> <?php echo $value["from_year"]; ?> - To <?php echo ($value["present_working"]) ? "Present" : (($value["to_month"]) ? date("F", mktime(0, 0, 0, $value["to_month"], 10)) : 0)." ".$value["to_year"]; ?> <?php echo $duration; ?> | <?php echo $value["job_location"]; ?></span>
+											<span class="information"><?php echo ($value["from_month"]) ? date("F", mktime(0, 0, 0, $value["from_month"], 10)) : 0; ?> <?php echo $value["from_year"]; ?> - To <?php echo ($value["present_working"]) ? "Present" : (($value["to_month"]) ? date("F", mktime(0, 0, 0, $value["to_month"], 10)) : 0)." ".$value["to_year"]; ?> <?php echo $duration; ?></span>
 											<p><?php echo $value["company_description"]; ?></p>
 										</div>
 										<div class="experiance_edit" id="experiance_edit_<?php echo $value["experience_id"]; ?>" style="display:none;"></div>
-										<?php } ?>									
+										<?php } } else { ?>
+										<div class="add_about edit_experiance edit_experiance_new edit_experiance_bar" id="edit_experiance_new"> <a href="javascript:void(0)"></a>Add Experience</div>
+										<?php } ?>
 										</div>
 									
 								</div>
-								<div class="profile_info_block">
+								<div class="profile_info_block all_education_view">
 									<div class="header">
 										<h2 class="title_have_image edu">Education Details</h2>
 										<a href="javascript:void(0);" class="edit_education edit_education_new" id="edit_education_new"><span>+</span>Add Education</a>
@@ -185,14 +188,17 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 										<div class="desc education_views">
 										<div class="education_view" id="education_view_new" style="display:none;"></div>
 										<div class="education_edit" id="education_edit_new" style="display:none;"></div>
-										<?php foreach($education as $key => $value) { ?>
-										<div class="education_view" id="education_view_<?php echo $value["education_id"]; ?>">
-											<h2 class="title_have_image educat"><?php echo $value["school_name"]; ?><span class="edit_education edit_education_<?php echo $value["education_id"]; ?> icon" id="edit_education_<?php echo $value["education_id"]; ?>"></span><div id="education_edit_loading_<?php echo $value["education_id"]; ?>" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div></h2>
-											<span class="caption"><?php echo $value["school_name"].($value["specialization"] ? ", ".$value["specialization"] : ""); ?></span>
-											<span class="information"><?php echo ($value["from_month"]) ? date("F", mktime(0, 0, 0, $value["from_month"], 10)) : 0; ?> <?php echo $value["from_year"]; ?> - To <?php echo ($value["present_working"]) ? "Present" : (($value["to_month"]) ? date("F", mktime(0, 0, 0, $value["to_month"], 10)) : 0)." ".$value["to_year"]; ?></span>
-											<p><?php echo $value["education_notes"]; ?></p>
-										</div>
-										<div class="education_edit" id="education_edit_<?php echo $value["education_id"]; ?>" style="display:none;"></div>
+										<?php if(count($education) > 0 ) { ?>
+											<?php foreach($education as $key => $value) { ?>
+											<div class="education_view" id="education_view_<?php echo $value["education_id"]; ?>">
+												<h2 class="title_have_image educat"><?php echo $value["school_name"]; ?><span class="edit_education edit_education_<?php echo $value["education_id"]; ?> icon" id="edit_education_<?php echo $value["education_id"]; ?>"></span><div id="education_edit_loading_<?php echo $value["education_id"]; ?>" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div></h2>
+												<span class="caption"><?php echo $value["degree"].($value["specialization"] ? ", ".$value["specialization"] : ""); ?></span>
+												<span class="information"><?php echo ($value["from_month"]) ? date("F", mktime(0, 0, 0, $value["from_month"], 10)) : 0; ?> <?php echo $value["from_year"]; ?> - To <?php echo ($value["present_working"]) ? "Present" : (($value["to_month"]) ? date("F", mktime(0, 0, 0, $value["to_month"], 10)) : 0)." ".$value["to_year"]; ?></span>
+												<p><?php echo $value["education_notes"]; ?></p>
+											</div>
+											<div class="education_edit" id="education_edit_<?php echo $value["education_id"]; ?>" style="display:none;"></div>
+											<?php } } else { ?>
+										<div class="add_about edit_education edit_education_new edit_education_bar" id="edit_education_new"> <a href="javascript:void(0)"></a>Add Education</div>
 										<?php } ?>
 										</div>
 									

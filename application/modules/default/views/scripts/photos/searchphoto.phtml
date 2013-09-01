@@ -1,0 +1,53 @@
+<table cellpadding="0" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th width='30'><input type="checkbox"/></th>
+						<th width='200'>Photo Title</th>
+						<th  width='100'>Photo Category</th>
+						<th  width='200'>Photo</th>
+						<th  width='100'>Date</th>
+						<th  width='100'>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php 
+				if(isset($this->searchphoto) && !empty($this->searchphoto))
+				{
+				foreach($this->searchphoto as $photolist){
+				?>
+					<tr class="odd">
+						<td width='30'><input type="checkbox"/></td>
+						<td width='200'><?php echo ucwords(strtolower($photolist['file_title']));?></td>
+						<td width='100'> <?php echo ucwords(strtolower($photolist['album_description']));?></td>
+						<td width='100'id="video<?php echo $photolist['file_id'];?>"><input type="hidden" name="videoid" value="<?php echo $photolist['file_path'];?>"><a href="javascript:void(0)" onCLick="video_preview('<?php echo $photolist['file_path'];?>', 'video_<?php echo $photolist['file_id'];?>');" >
+						<?php					 $file	=	$this->baseUrl('public/uploads/photo_images/'.$photolist['file_path']);
+						if($photolist['file_path']!=''){?>
+						<img width="120" height="75" src="<?php echo $file;?>">
+						<?php }else{?>
+						<img width="120" height="75" src="<?php echo $this->baseUrl('public/uploads/photo_images/No_Image_Available.jpg');?>">
+						<?php }?>	
+					</a></td>
+						<!--td><?php echo $photolist['file_path']; ?></td-->
+						<td width='100'><?php echo date('Y-M-d',strtotime($photolist['updateddatetime']));?></td>
+						<td width='100'> <a class="button-edit" href="javascript:void(0)"  onClick="edit_photo(<?php echo $photolist['file_id']; ?>)";></a> | <a class="button-delete" href="<?php echo $this->baseUrl('photos/deletephoto/file_id/').$photolist['file_id']."/cat_id/".$photolist['album_id']; ?>";></a></td>
+					
+
+						</tr>
+						
+					<?php } }else{ ?>
+					<tr class="grid-view-footer"><td  colspan="6">Records not found !</td></tr>
+					<?php } ?>
+									
+				</tbody>
+			</table>
+		
+					<?php 
+if(count($this->searchphoto)>=$this->limit){?>
+<div class="more_box grid-view-footer" id="<?php echo $this->start;?>">
+<input type="hidden" name="cid" id="cid" value="<?php echo $this->cat_id;?>" />
+	<div class="view_more_loader" id="video_view_more_loading" style="display:none;"><img src="<?php echo $this->baseUrl('public/default/images')."/ajax-loader.gif" ?>" ></div>
+	<div class="view_more_products" id="video_view_more">View More..</div>
+</div><div class="clear"></div>
+<?php }?>
+					
+		

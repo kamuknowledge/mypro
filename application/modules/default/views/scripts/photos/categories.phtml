@@ -34,14 +34,14 @@
 							?>
 								<li class="category_border">
 									<div class="product_image" align="center">
-										<a href="<?php echo $this->baseUrl('videos/list/').$cat_list['album_id'];?>">
+										<a href="<?php echo $this->baseUrl('photos/list/cat_id/').$cat_list['album_id'];?>">
 										<input type="hidden" name="cal_id" value="<?php echo $cat_list['album_id'];?>" />
 										<?php 
-										$file	=	$this->baseUrl('public/uploads/video_category_images/'.$cat_list['album_image']);
+										$file	=	$this->baseUrl('public/uploads/photo_category_images/'.$cat_list['album_image']);
 										if($cat_list['album_image'] !=''){?>
 										<img src="<?php echo $file;?>" width="135" height="135">
 										<?php }else{ ?>
-										<img width="135" height="135" src="<?php echo $this->baseUrl('public/uploads/video_category_images/No_Image_Available.jpg');?>">
+										<img width="135" height="135" src="<?php echo $this->baseUrl('public/uploads/photo_category_images/No_Image_Available.jpg');?>">
 										<?php } ?>
 										</a>
 									</div>

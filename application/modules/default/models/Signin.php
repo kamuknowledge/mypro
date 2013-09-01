@@ -124,7 +124,6 @@ class Default_Model_Signin extends Application_Model_Validation {
 				$this->error->error = Failure_user_creation . ' with Login ID ' . $useremail ;
 				return false;
 			}
-			
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

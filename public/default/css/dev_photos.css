@@ -61,5 +61,20 @@
 	border-radius: 3px 3px 3px 3px;
 	min-height:50px;
 	}
+/* Start code by venu */
+.button-edit {
+    background: url("../images/app-icons.png") no-repeat scroll 0 0 transparent;
+    color: #000000;
+    padding: 3px 3px 6px 18px;
+	background-position: -153px 3px;
+    text-shadow: 1px 1px #FFFFFF;
+}
+.button-delete {
+    background: url("../images/btn_icons.png") no-repeat scroll 0 0 transparent;
+    color: #000000;
+    padding: 6px 6px 5px 28px;
+    text-shadow: 1px 1px #FFFFFF;
+}
+/* End code by venu */	
 	
 	

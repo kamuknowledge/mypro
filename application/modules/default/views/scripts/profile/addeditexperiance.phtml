@@ -61,23 +61,27 @@ $(document).ready(function(){
 				url : baseUrl+"/profile/vieweditexperiance",
 				data : "type="+save_type+"&"+str,
 				beforeSend : function() {
-					$("#experiance_edit_loading_<?php echo $experiance_id; ?>").show();
+					///$("#experiance_edit_loading_<?php echo $experiance_id; ?>").show();
 				},
 				success : function(data) {
-					if(save_type == "new") {
-						CreateSuccess("Experiance added successfully.");
-						$("#experiance_view_<?php echo $experiance_id; ?>").html("");
-						$("#experiance_edit_<?php echo $experiance_id; ?>").html("");
-						$("#experiance_view_<?php echo $experiance_id; ?>").hide();
-						$("#experiance_edit_<?php echo $experiance_id; ?>").hide();
-						if($("#experiance_form_new")) $("#experiance_form_new").remove();
-						$("#experiance_edit_<?php echo $experiance_id; ?>").after(data);
+					if(data == 1) {
+						reloadExperiance();
 					} else {
-						CreateSuccess("Experiance updated successfully.");
-						$("#experiance_view_<?php echo $experiance_id; ?>").html(data);
-						$("#experiance_edit_loading_<?php echo $experiance_id; ?>").hide();
-						$("#experiance_edit_<?php echo $experiance_id; ?>").hide();
-						$("#experiance_view_<?php echo $experiance_id; ?>").show();
+						if(save_type == "new") {
+							CreateSuccess("Experiance added successfully.");
+							$("#experiance_view_<?php echo $experiance_id; ?>").html("");
+							$("#experiance_edit_<?php echo $experiance_id; ?>").html("");
+							$("#experiance_view_<?php echo $experiance_id; ?>").hide();
+							$("#experiance_edit_<?php echo $experiance_id; ?>").hide();
+							if($("#experiance_form_new")) $("#experiance_form_new").remove();
+							$("#experiance_edit_<?php echo $experiance_id; ?>").after(data);
+						} else {
+							CreateSuccess("Experiance updated successfully.");
+							$("#experiance_view_<?php echo $experiance_id; ?>").html(data);
+							$("#experiance_edit_loading_<?php echo $experiance_id; ?>").hide();
+							$("#experiance_edit_<?php echo $experiance_id; ?>").hide();
+							$("#experiance_view_<?php echo $experiance_id; ?>").show();
+						}
 					}
 					return false;
 				}
@@ -111,6 +115,20 @@ function submit_exp_form(form) {
 function cancel_exp_form(id) {
 	$("#experiance_edit_"+id).hide();
 	$("#experiance_view_"+id).show();
+	if($(".edit_experiance_bar")) $(".edit_experiance_bar").show();
+}
+function mem_exp_delete(id) {
+	$.ajax({
+		url: baseUrl+"/profile/deleteexperiance",
+		type: "post",
+		data: "id="+id,
+		success: function(data) {
+			if(data == 1) {
+				reloadExperiance();
+				CreateSuccess("Experiance has been deleted successfully.");
+			}
+		}
+	});
 }
 </script>
 <form name="experiance_form_<?php echo $experiance_id; ?>" id="experiance_form_<?php echo $experiance_id; ?>">
@@ -179,6 +197,7 @@ function cancel_exp_form(id) {
 			</div>
 		</div>
 		<div class="row">
+			<?php $present = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['present_working'] : $present_working; ?>
 			<label class="width-15">Time Period : </label>
 			<div class="fields-container">
 				<div class="row">
@@ -196,14 +215,14 @@ function cancel_exp_form(id) {
 							<option value="<?php echo $i; ?>" <?php echo ($fyear == $i) ? "selected" : ""; ?>><?php echo $i; ?></option>
 						<?php } ?>
 					</select>
-					<select id="to_month_<?php echo $experiance_id; ?>" name="to_month">
+					<select id="to_month_<?php echo $experiance_id; ?>" name="to_month" <?php if($present) { ?> style="display:none" <?php } ?> >
 						<option>Month</option>
 						<?php $tmonth = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['to_month'] : $to_month; ?>
 						<?php for($i = 1; $i<= 12; $i++) { ?>
 							<option value="<?php echo $i; ?>" <?php echo ($tmonth == $i) ? "selected" : ""; ?>><?php echo date("F", mktime(0, 0, 0, $i, 10)); ?></option>
 						<?php } ?>
 					</select>
-					<select id="to_year_<?php echo $experiance_id; ?>" name="to_year">
+					<select id="to_year_<?php echo $experiance_id; ?>" name="to_year" <?php if($present) { ?> style="display:none" <?php } ?>>
 						<option>Year</option>
 						<?php $tyear = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['to_year'] : $to_year; ?>
 						<?php for($i = 1925; $i <= date("Y"); $i++) { ?>
@@ -215,8 +234,7 @@ function cancel_exp_form(id) {
 			</div>
 			<div class="fields-container">
 				<div class="row">
-					<?php $present = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['present_working'] : $present_working; ?>
-					<input type="checkbox" name="present_working" id="present_working_<?php echo $experiance_id; ?>" style="vertical-align: text-bottom;margin-top:8px;" class="present_working" <?php if($present) echo "checked"; ?>/> <label style="margin-top:2px;">Present Working Here</label>
+					<input type="checkbox" name="present_working" id="present_working_<?php echo $experiance_id; ?>" style="vertical-align: text-bottom;margin-top:8px;" class="present_working" <?php if($present) echo "checked"; ?> value="1"/> <label style="margin-top:2px;">Present Working Here</label>
 				</div>
 			</div>
 		</div>
@@ -227,6 +245,7 @@ function cancel_exp_form(id) {
 			<div class="text-right">
 				<a class="button-dark add" href="javascript:void(0)" onclick="submit_exp_form('experiance_form_<?php echo $experiance_id; ?>')"><span><span>Save</span></span></a>
 				<a class="button-grey add common_cancel_btn" href="javascript:void(0)"onclick="cancel_exp_form('<?php echo $experiance_id; ?>')"><span><span>Cancel</span></span></a>
+				<a class="delete_text" href="javascript:void(0)" onclick="mem_exp_delete('<?php echo $experiance_id; ?>')">Remove this position</a>
 				<div class="clear"></div>
 			</div>
 		</div>

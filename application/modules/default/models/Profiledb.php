@@ -70,11 +70,12 @@ class Default_Model_Profiledb  {
 	public function getProfileDetails(){
 		try {	
 			if($this->userid) {
-				$query = "SELECT u.userid, u.firstname, u.lastname, u.emailid, u.phonenumber, u.display_name, u.date_of_birth, u.gender, u.marital_status, u.timezone_id, u.profile_image, up.about_us, up.interests, ui.image_path, ue.job_title, ue.company_name, ued.degree, ued.school_name
+				$query = "SELECT u.userid, u.firstname, u.lastname, u.emailid, u.phonenumber, u.display_name, u.date_of_birth, u.gender, u.marital_status, u.timezone_id, u.profile_image, up.about_us, up.interests, ui.image_path, ue.job_title, ue.company_name, ued.degree, ued.school_name, mc.country as country_name
 							FROM apmusers u
 							LEFT JOIN user_profile up ON up.userid = u.userid AND up.statusid = 1
 							LEFT JOIN user_images ui ON ui.userid = u.userid AND ui.statusid = 1
-							LEFT JOIN user_experience ue ON ue.userid = u.userid AND ue.experience_id = (SELECT ue1.experience_id FROM user_experience ue1 WHERE ue1.userid = u.userid AND ((ue1.present_working = 1 AND ue1.to_year = 0 AND ue1.to_month = 0) OR (ue1.present_working = 0 AND ue1.to_year != 0 AND ue1.to_month != 0)) AND ue1.statusid = 1 ORDER BY ue1.to_year DESC, ue1.to_month DESC LIMIT 1)
+							LEFT JOIN user_experience ue ON ue.userid = u.userid AND ue.experience_id = (SELECT ue1.experience_id FROM user_experience ue1 WHERE ue1.userid = '94' AND ue1.present_working = 1 AND ue1.statusid = 1 ORDER BY ue1.to_year DESC, ue1.to_month DESC LIMIT 1)
+							LEFT JOIN master_countries mc ON mc.country_id = ue.country_id AND mc.statusid = 1
 							LEFT JOIN user_education ued ON ued.userid = u.userid AND ued.education_id = (SELECT ued1.education_id FROM user_education ued1 WHERE ued1.userid = u.userid AND ued1.statusid = 1 ORDER BY ued1.to_year DESC, ued1.to_month DESC LIMIT 1)
 							WHERE u.userid = '".$this->userid."' AND u.statusid = 1;";
 				$stmt = $this->db->query($query);			
@@ -129,7 +130,7 @@ class Default_Model_Profiledb  {
 				$query = "SELECT ue.* FROM user_education ue WHERE ue.userid = '".$this->userid."' AND ue.statusid = 1";
 				if($id)
 					$query .= " AND ue.education_id = ".$id;
-				$query .= " AND ue.statusid = 1;";
+				$query .= " AND ue.statusid = 1 ORDER BY ue.to_year DESC, ue.to_month DESC;";
 				$stmt = $this->db->query($query);			
 				return $stmt->fetchAll();
 			}
@@ -146,9 +147,9 @@ class Default_Model_Profiledb  {
 				$query = "SELECT ue.* FROM user_experience ue WHERE ue.userid = '".$this->userid."'";
 				if($id)
 					$query .= " AND ue.experience_id = ".$id;
-				$query .= " AND ue.statusid = 1;";
+				$query .= " AND ue.statusid = 1 ORDER BY ue.present_working DESC, ue.to_year DESC, ue.to_month DESC;";
 				//exit;
-				$stmt = $this->db->query($query);			
+				$stmt = $this->db->query($query);
 				return $stmt->fetchAll();
 			}
 			return 0;
@@ -298,6 +299,34 @@ class Default_Model_Profiledb  {
 					$query = 'INSERT INTO user_images (userid, image_path, is_primary, statusid, createddatetime) values("'.$this->userid.'", "'.$filename.'", 1, 1, NOW());';
 					$stmt = $this->db->query($query);
 				}
+				return 1;
+			}
+			return 0;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function delete_user_experiance($id){
+		try {
+			if($this->userid && $id) {
+				$query = "DELETE FROM user_experience WHERE experience_id = '".$id."';";
+				$stmt = $this->db->query($query);
+				return 1;
+			}
+			return 0;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function delete_user_education($id){
+		try {
+			if($this->userid && $id) {
+				$query = "DELETE FROM user_education WHERE education_id = '".$id."';";
+				$stmt = $this->db->query($query);
 				return 1;
 			}
 			return 0;

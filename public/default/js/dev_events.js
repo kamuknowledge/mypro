@@ -3,6 +3,72 @@ var clicking = false, mainevent,
         clickedElement, self = {}, appointmentBook = [];
 
 $(document).ready(function() {
+
+$('#example-two').organicTabs({
+                        'speed': 05
+                    });
+					set_popup_content();
+					
+	$('.close_pop').on({
+        click: function(e) {
+            e.preventDefault();
+            $('.pop_up').hide();
+        }
+    });
+	
+	$('.fc-button').live({
+    click: function(e) {
+        e.preventDefault();
+        closeallpopups();
+    }
+});
+	
+	$(".small_form_btn").live("click",function(){
+		var eventTitle = $("#event_title").val();
+		if(eventTitle==""){
+			$(".error_event_title").show();
+			$(".error_event_title").html('Event title can not be null.').css({'color':'red','padding-left':'77px'});
+			setTimeout(function(){
+				$(".error_event_title").html();
+				$(".error_event_title").hide();
+			},2000);
+			return false;
+		} else {
+			createEvent();
+		}
+	});
+	
+	$(".edit_event_link").live("click",function(){
+	
+					$('.calendar').hide('slide', {direction: 'left'}, 1000);
+					$('#event_form').show('slide', {direction: 'left'}, 1000);
+					$("#allday").removeAttr("checked");
+					$("#event_id").val('');
+					$("#event_form_body input[type=text],textarea").val('');
+					
+					 var start = new Date($('#start_date').val());
+					 var startTime = $('#start_time').val();
+					 var end = new Date($('#end_date').val());
+					 var endTime = $('#end_time').val();
+					 var allDay = $('#allDay').val();
+					
+					if(allDay==1){
+						$('#allday').attr('checked',true);
+						$('#event_start_time').attr('disabled',true);
+						$('#event_end_time').attr('disabled',true);
+					} else {
+						$('#allday').attr('checked',false);
+						$('#event_start_time').attr('disabled',false);
+						$('#event_end_time').attr('disabled',false);
+					}
+					
+					
+					$("#event_start_date").datepicker('setDate', start);
+					$("#event_end_date").datepicker('setDate', end);
+					$('#event_start_time').timepicker('setTime', startTime);
+					$('#event_end_time').timepicker('setTime', endTime);
+	});
+	
    /* Event form processing js code*/
    $("#event_form_body").submit(function(e){
 		$('#event_form_body').validate({errorElement: 'span', errorPlacement: function(error, element) {
@@ -116,9 +182,15 @@ $(document).ready(function() {
 
 
             var today = new Date();
-            if (today > start && (copiedEventObject.type == 'event' || copiedEventObject.type == 'appointments'))
+            if (today > start && (copiedEventObject.type == 'event'))
             {
-                alert('Cannot move Events to past dates');
+				$(".error_message").show();
+				$(".error_message").html('You cannot move Events to past dates');
+				setTimeout(function(){
+							$(".error_message").html('');
+							$(".error_message").hide();
+						},2000);
+                //alert('Cannot move Events to past dates');
                 self.calendar.calendar.refetchEvents();
             } else {
                 $.post(baseUrl + 'calendar/changeDate', {start: start, end: end, id: copiedEventObject.unique_id, etype: copiedEventObject.type, allday: copiedEventObject.allDay}, function(data) {
@@ -206,92 +278,163 @@ $(document).ready(function() {
 				});
 			},
 			select: function(start, end, allDay, jsEvent, view) {
-          
-            var clickedElement = jsEvent.target;
-            var offsetData = $(clickedElement).position();
-            var targ = jsEvent.target;
-			//console.log(targ);
-            var elem = $.trim($(targ).data("show"));
-			if (elem == 'view_more') {
-            } else {
-				var start_date = convert(start);
-				start_date = start_date.split(' ');
-				end_date = convert(end);
-                end_date = end_date.split(' ');
+				$('#example-two').remove();
 				
-				var ys1 = start_date[0].substring(0, 4);
-                var ms1 = start_date[0].substring(5, 7);
-                var ds1 = start_date[0].substring(8, 10);
-				
-				var ye1 = end_date[0].substring(0, 4);
-                var me1 = end_date[0].substring(5, 7);
-                var de1 = end_date[0].substring(8, 10);
+				start_obj_date = start;
+                end_obj_date = end;
+                start = convert(start_obj_date);
+                start = start.split(' ');
+                //alert(start);
+                end = convert(end_obj_date);
+                end = end.split(' ');
+                //alert(end);
+                var start_d = start[0].split('/');
 
-                var stDate = new Date(ys1, ms1 - 1, ds1);
-				
-				var enDate = new Date(ye1, me1 - 1, de1);
+                var y1 = start[0].substring(0, 4);
+                var m1 = start[0].substring(5, 7);
+                var d1 = start[0].substring(8, 10);
 
-                var today = new Date(y, m, d);
+                var today = new Date();
+				var strt = dateFormat(start[0]);
+                var endt = dateFormat(end[0]);
+                var strtTime = start_obj_date.toLocaleTimeString().toLowerCase().replace(/:\d\d ([ap]m) .+$/, ' $1');
+                var endTime = end_obj_date.toLocaleTimeString().toLowerCase().replace(/:\d\d ([ap]m) .+$/, ' $1');
 				
-				if (today > stDate)
+				if (today > start_obj_date)
                 {
-                    alert("You can not create a backdate event.");
+                    $(".error_message").show();
+					$(".error_message").html('You cannot create a backdate event.');
+					setTimeout(function(){
+								$(".error_message").html('');
+								$(".error_message").hide();
+							},2000);
 					//dialoge_close();
 					$('#calendar').fullCalendar('unselect');
 					return false;
-                } else {
-					$('.calendar').hide('slide', {direction: 'left'}, 1000);
-					$('#event_form').show('slide', {direction: 'left'}, 1000);
-					if(allDay==true){
-						$('#allday').attr('checked',true);
-						$('#event_start_time').attr('disabled',true);
-						$('#event_end_time').attr('disabled',true);
+                }
+				
+				 var clickedElement = jsEvent.target;
+				 var offsetData = $(clickedElement).position();
+				 var targ = jsEvent.target;
+				var elem = $.trim($(targ).data("show"));
+				if (elem == 'view_more') {
+				} else {
+					if (view.name == 'month') {
+						var clickedElement = jsEvent.target;
+						var offsetData = $(clickedElement).position();
+						var targ = jsEvent.target;
+						var elem = $(targ).html();
+						$('#calendar').css('position', 'relative');
+						var mousex = jsEvent.pageX - 151;
+						var mousey = jsEvent.pageY - 180;
+
+						if (offsetData.left - 250 < 0) {
+							offsetData.left = 0;
+						}
+						if (offsetData.left > 600) {
+							offsetData.right = '50px';
+						}
+
+						if (offsetData.top > 550) {
+							offsetData.top = 0;
+						}
+
+						$('#calendar').append('<div id=\'example-two\'>' + popup_content + '</div>');
+						$('#example-two').css('display', 'block');
+						if (offsetData.top == 0) {
+							$('#example-two').css('bottom', offsetData.top);
+						} else {
+							$('#example-two').css('top', offsetData.top);
+						}
+						if (typeof offsetData.right != 'undefined') {
+							$('#example-two').css('right', offsetData.right);
+						} else {
+							$('#example-two').css('left', offsetData.left);
+						}
+						$('#example-two').css('position', 'absolute');
+						
 					} else {
-						$('#allday').attr('checked',false);
-						$('#event_start_time').attr('disabled',false);
-						$('#event_end_time').attr('disabled',false);
+						var _cal_width = 780;
+						var elem = $(jsEvent.target);
+
+						var currentElem = elem.parents('.fc-event');
+						//console.log(currentElem);
+						if (!currentElem.length)
+							return false;
+						var _top = currentElem.css('top');
+
+						var _left_px = currentElem.css('left');
+						var _left = currentElem.css('left').replace('px', '');
+						var topwithoutpx = currentElem.css('top').replace('px', '');
+						if ($('.fc-agenda-slots').height() < 200 + parseInt(topwithoutpx)) {
+							var bottomData = '0px';
+						}
+						var _width = currentElem.css('width');
+						var _pop_width = 390;
+						var _width_diff = (_cal_width - parseInt(_left));
+						var _popleft = (_width_diff < (_pop_width)) ? _left - (_pop_width - _width_diff) - 10 : _left_px;
+
+
+						currentElem.after('<div id=\'example-two\'>' + popup_content + '</div>');
+						$('#example-two').css('left', _popleft).css('position', 'absolute');
+						if (typeof bottomData != 'undefined') {
+							$('#example-two').css('bottom', bottomData);
+						} else {
+							$('#example-two').css('top', _top);
+						}
+
+					   
+						$('#example-two').show();
 					}
-					$("#event_id").val('');
-					$("#event_form_body input[type=text],textarea").val('');
 					
 					
 					
-					
-					$("#event_start_date").datepicker('setDate', start);
-					$("#event_end_date").datepicker('setDate', end);
-					$('#event_start_time').timepicker('setTime', start);
-					$('#event_end_time').timepicker('setTime', end);
 				}
-            }
+				$('#form_bubble').hide();
+                $('.event_popup_view1').hide();
+                //alert(view.name);
+                $('#start_date').val('');
+                $('#start_time').val('');
+                $('#end_date').val('');
+                $('#end_time').val('');
+                $('#allDay').val('');
+                $('#event_name').val('');
+                $('#event_id').val('');
+
+                $('#event_name').removeClass('error');
+                $('#error_message_event').html('');
+				$('.date_contianer').html('');
+				
+				
+				
+                if (view.name == 'month') {
+                    if (strt == endt) {
+                        $('.date_contianer').html(strt);
+                    } else {
+                        $('.date_contianer').html(strt + ' <b>to</b> ' + endt);
+                    }
+                } else {
+                    $('.date_contianer').html(strt + ' ' + strtTime + ' <b>to</b> ' + endTime);
+                }
+				
+				 $('#start_date').val(start[0]);
+                $('#start_time').val(start[1]);
+                $('#end_date').val(end[0]);
+                $('#end_time').val(end[1]);
+
+                if (start[1] == '00:00' && end[1] == '00:00')
+                    $('#allDay').val(1);
+                else
+                    $('#allDay').val(0);
+            
 
         },
 		eventClick: function(event, jsEvent, view) {
 				
-				$('.calendar').hide('slide', {direction: 'left'}, 1000);
-				$('#event_form').show('slide', {direction: 'left'}, 1000);
-				
-				$('.header_events h2').html('Edit Event');
-				$('#event_name').val(event.title);
-				$('#event_venue').val(event.event_location);
-				$('#event_address').val(event.event_address);
-				$('#event_type').val(event.event_type);
-				$("#event_start_date").datepicker('setDate', new Date(event.start));
-				$("#event_end_date").datepicker('setDate', new Date(event.end_date));
-				
-				if(event.allDay==true){
-					$('#allday').attr('checked','checked');
-					$('#event_start_time').attr('disabled',true);
-					$('#event_end_time').attr('disabled',true);
-					$('#event_start_time').timepicker();
-					$('#event_end_time').timepicker();
-				} else {
-					$('#event_start_time').attr('disabled',false);
-					$('#event_end_time').attr('disabled',false);
-					$('#event_start_time').timepicker('setTime', new Date(event.start));
-					$('#event_end_time').timepicker('setTime', new Date(event.end_date));
-				}
-				$("#event_id").val(event.id);
-				$('#event_description').val(event.description);
+				$('.pop_up').hide();
+					$('#example-two').hide();
+					$('#form_bubble').hide();
+                    showEventPopup(event, jsEvent);
 			},
 			eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc) {
 					if (event.end == null){
@@ -309,7 +452,12 @@ $(document).ready(function() {
 					var today = new Date();
 					if (today > event.start)
 					{
-						alert('Cannot move an event to past dates.');
+						$(".error_message").show();
+						$(".error_message").html('You cannot move Events to past dates');
+						setTimeout(function(){
+									$(".error_message").html('');
+									$(".error_message").hide();
+								},2000);
 						$('#calendar').fullCalendar('refetchEvents');
 					} else {
 						var allDay = (allDay == true) ? 1 : 0;
@@ -379,13 +527,16 @@ $(document).ready(function() {
 				}
 		});
 		
+		$(".edit_event_link").live("click",function(){
 		
+		});
 
 });
 /******** Ready function ends ********************/
 
 /**************** Close Dialog *******************/
 function dialoge_close(){
+	closeallpopups();
 	$('#event_form').hide('slide', {direction: 'left'}, 1000);
 	$('.calendar').show('slide', {direction: 'left'}, 1000);
 }
@@ -1143,8 +1294,165 @@ function enableEvents() {
     });
 }
 
+function set_popup_content(){
+	popup_content = $('#example-two').html();
+	$('#example-two').remove();
+}
 
 
+function showEventPopup(event, jsEvent) {
+    $('.event_pop').show();
+    $('.event_pop .event_title').html(event.title);
+    var endDate = '';
+    $('#event_delete_small').show();
+    $('.delete-editBtn').show();
+    $('.image_bi').remove();
+    if (event.allDay) {
+        var startDate = self.calendar.calendar.formatDates(event.start, null, 'dd MMMM yyyy');
+        if (event.end != null)
+            endDate = ' to ' + self.calendar.calendar.formatDates(event.end, null, 'dd MMMM yyyy');
+    } else {
+        var startDate = self.calendar.calendar.formatDates(event.start, null, 'dd MMMM yyyy hh:mm tt');
+        if (event.end != null)
+            endDate = ' to ' + self.calendar.calendar.formatDates(event.end, null, 'dd MMMM yyyy hh:mm tt');
+    }
 
+    $('.event_pop .event_date_label').html(startDate + endDate).css('fontSize', '12px').css({
+        marginTop: '50px',
+        marginLeft: '10px'
+		
+    });
+    $('#event_id').val(event.id);
+    var leftData = getAppointmentLeft('.event_pop', jsEvent.pageX);
+    $('.event_pop').css({
+        position: 'absolute',
+        top: jsEvent.pageY,
+        left: leftData
+    });
+}
+
+function getAppointmentLeft(className, leftWidth) {
+    var obj = $(className);
+    var calendarWidth = $('#calendar').width();
+    var appointmentWidth = obj.width();
+    leftWidth = parseInt(leftWidth);
+    var totalWidth = leftWidth + appointmentWidth;
+    if (totalWidth <= calendarWidth) {
+        return leftWidth;
+    } else {
+        return leftWidth - appointmentWidth;
+
+    }
+
+}
+
+
+function createEvent(){
+        $.ajax({
+                type: 'POST',
+                url: baseUrl + '/events/small',
+                data: $('form#edit_small_event_form').serializeArray(),
+                dataType: 'json',
+                success: function(data) {
+                    $('#example-two').hide();
+					$(".success_message").show();
+						$(".success_message").html(data.success);
+						$('#calendar').fullCalendar('refetchEvents');
+						setTimeout(function(){
+							$(".success_message").html();
+							$(".success_message").hide();
+						},2000);
+                }
+            });
+}
+
+function closeallpopups() {
+    $('#example-two').hide();
+    $('.appointment_pop').hide();
+    $('.appointment_booking_pop').hide();
+    $('.pop_up').hide();
+    $('#form_bubble').hide();
+    $('.event_popup_view1').hide();
+    
+}
+
+function editEvent(){
+	var eventId =  $('#event_id').val();
+	closeallpopups();
+	var event = GetEventData(eventId);
+}
+
+function deleteEvent(){
+	var eventId =  $('#event_id').val();
+	closeallpopups();
+	delete_event(eventId);
+}
+
+function GetEventData(eventId){
+        $.ajax({
+                type: 'POST',
+                url: baseUrl + '/events/event',
+                data: {eventId:eventId},
+                dataType: 'json',
+                success: function(data) {
+                    var event = data;
+					//console.log(event);
+					$('.calendar').hide('slide', {direction: 'left'}, 1000);
+					$('#event_form').show('slide', {direction: 'left'}, 1000);
+					
+					$('.header_events h2').html('Edit Event');
+					$('#event_name').val(event.title);
+					$('#event_venue').val(event.event_location);
+					$('#event_address').val(event.event_address);
+					$('#event_type').val(event.event_type);
+					$("#event_start_date").datepicker('setDate', new Date(event.start));
+					$("#event_end_date").datepicker('setDate', new Date(event.end));
+					
+					if(event.allDay==true){
+						$('#allday').attr('checked','checked');
+						$('#event_start_time').attr('disabled',true);
+						$('#event_end_time').attr('disabled',true);
+						$('#event_start_time').timepicker();
+						$('#event_end_time').timepicker();
+					} else {
+						$('#event_start_time').attr('disabled',false);
+						$('#event_end_time').attr('disabled',false);
+						$('#event_start_time').timepicker('setTime', new Date(event.start));
+						$('#event_end_time').timepicker('setTime', new Date(event.end));
+					}
+					$("#event_id_check").val(event.id);
+					$('#event_description').val(event.description);
+                }
+            });
+}
+
+function delete_event(eventId){
+ $.ajax({
+                type: 'POST',
+                url: baseUrl + '/events/delete',
+                data: {eventId:eventId},
+                dataType: 'json',
+                success: function(data) {
+					if(data.success) {
+						$('#example-two').hide();
+						$(".success_message").show();
+						$(".success_message").html(data.success);
+						$('#calendar').fullCalendar('refetchEvents');
+						setTimeout(function(){
+							$(".success_message").html();
+							$(".success_message").hide();
+						},2000);
+					} else {
+						$('.error_message').show();
+						$('.error_message').html(data.error);
+						setTimeout(function(){
+							$(".error_message").html();
+							$(".error_message").hide();
+						},2000);
+					}
+				}
+				
+				});
+}
 
 
