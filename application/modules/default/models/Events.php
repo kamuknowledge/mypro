@@ -133,6 +133,67 @@ class Default_Model_Events extends Application_Model_Validation {
 	
 	
 	/**
+     * Purpose: create event procees logic
+     *
+     * Access is public
+     *
+     * @param	Array	$post array
+     * 
+     * @return  json array
+     */
+	
+	public  function createSmallEvent(Array $post) {
+		try{
+			/*echo "<pre>";
+			print_r($post);
+			exit;*/
+			$data = array();
+			$start_time = (isset($post['start_time']))?$post['start_time']:'00:00:00';
+			$end_time = (isset($post['end_time']))?$post['end_time']:'23:30:00';
+			$event_name = ($post['event_title']!="")?trim($post['event_title']):'';
+			$event_venue = ($post['event_venue']!="")?trim($post['event_venue']):'';
+			$event_address = ($post['event_address']!="")?trim($post['event_address']):'';
+			$event_type = ($post['event_type']!="")?trim($post['event_type']):'';
+			$event_start_date = ($post['start_date']!="")?trim($post['start_date']):'';
+			$event_start_time = $start_time;
+			$event_end_date = ($post['end_date']!="")?trim($post['end_date']):'';
+			$event_end_time = $end_time;
+			$allday = ($post['allDay']==1)?trim($post['allDay']):0;			
+			$event_description = ($post['event_description']!="")?trim($post['event_description']):'';
+			
+			
+			$error = 0;
+			
+            if($event_name == '') {			
+            	$error = 1;
+				$data = array('error'=>'Event title can not be empty.');
+            	//return false;
+            } 
+			$start_date = date("Y-m-d",strtotime($event_start_date))." ".date("H:i:s",strtotime($event_start_time));
+			$end_date = date("Y-m-d",strtotime($event_end_date))." ".date("H:i:s",strtotime($event_end_time));
+			
+			if(strtotime($start_date) > strtotime($end_date)) {				
+				$error = 1;
+				$data = array('error'=>'End date should be greater than start date.');
+            	//return false;
+            }
+			
+			if($error==0){
+					$outpt = $this->Eventsdb->insertEvent($event_name, $event_venue, $event_address, $event_type, $start_date, $end_date, $allday, $event_description);	
+					if($outpt){
+						$data = array('success'=>'Event successfully created.');
+					}
+			}
+			//print_r($data);die;
+          	return $data;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	/**
      * Purpose: update event procees logic
      *
      * Access is public
@@ -150,7 +211,7 @@ class Default_Model_Events extends Application_Model_Validation {
 			$data = array();
 			$start_time = (isset($post['event_start_time']))?$post['event_start_time']:'00:00:00';
 			$end_time = (isset($post['event_end_time']))?$post['event_end_time']:'23:30:00';
-			$event_id = ($post['event_id']!="")?trim($post['event_id']):'';
+			$event_id = ($post['event_id_check']!="")?trim($post['event_id_check']):'';
 			$event_name = ($post['event_name']!="")?trim($post['event_name']):'';
 			$event_venue = ($post['event_venue']!="")?trim($post['event_venue']):'';
 			$event_address = ($post['event_address']!="")?trim($post['event_address']):'';
@@ -159,7 +220,8 @@ class Default_Model_Events extends Application_Model_Validation {
 			$event_start_time = $start_time;
 			$event_end_date = ($post['event_end_date']!="")?trim($post['event_end_date']):'';
 			$event_end_time = $end_time;
-			$allday = ($post['allday']==1)?trim($post['allday']):0;			
+			$allday = (isset($post['allday']) && $post['allday']==1)?$post['allday']:0;
+
 			$event_description = ($post['event_description']!="")?trim($post['event_description']):'';
 			
 			$error = 0;
@@ -169,8 +231,8 @@ class Default_Model_Events extends Application_Model_Validation {
 				$data = array('error'=>'Event title can not be empty.');
             	//return false;
             } 
-			$start_date = date("Y-m-d H:i:s",strtotime($event_start_date))." ".date("H:i:s",strtotime($event_start_time));
-			$end_date = date("Y-m-d H:i:s",strtotime($event_end_date))." ".date("H:i:s",strtotime($event_end_time));
+			$start_date = date("Y-m-d",strtotime($event_start_date))." ".date("H:i:s",strtotime($event_start_time));
+			$end_date = date("Y-m-d",strtotime($event_end_date))." ".date("H:i:s",strtotime($event_end_time));
 			if(strtotime($start_date) > strtotime($end_date)) {				
 				$error = 1;
 				$data = array('error'=>'End date should be greater than start date.');

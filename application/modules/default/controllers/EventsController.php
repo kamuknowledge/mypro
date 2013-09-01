@@ -119,12 +119,43 @@ class EventsController extends Zend_Controller_Action {
 				$data = array();
 				$this->_helper->layout->disableLayout();
 				$post = $this->getRequest()->getPost();
-				
-				if(isset($post['event_id']) && !empty($post['event_id'])){
+				//die(print_r($post));
+				if(isset($post['event_id_check']) && !empty($post['event_id_check'])){
 					$dataCreateEvent = $this->events -> updateEvent($post);
 				} else {
 					$dataCreateEvent = $this->events -> createEvent($post);
 				}
+				//die(print_r($dataCreateEvent));
+				if($dataCreateEvent['error']) {
+					$error_data = $dataCreateEvent;
+					echo json_encode($error_data);
+					die;
+				} else {
+					$data = $dataCreateEvent;
+					echo json_encode($data);
+					die;
+				}
+			}	
+			
+		}
+	
+	}
+	
+	/** 
+	 * Process a create event form using an ajax call
+     * @access is public
+	 * @author Alok Pandey.
+	 * @copyright GetLinc.com, Inc. 
+	 * @license GetLinc.com, Inc.
+	*/
+	public function smallAction(){
+		if ($this->getRequest()->isXmlHttpRequest()) {
+			if ($this->getRequest()->isPost()) {
+				$data = array();
+				$this->_helper->layout->disableLayout();
+				$post = $this->getRequest()->getPost();
+				$dataCreateEvent = $this->events -> createSmallEvent($post);
+				
 				//die(print_r($dataCreateEvent));
 				if($dataCreateEvent['error']) {
 					$error_data = $dataCreateEvent;
@@ -202,6 +233,31 @@ class EventsController extends Zend_Controller_Action {
 	
 	}
 	
+	/** 
+	 * Process to delete event form using an ajax call
+     * @access is public
+	 * @author Alok Pandey.
+	 * @copyright GetLinc.com, Inc. 
+	 * @license GetLinc.com, Inc.
+	*/
+	public function deleteAction(){
+		if ($this->getRequest()->isPost()) {
+				$this->_helper->layout->disableLayout();
+				$post = $this->getRequest()->getPost();
+				$eventId = $post['eventId'];
+				$res = $this->eventsdb -> deleteEvent($eventId);
+				if($res==1) {
+					$data = array('success'=>'Event deleted successfully.');
+					echo json_encode($data);
+					die;
+				} else {
+					$error_data = array('error'=>'Problem occurred while deleting an event.');
+					echo json_encode($error_data);
+					die;;
+				}
+		}
+	}
+	
 	 /** 
 	 * load events in calendar between start and end date
      * @access is public
@@ -221,6 +277,50 @@ class EventsController extends Zend_Controller_Action {
 				if($events){
 					foreach($events as $key=>$value) {
 						$data[] = array(
+						'id'=>$value['event_id'],
+						'title'=>$value['event_title'],
+						'allDay'=>($value['event_all_day']==1)?true:false,
+						'start'=>$value['event_startdate'],
+						'end'=>$value['event_enddate'],
+						'description'=>$value['event_details'],
+						'event_type'=>$value['event_type'],
+						'event_location'=>$value['event_location'],
+						'event_address'=>$value['event_address'],
+						'editable'=>true,
+						'color'=>'#69131E',
+						'cache'=> true,
+						'className' => 'event_'.$value['event_id'],
+						'type'=>'event'
+						);
+					}
+				}
+				echo json_encode($data);
+				die;
+			}	
+			
+		}
+	
+	}
+	
+	 /** 
+	 * load particular event data in edit event from
+     * @access is public
+	 * @author Alok Pandey.
+	 * @copyright GetLinc.com, Inc. 
+	 * @license GetLinc.com, Inc.
+	*/
+	public function eventAction(){
+		if ($this->getRequest()->isXmlHttpRequest()) {
+			if ($this->getRequest()->isPost()) {
+				$data = array();
+				$this->_helper->layout->disableLayout();
+				$post = $this->getRequest()->getPost();
+				$eventId = $post['eventId'];
+				$event = $this->eventsdb -> getEvent($eventId);
+				//die(print_r($event));
+				if($event){
+					foreach($event as $key=>$value) {
+						$data = array(
 						'id'=>$value['event_id'],
 						'title'=>$value['event_title'],
 						'allDay'=>($value['event_all_day']==1)?true:false,

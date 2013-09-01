@@ -57,7 +57,7 @@ class Default_Model_Eventsdb extends Application_Model_DataBaseOperations {
 	
 	public function insertEvent($event_name, $event_venue, $event_address, $event_type, $start_date, $end_date, $allday, $event_description){
 		try {
-		 $uid = 86;//$this->session->userid;
+		 $uid = $this->session->userid;
 		/*$data = array(
 				'event_title'=>$event_name,
 				'userid'=>$this->session->userid,
@@ -90,7 +90,7 @@ class Default_Model_Eventsdb extends Application_Model_DataBaseOperations {
 	
 	public function updateEvent($event_name, $event_venue, $event_address, $event_type, $start_date, $end_date, $allday, $event_description,$update_id){
 		try {
-		 $uid = 86;//$this->session->userid;
+		 $uid = $this->session->userid;
 		/*$data = array(
 				'event_title'=>$event_name,
 				'userid'=>$this->session->userid,
@@ -182,6 +182,20 @@ class Default_Model_Eventsdb extends Application_Model_DataBaseOperations {
 		}
 	}
 	
+	public function deleteEvent($update_id){
+		try {
+		//$uid = 86;//$this->session->userid;
+			$uid = $this->session->userid; 
+			$sql = "update `social_events` set statusid='3' where event_id='".$update_id."' and userid='".$uid."'";
+			$res = $this->db->query("update `social_events` set statusid='3' where event_id='".$update_id."' and userid='".$uid."'");
+			return ($res)?1:0;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
 	 /** 
 	 * get all active events
      * @access is public
@@ -194,6 +208,27 @@ class Default_Model_Eventsdb extends Application_Model_DataBaseOperations {
 		try {	
 			///parent::SetDatabaseConnection();
 			$query = "SELECT * FROM social_events WHERE userid = '".$this->session->userid."' AND statusid = 1 AND event_startdate>='".$start_date."' AND event_enddate<='".$end_date."';";
+			//echo $query;die;
+			$stmt = $this->db->query($query);			
+			return $stmt->fetchAll();
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	/** 
+	 * get event by event id
+     * @access is public
+	 * @author Alok Pandey.
+	 * @copyright GetLinc.com, Inc. 
+	 * @license GetLinc.com, Inc.
+	*/
+	
+	public function getEvent($eventId) {
+		try {	
+			///parent::SetDatabaseConnection();
+			$query = "SELECT * FROM social_events WHERE userid = '".$this->session->userid."' AND event_id='".$eventId."'";
 			//echo $query;die;
 			$stmt = $this->db->query($query);			
 			return $stmt->fetchAll();
