@@ -83,8 +83,13 @@ class CategoriesController extends Zend_Controller_Action {
      */
 	
 	public function topcatmenuAction() {
-		try{			
-			
+		try{
+			//$this->_helper->viewRenderer->setNoRender(true);
+			$this->_helper->layout->disableLayout();
+			$CategoriesList = $this->categoriesdb->getCategoriesList();
+			//print_r($CategoriesList);exit;
+			$this->view->CategoriesList = $CategoriesList;
+			//exit;			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
