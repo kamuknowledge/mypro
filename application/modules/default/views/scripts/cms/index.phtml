@@ -15,7 +15,7 @@ $content_array = $this->content_array;
 	
 	
 	<div style="letter-spacing:1px; line-height:25px; font-size:12px; font-family:Geneva,sans-serif;">
-	<?php echo $content_array['cms_description'];?>
+	<?php echo html_entity_decode($content_array['cms_description']);?>
 	</div>
 	
 	
