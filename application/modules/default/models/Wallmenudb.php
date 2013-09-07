@@ -43,6 +43,7 @@ class Default_Model_Wallmenudb {
 	public function __construct(){
 		$this->session = new Zend_Session_Namespace('MyClientPortal');
 		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		$this->db=Zend_Registry::get('db');
 	}
 	
 }

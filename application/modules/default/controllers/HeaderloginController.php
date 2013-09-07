@@ -44,6 +44,10 @@ class HeaderloginController extends Zend_Controller_Action {
 		$this->headerlogindb = new Default_Model_Headerlogindb();
         $this->_helper->layout->setLayout('default/layout');
 		//$this->setLayoutAction('default/layout');		
+		
+		//Assigning session
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
+		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
 	}
 	
     
@@ -59,13 +63,16 @@ class HeaderloginController extends Zend_Controller_Action {
 	
 	public function indexAction() {
 		try{
-			
-			
+			if(isset($this->session->userid) && trim($this->session->userid)!=''){
+				$UserProfileImage = $this->headerlogindb->getUserProfileImage($params);
+				//print_r($UserProfileImage);
+				$this->view->UserProfileImage = $UserProfileImage['0']['image_path'];
+				$this->session->UserProfileImage = $this->view->UserProfileImage;
+			}			
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
-	}
-	
+	}	
 }
 ?>

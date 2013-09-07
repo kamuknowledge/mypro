@@ -57,13 +57,25 @@
 							</script>
 							
 							<div style="float:right;width:350px;">					
-								<?php 			
-								foreach($this->ProductImageDetails as $each_ProductImages){			
-								if(trim($each_ProductImages['product_thumbnail'])==1){?>
-								<div class="targetarea diffheight">
-								<img id="multizoom2" style="float:right;" src="<?php echo $this->baseUrl('public/uploads/product_images')."/".$each_ProductImages['product_image']; ?>" width="300" height="225">
-								</div>
-								<?php }}?>
+								<?php
+								if(count($this->ProductImageDetails)>0){
+									foreach($this->ProductImageDetails as $each_ProductImages){			
+									if(trim($each_ProductImages['product_thumbnail'])==1){?>
+									<div class="targetarea diffheight">
+									<?php 
+									echo "l".$each_ProductImages['product_image']."l";
+									if(trim($each_ProductImages['product_image'])!=''){
+									?>
+									<img id="multizoom2" style="float:right;" src="<?php echo $this->baseUrl('public/uploads/product_images')."/".$each_ProductImages['product_image']; ?>" width="300" height="225">
+									<?php }else{?>
+									<img id="multizoom2" style="float:right;" src="<?php echo $this->baseUrl('public/uploads/product_images/No_Image_Available.jpg'); ?>" width="300" height="225">
+									<?php }?>
+									</div>
+									<?php }}
+								}else{
+								?>				
+								<img style="margin:auto;" src="<?php echo $this->baseUrl('public/uploads/product_images/No_Image_Available.jpg'); ?>" width="300">
+								<?php }?>
 								
 								<div class="multizoom2 thumbs">
 								<?php

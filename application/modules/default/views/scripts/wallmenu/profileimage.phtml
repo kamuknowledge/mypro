@@ -5,7 +5,11 @@ $displayName = $this->session->name;
 <div class="contact-profile-pics">
 	<div class="profile_pic_cnt">
 	<a href="<?php echo $this->baseUrl('profile/view/');?>">
+	<?php if(trim($this->UserProfileImage)!=''){?>
+	<img src="<?php echo $this->baseUrl('public/uploads/user_images/crop_200_200/').$this->UserProfileImage; ?>" alt="" width="148" height="155"  />
+	<?php }else{?>
 	<img src="<?php echo $this->baseUrl('public/images/avatarDefault.gif'); ?>" alt="" width="148" height="155"  />
+	<?php }?>
 	</a>
 	<div class="prifile_image_label">
 	<label><?php echo $displayName;?></label> 

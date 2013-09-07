@@ -39,7 +39,12 @@ class WallmenuController extends Zend_Controller_Action {
      * @return  
      */
 	
-	public function init() {			
+	public function init() {
+	
+		//Assigning session
+		$this->session = new Zend_Session_Namespace('MyClientPortal');
+		$this->error = new Zend_Session_Namespace('MyClientPortalerror');
+		
 		$this->wallmenu = new Default_Model_Wallmenu();
 		$this->wallmenudb = new Default_Model_Wallmenudb();
         $this->_helper->layout->setLayout('default/layout');
@@ -79,9 +84,8 @@ class WallmenuController extends Zend_Controller_Action {
      */
 	
 	public function profileimageAction() {
-		try{
-			
-			
+		try{			
+			$this->view->UserProfileImage = $this->session->UserProfileImage; //$UserProfileImage['0']['image_path'];
 		}catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
