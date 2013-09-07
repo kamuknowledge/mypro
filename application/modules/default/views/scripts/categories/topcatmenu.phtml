@@ -1,0 +1,178 @@
+<?php
+//print_r($this->CategoriesList);
+/*foreach($this->CategoriesList as $each_CategoriesList){
+	if($each_CategoriesList['parent_category_id']=='0'){
+		foreach($this->CategoriesList as $each_CategoriesList2){
+			if($each_CategoriesList2['parent_category_id'] == $each_CategoriesList['category_id']){
+				$CategoriesList_array[$each_CategoriesList['category_id']]['ids'][$each_CategoriesList2['category_id']] = $each_CategoriesList2['category_name'];
+				$CategoriesList_array[$each_CategoriesList['category_id']]['category_name'] = $each_CategoriesList['category_name'];
+			}
+		}
+	}else{
+			//$CategoriesList_array[$each_CategoriesList['category_id']]['ids'][] = $each_CategoriesList2['category_name'];
+			//$CategoriesList_array[$each_CategoriesList['category_id']]['category_name'] = $each_CategoriesList['category_name'];
+	}
+}*/
+//echo "<pre>";
+//print_r($CategoriesList_array);
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('public/default/top_cat_menu/mega-menu-css/basic-bcc2ff39-nogz_z111.css');?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('public/default/top_cat_menu/mega-menu-css/style.css');?>" />
+
+<div style="clear:both;">
+	<div id="fk-mainhead-id" class="new-vd">
+		<div class="unit">
+			<div class="flyout-menu" id="flyout-menu">
+				<ul class="menu-dd">
+				
+					<li class="all-ctg-btn ">
+						 <div class="all-ctg-wrapper">
+							 <a class="all-ctg-link">
+								 See All Categories
+								 <div class="arrow-dd closed">
+									 <span class="arrow-dd-img fk-inline-block"></span>
+								 </div>
+							 </a>
+						 </div>
+						 
+						 
+						 <div id="flyout-cache" class="nav-content hidden">
+							<ul class="nav-list">
+								<li id="fk-header-tab-offer-zone" data-tracking-id="menu_new_header"
+									class="required-tracking menu-item last offer-zone">
+									<div class="item-wrapper">
+										<div class="item-link line">
+											<div class="unit item-name">
+												<a data-tracking-id="OFFERS ZONE" href="http://www.flipkart.com/offers">OFFERS ZONE</a>                                                                                        &nbsp;<span class="new-label vmiddle">NEW</span>
+											</div>
+										</div>
+									</div>
+								</li>
+								
+
+								<li id="fk-header-tab-clothing" data-tracking-id="menu_new_header" class="required-tracking menu-item clothing">
+									<div class="item-wrapper">
+										<div class="item-link line">
+											<div class="unit item-name">
+											<a data-tracking-id="Clothing" href="http://www.flipkart.com/clothing">Clothing</a>
+											</div>    
+
+											<div class="item-pointer lastUnit text_right">
+											<span class="arrow-img fk-inline-block"></span>
+											</div>										
+									   </div>
+									</div>
+									
+									<div class="subMenu clothing hidden three-col">					
+										<div class="fk-mh-submenu-dsection left">
+											<div class="line fk-mh-navChild-content">
+												<div class="line fk-mh-navChild-Section">
+												c1
+												</div>
+											</div>
+											
+										</div>
+										<div class="fk-mh-submenu-dsection right">
+											<div class="line fk-mh-navChild-content">
+												<div class="line fk-mh-navChild-Section">
+												c2
+												</div>
+											</div>
+										</div>
+										<div class="fk-mh-submenu-dsection featured">
+											<div class="line fk-mh-navChild-content">
+												<div class="line fk-mh-navChild-Section">
+												c3
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+								
+
+								<li id="fk-header-tab-footwear" data-tracking-id="menu_new_header" class="required-tracking menu-item footwear">
+									<div class="item-wrapper">
+										<div class="item-link line">
+											<div class="unit item-name">
+												<a data-tracking-id="Footwear" href="http://www.flipkart.com/footwear">Footwear</a>
+											</div>
+											
+											<div class="item-pointer lastUnit text_right">
+											<span class="arrow-img fk-inline-block"></span>
+											</div>
+										</div>
+									</div>
+									
+
+									<div class="subMenu footwear hidden three-col">					
+										<div class="fk-mh-submenu-dsection left">
+											<div class="line fk-mh-navChild-content">
+												<div class="line fk-mh-navChild-Section">
+												c1
+												</div>
+											</div>
+										</div>
+										<div class="fk-mh-submenu-dsection right">
+											<div class="line fk-mh-navChild-content">
+												<div class="line fk-mh-navChild-Section">
+												c2
+												</div>
+											</div>
+										</div>
+										<div class="fk-mh-submenu-dsection featured">
+											<div class="line fk-mh-navChild-content">
+												<div class="line fk-mh-navChild-Section">
+												c3
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>					
+							</ul>
+						</div>		
+					</li>
+				</ul>
+			</div>
+			<script type="text/javascript+fk-onload">
+			  (function(){
+				  var init = FKART.navmenu.curry(0, 91), $flyout_cache = $("#flyout-cache"), html,
+				  persist = function (html) {
+					  true && setTimeout(function(){
+						  try{
+							if(window.sessionStorage) {
+							   window.sessionStorage.setItem("flyout", html);
+							   $.cookie("ft-ls", "1", { expires: new Date(new Date().getTime() + 10 * 60 * 1000), path:"/" });
+							}
+						  } catch(e){}
+					  }, 10);
+				  };
+				  if ($flyout_cache.children().length == 0) {
+					  html = window.sessionStorage.getItem("flyout");
+					  if (html) {
+						  $flyout_cache.html(html);
+						  init();
+					  } else {
+						  $flyout_cache.load("/xhr/getMenuHTML", function(response, status){
+								 if(status!="error") {
+									 persist(response);
+									 init();
+									 FKART.parseModuleLinkTracking()
+								 }
+						  });
+					  }
+				  } else {
+					  persist($flyout_cache.html());
+					  init();
+				  }
+			  })();
+			</script>
+		</div>		
+	</div>
+
+	<script type="text/javascript" src="<?php echo $this->baseUrl('public/default/top_cat_menu/mega-menu-js/zzlib-7c9e175.js');?>"></script>
+	<script type="text/javascript" src="<?php echo $this->baseUrl('public/default/top_cat_menu/mega-menu-js/main-3a273bd.js');?>"></script>
+	<!--script type="text/javascript" src="./mega-menu-js/browse-c4fa1d1.js"></script-->
+	<script type="text/javascript">    
+	addOnload(function(){ FKART.utils.runOnload();});
+	</script>	
+</div>

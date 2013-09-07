@@ -1,3 +1,4 @@
+<div style="clear:both; height:2px;"></div>
 <?php
 $this->session = new Zend_Session_Namespace('MyClientPortal');
 $isSignedIn = $this->session->isSignedIn;
@@ -26,14 +27,15 @@ if($isSignedIn==1){
 				<li class="find-friends"><a href="javascript:void(0)"><span></span>Find Friends</a></li>
 				
 				
-				<li class="my-blog"><a href="javascript:void(0)"><span></span>My Blog</a></li>
-				<li class="polls"><a href="javascript:void(0)"><span></span>Polls</a></li>
+				<!--li class="my-blog"><a href="javascript:void(0)"><span></span>My Blog</a></li-->
+				<!--li class="polls"><a href="javascript:void(0)"><span></span>Polls</a></li-->
 				<li class="jobs"><a href="javascript:void(0)"><span></span>Jobs</a></li>
 				
 				
 				<li class="events"><a href="<?php echo $this->baseUrl('demo/list/');?>"><span></span>Demo List</a></li>
 				<li class="events"><a href="<?php echo $this->baseUrl('demo/add/');?>"><span></span>Demo Add</a></li>
 				<li class="events"><a href="<?php echo $this->baseUrl('demo/view/');?>"><span></span>Demo View</a></li>
+				
 			</ul>
 		</div>
 	</div>

@@ -71,5 +71,25 @@ class CategoriesController extends Zend_Controller_Action {
 		}
 	}
 	
+	
+	
+	
+	/**
+     * Purpose: Index action
+     * Access is public
+     *
+     * @param	
+     * @return  
+     */
+	
+	public function topcatmenuAction() {
+		try{			
+			
+		}catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
 }
 ?>

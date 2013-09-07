@@ -5,8 +5,21 @@ $isSignedIn = $this->session->isSignedIn;
 $config=Zend_Registry::get('config');
 ?>
 <div class="header-bottom">
-	<div class="wrapper">
+	<div class="wrapper">	
+	
+		<?php 
+		if(isset($isSignedIn) && $isSignedIn==1){?>
+		
+			<div style="padding-right:100px; margin-right:100px;">
+			<?php
+			echo $this->action('topcatmenu', 'categories', 'default', array('a_parameter'=>'a_value'));
+			?>
+			<div style="clear:both;"></div>
+			</div>			
+			
+		<?php }else{?>		
 		<div class="call"><h5>ORDER BY PHONE</h5><h3><?php echo $config->site->header->phone;?></h3></div>
+		<?php }?>
 		<div class="search">
 			<form>
 				<select>
