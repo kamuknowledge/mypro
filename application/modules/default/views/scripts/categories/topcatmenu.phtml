@@ -6,6 +6,8 @@ foreach($this->CategoriesList as $each_CategoriesList){
 			if($each_CategoriesList2['parent_category_id'] == $each_CategoriesList['category_id']){
 				$CategoriesList_array[$each_CategoriesList['category_id']]['ids'][$each_CategoriesList2['category_id']] = $each_CategoriesList2['category_name'];
 				$CategoriesList_array[$each_CategoriesList['category_id']]['category_name'] = $each_CategoriesList['category_name'];
+			}else{
+				$CategoriesList_array[$each_CategoriesList['category_id']]['category_name'] = $each_CategoriesList['category_name'];
 			}
 		}
 	}else{
@@ -60,9 +62,11 @@ foreach($this->CategoriesList as $each_CategoriesList){
 											<div class="unit item-name">											
 											<a data-tracking-id="c_<?php echo $key;?>" href="<?php echo $this->baseUrl('products/list/id/').$key.'/'.str_replace($special_array, $replace,$CategoriesList_array[$key]['category_name']); ?>"><?php echo $CategoriesList_array[$key]['category_name'];?></a>
 											</div>
+											<?php if(isset($value['ids']) && count($value['ids'])>0){?>
 											<div class="item-pointer lastUnit text_right">
 											<span class="arrow-img fk-inline-block"></span>
-											</div>										
+											</div>
+											<?php }?>
 									   </div>
 									</div>
 									

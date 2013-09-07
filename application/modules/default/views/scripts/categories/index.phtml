@@ -11,6 +11,8 @@ foreach($this->CategoriesList as $each_CategoriesList){
 			if($each_CategoriesList2['parent_category_id'] == $each_CategoriesList['category_id']){
 				$CategoriesList_array[$each_CategoriesList['category_id']]['ids'][$each_CategoriesList2['category_id']] = $each_CategoriesList2['category_name'];
 				$CategoriesList_array[$each_CategoriesList['category_id']]['category_name'] = $each_CategoriesList['category_name'];
+			}else{
+				$CategoriesList_array[$each_CategoriesList['category_id']]['category_name'] = $each_CategoriesList['category_name'];
 			}
 		}
 	}else{
