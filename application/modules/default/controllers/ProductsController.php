@@ -430,6 +430,7 @@ class ProductsController extends Zend_Controller_Action {
 			$request = $this->getRequest();
 			$Request_Values = $request->getPost();
 			if ($request->isPost()) {
+			
 				
 				
 			}
@@ -456,6 +457,10 @@ class ProductsController extends Zend_Controller_Action {
 	try{			
 			$this->view->title = "Payment Status";		
 			
+			$toemail = "kamu.knowledge@gmail.com";
+			$mailbody = "my content";
+			$emailsubject = "Order Details";				
+			Application_Model_DataBaseOperations::insertEmailQueue($toemail,$mailbody,$emailsubject);
 			
 			
 		}catch (Exception $e){
@@ -505,7 +510,7 @@ class ProductsController extends Zend_Controller_Action {
 			
 			echo "hi";
 			
-			$to      = 'phpdeveloper.web@gmail.com';			
+			$to      = 'kamu.knowledge@gmail.com';			
 			$subject = "IPN Status : ".date('d-m-Y H:i:s')."-".time();			
 			$message = "";
 			$message .= "$_GET: ".print_r($_GET,true);

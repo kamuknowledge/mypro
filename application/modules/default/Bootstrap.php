@@ -9,4 +9,15 @@ class Default_Bootstrap extends Zend_Application_Module_Bootstrap {
       ));
       return $autoloader;
      }
-} ?>
+	 
+	/*
+	* Initializing language file i.e, Constants
+	*/
+	public function _initFuncName() {        
+		$langs = glob(APPLICATION_PATH . "/lang/*.php");
+		foreach ($langs as $lang) {
+			require_once $lang;
+		}
+	}
+} 
+?>

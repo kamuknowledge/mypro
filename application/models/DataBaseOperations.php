@@ -253,7 +253,58 @@ class Application_Model_DataBaseOperations  {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
-	}	
+	}
 	
+	
+	
+	
+	
+	/**
+     * Purpose: Fetch Default Template
+     * Access is public
+     *
+     * @param   
+     * @return  object Result set object 
+     */
+	
+	public static function getDefaultTemplate() {
+		try {
+			self::SetDatabaseConnection();		
+			$query = "SELECT * FROM apmemailtemplate WHERE emailtemplatename='Default Template'";
+            //exit;
+			return Application_Model_Db::getResult($query);
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	
+	
+	
+	/**
+     * Purpose: Fetch Default Template
+     * Access is public
+     *
+     * @param   
+     * @return  object Result set object 
+     */
+	
+	public static function insertEmailQueue($toemail,$mailbody,$emailsubject) {
+		try {
+			self::SetDatabaseConnection();
+			$default_template = self::getDefaultTemplate();	
+			//print_r($default_template);			
+			$search= array("#content","#sitebaseurl");
+			$replace   = array($mailbody,APPLICATION_HOST_PATH);
+			$content=str_replace($search, $replace, $default_template['0']['emailcontent']);			
+			$emailfrom = "support@getlinc.com";			
+			$insert_query = "insert into apmmailqueue (emailfrom,emailto,emailsubject,body,mailstatus,statusid) values ('".$emailfrom."','".$toemail."','".$emailsubject."','".$content."','1','1')";
+			Application_Model_Db::execute($insert_query);
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 }
 ?>
