@@ -1,7 +1,8 @@
 <?php
 	$error = $this;
+	$about_us = (is_array($error->error_aboutus_values)) ? $error->error_aboutus_values['about_us'] : "";
 ?>
-<textarea name="about_us" <?php if($error->error_about_us != '') { echo 'class="error"'; } ?>><?php if(is_array($error->error_aboutus_values)) {echo $error->error_aboutus_values['about_us'];} ?></textarea>
+<textarea name="about_us" class="auto_count" <?php if($error->error_about_us != '') { echo 'class="error"'; } ?>><?php echo $about_us; ?></textarea>
 <?php 
 		if($error->error_about_us != '') {
 			echo '<label for="about_us" generated="true" class="error">'.$error->error_about_us.'</label>';
@@ -9,11 +10,11 @@
 			$error->error_about_us = '';
 		}
 ?>
+<div class="info">
+		<span class="blue"><?php echo 500 - strlen($about_us); ?></span> Characters Remaining
+</div>
 <div class="clear">&nbsp;</div>
 <div class="clear">
-	<div class="left">
-		<span class="blue">1922</span> Characters Remaining
-	</div>
 	<div class="right">
 		<a class="button-dark add" href="javascript:void(0);" onclick="submit_form()"><span><span>Save</span></span></a>
 		<a class="button-grey add common_cancel_btn" href="javascript:void(0)" onclick="cancel_form()"><span><span>Cancel</span></span></a>

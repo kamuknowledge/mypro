@@ -62,12 +62,12 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 										<?php } ?>
 										<div class="details">
 											<?php if($present_cmp) { ?>
-											<label>Current:</label><span class="blue"><?php echo $present_cmp; ?></span>
+											<label style="width:10%">Current:</label><span class="blue"><?php echo $present_cmp; ?></span>
 											<?php } ?>
 											<!--label>Previous:</label><span class="blue"><?php echo $previous_cmp; ?></span-->
 											<div class="clear">&nbsp;</div>
 											<?php if($recent_education) { ?>
-											<label>Education:</label><span class="blue"><?php echo $recent_education; ?></span>
+											<label style="width:13%">Education:</label><span class="blue"><?php echo $recent_education; ?></span>
 											<?php } ?>
 										</div>
 										<div class="clear">&nbsp;</div>
@@ -110,7 +110,7 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 								<div class="profile-information">
 									<div class="left width-20">
 										<strong style="position: relative; line-height: 2; font-size:14px;">
-										Complete Your Profile</strong>										
+										Edit Your Profile</strong>										
 									</div>
 									<div class="frnds_infor">
 										<img src="images/relation_icon.png" />
@@ -132,12 +132,12 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 										</div>
 										<div class="desc about" style="display:none;" id="edit_about_us">
 											<form name="form_about_us" id="form_about_us" method="POST" action="#">
-												<textarea name="about_us" id="about_us"><?php echo $profile["about_us"]; ?></textarea>
+												<textarea name="about_us" id="about_us" class="auto_count"><?php echo $profile["about_us"]; ?></textarea>
+												<div class="info">
+													<span class="blue"><?php echo 500 - strlen($profile["about_us"]); ?></span> Characters Remaining
+												</div>
 												<div class="clear">&nbsp;</div>
 												<div class="clear">
-													<div class="left">
-														<span class="blue">1922</span> Characters Remaining
-													</div>
 													<div class="right">
 														<a class="button-dark add" href="javascript:void(0);" onclick="submit_form()"><span><span>Save</span></span></a>
 														<a class="button-grey add common_cancel_btn" href="javascript:void(0)" onclick="cancel_form()"><span><span>Cancel</span></span></a>
@@ -211,14 +211,21 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 									<div class="desc personal_view" id="personal_view">
 										<?php if($profile["date_of_birth"] != "0000-00-00" || $profile["marital_status"] || $profile["interests"] || $profile["phonenumber"]) { ?>
 										<ul>
-											<li><label>Birthday : </label><span class="blue"><?php echo ($profile["date_of_birth"] != "0000-00-00") ? $profile["date_of_birth"] : ""; ?></span></li>
+											<?php if($profile["date_of_birth"] != "0000-00-00"){ ?>
+											<li><label>Birthday : </label><span class="blue"><?php echo $profile["date_of_birth"]; ?></span></li>
+											<?php } 
+											if($profile["marital_status"]) {
+											?>
 											<li><label>Marital Status : </label><span class="blue"><?php echo $profile["marital_status"]; ?></span></li>
+											<?php } 
+											if($profile["interests"]) {
+											?>
 											<li><label>Interests : </label><span class="blue"><?php echo $profile["interests"]; ?></span></li>
-											<!--li><label>Honors & Awards : </label><span class="blue">Honors & Awards Honors & Awards Honors & Awards</span></li>
-											<li><label>Contact For : </label><span class="blue">Contact For Contact For Contact For</span></li-->
-											<li><label>Personal : </label><span class="blue"><?php echo ($profile["phonenumber"]) ? $profile["phonenumber"] : ""; ?></span></li>
-											<!--li><label>Website : </label><span class="blue">http://www.telugump3lyrics.com</span></li>
-											<li><label>Skype : </label><span class="blue">vip.veera</span></li-->
+											<?php }
+											if($profile["phonenumber"]) {
+											?>
+											<li><label>Phone : </label><span class="blue"><?php echo $profile["phonenumber"]; ?></span></li>
+											<?php } ?>
 										</ul>
 										<?php } else { ?>
 										<div class="add_about edit_personal" id="mem_contact"> <a href="javascript:void(0)"></a>Add Personal Information</div>

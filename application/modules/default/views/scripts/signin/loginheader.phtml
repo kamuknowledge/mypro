@@ -4,14 +4,11 @@
 ?>
 	<!--label for="db_error" generated="true" class="" style="color:#FF0000;"><?php echo ($error->error_loginuser_db_value) ? $error->error_loginuser_db_value : ""; ?></label-->
 	<ul>
-		<li><input type="text" name="email_id" id="email_id" value="<?php if(is_array($error->error_loginuser_values)) {echo $error->error_loginuser_values['email_id'];} ?>" <?php if($error->error_user_email != '') { echo 'class="error"'; } ?> />
+		<li><input type="text" name="email_id" id="email_id" tabindex="1" value="<?php if(is_array($error->error_loginuser_values)) {echo $error->error_loginuser_values['email_id'];} ?>" <?php if($error->error_user_email != '') { echo 'class="error"'; } ?> />
 		<span>New Customer? <a href="javascript:void(0)" id="signup">Start Here</a></span></li>
-		<li><input type="password" name="password" id="password" <?php if($error->error_user_password != '') { echo 'class="error"'; } ?> /><span><a href="javascript:void(0)" >Forgot Password ?</a></span></li>
-		<li class="button"><input type="submit" value="login" /></li>
+		<li><input type="password" name="password" id="password" tabindex="2" <?php if($error->error_user_password != '') { echo 'class="error"'; } ?> <?php if($error_val) { ?>placeholder="<?php echo $error_val; ?>"<?php } ?>/><span><a href="javascript:void(0)" >Forgot Password ?</a></span></li>
+		<li class="button"><input type="submit" value="login" tabindex="3"/></li>
 	</ul>
 	<script type="text/javascript">
-		<?php if($error_val) { ?>
-		alert('<?php echo $error_val; ?>');
 		$("#email_id").focus();
-		<?php } ?>
 	</script>

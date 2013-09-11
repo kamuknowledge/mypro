@@ -133,14 +133,21 @@ function cancel_per_form() {
 	if($profile["date_of_birth"] != "0000-00-00" || $profile["marital_status"] || $profile["interests"] || $profile["phonenumber"]) {
 ?>
 <ul>
-	<li><label>Birthday : </label><span class="blue"><?php echo ($profile["date_of_birth"] != "0000-00-00") ? $profile["date_of_birth"] : ""; ?></span></li>
+	<?php if($profile["date_of_birth"] != "0000-00-00"){ ?>
+	<li><label>Birthday : </label><span class="blue"><?php echo $profile["date_of_birth"]; ?></span></li>
+	<?php } 
+	if($profile["marital_status"]) {
+	?>
 	<li><label>Marital Status : </label><span class="blue"><?php echo $profile["marital_status"]; ?></span></li>
+	<?php } 
+	if($profile["interests"]) {
+	?>
 	<li><label>Interests : </label><span class="blue"><?php echo $profile["interests"]; ?></span></li>
-	<!--li><label>Honors & Awards : </label><span class="blue">Honors & Awards Honors & Awards Honors & Awards</span></li>
-	<li><label>Contact For : </label><span class="blue">Contact For Contact For Contact For</span></li-->
-	<li><label>Phone : </label><span class="blue"><?php echo ($profile["phonenumber"]) ? $profile["phonenumber"] : ""; ?></span></li>
-	<!--li><label>Website : </label><span class="blue">http://www.telugump3lyrics.com</span></li>
-	<li><label>Skype : </label><span class="blue">vip.veera</span></li-->	
+	<?php }
+	if($profile["phonenumber"]) {
+	?>
+	<li><label>Phone : </label><span class="blue"><?php echo $profile["phonenumber"]; ?></span></li>
+	<?php } ?>
 </ul>
 <?php } else { ?>
 <div class="add_about edit_personal" id="mem_contact"> <a href="javascript:void(0)"></a>Add Personal Information</div>

@@ -109,10 +109,9 @@ function mem_edu_delete(id) {
 					}
 				?>
 			</div>
-			<div class="row">
-				<label>Time Period:</label>
-				<div class="fields-container">
-					<div class="row">
+			<div class="row" style="width:500px">
+				<label style="width:123px;float:left;">Time Period:</label>
+				<div class="fields-container" style="float:left;">
 					<select id="from_month" name="from_month">
 						<option>Month</option>
 						<?php $fmonth = (is_array($error->error_education_values)) ? $error->error_education_values['from_month'] : $from_month; ?>
@@ -141,9 +140,8 @@ function mem_edu_delete(id) {
 							<option value="<?php echo $i; ?>" <?php echo ($tyear == $i) ? "selected" : ""; ?>><?php echo $i; ?></option>
 						<?php } ?>
 					</select>
-					<div class="clear"></div>
 				</div>
-				</div>
+				<div class="clear"></div>
 			</div>
 			<div class="row">
 				<label>Degree:</label>
@@ -168,8 +166,9 @@ function mem_edu_delete(id) {
 		</div>
 		<div class="row">
 			<label class="" style="width:18%">Description : </label>
-			<textarea style="width: 80%;" rows="6" id="description" name="description"><?php if(is_array($error->error_education_values)) { echo $error->error_education_values['description']; } else { echo $school_description; } ?></textarea>
-			<div class="info"  style="margin-left: 18%;"><span class="blue">2500</span> Words Remaining.</div>
+			<?php $desc = (is_array($error->error_education_values)) ? $error->error_education_values['description'] : $school_description; ?>
+			<textarea style="width: 80%;" rows="6" id="description" name="description" class="auto_count"><?php echo $desc; ?></textarea>
+			<div class="info"  style="margin-left: 18%;"><span class="blue"><?php echo 500 - strlen($desc); ?></span> Characters Remaining.</div>
 			<div class="text-right">
 				<a class="button-dark add" href="javascript:void(0);" onclick="submit_edu_form('education_form_<?php echo $education_id; ?>')"><span><span>Save</span></span></a>
 				<a class="button-grey add common_cancel_btn" href="javascript:void(0);" onclick="cancel_edu_form('<?php echo $education_id; ?>')"><span><span>Cancel</span></span></a>

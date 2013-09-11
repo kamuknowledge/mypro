@@ -1,3 +1,4 @@
+var error_flag = 0;
 $(document).ready(function(){
 	/*$.fn.fancyBox = function(params){
 		params = $.extend({content: '.main-wrapper'}, params);
@@ -21,8 +22,13 @@ $(document).ready(function(){
 			$(this).removeClass("loading"); 
 		}    
 	});
-
+	
 	$("#login_user").submit(function(ev) {
+		ev.preventDefault();
+	});
+	
+	$("#login_header").submit(function(ev) {
+		error_flag = 0;
 		ev.preventDefault();
 	});
 	
@@ -94,7 +100,15 @@ $(document).ready(function(){
 		},
 		onkeyup: false,
 		errorPlacement: function(error,element){
-			alert(error.html());
+			if($("input[name=email_id]").val() != "") {
+				if(error_flag == 0) {
+					$("input[name=password]").val("");
+					$("input[name=password]").attr("placeholder", error.html());
+				}
+			} else {
+				element.attr("placeholder", error.html());
+			}
+			error_flag = 1;
 			return false;
 	    },
 		submitHandler: function(form) {
@@ -434,6 +448,18 @@ $(document).ready(function(){
 		} else {
 			$("#to_month_"+id).show();
 			$("#to_year_"+id).show();
+		}
+	});
+	$(".auto_count").live("keyup", function(){
+		var str = $(this).val();
+		var len = str.length;
+		var min = 0;
+		var max = 500;
+		if(len <= 500) {
+			$(this).parent().find(".info").find("span").html(max - len);
+		} else {
+			$(this).val(str.substring(min, max));
+			$(this).parent().find(".info").find("span").html(min);
 		}
 	});
 });

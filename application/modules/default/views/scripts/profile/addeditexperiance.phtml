@@ -240,8 +240,9 @@ function mem_exp_delete(id) {
 		</div>
 		<div class="row">
 			<label class="width-15">Description : </label>
-			<textarea style="width: 80%;" rows="6" id="description" name="description"><?php if(is_array($error->error_experiance_values)) { echo $error->error_experiance_values['description']; } else { echo $company_description; } ?></textarea>
-			<div class="info"  style="margin-left: 15%;"><span class="blue">2500</span> Words Remaining.</div>
+			<?php $desc = (is_array($error->error_experiance_values)) ? $error->error_experiance_values['description'] : $company_description; ?>
+			<textarea style="width: 80%;" rows="6" id="description" name="description" class="auto_count"><?php echo $desc; ?></textarea>
+			<div class="info"  style="margin-left: 15%;"><span class="blue"><?php echo 500 - strlen($desc); ?></span> Characters Remaining.</div>
 			<div class="text-right">
 				<a class="button-dark add" href="javascript:void(0)" onclick="submit_exp_form('experiance_form_<?php echo $experiance_id; ?>')"><span><span>Save</span></span></a>
 				<a class="button-grey add common_cancel_btn" href="javascript:void(0)"onclick="cancel_exp_form('<?php echo $experiance_id; ?>')"><span><span>Cancel</span></span></a>
