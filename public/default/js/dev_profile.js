@@ -215,6 +215,43 @@ $(document).ready(function(){
 			});
 		}
 	});
+	// Forgot Password
+	$("#forgot").validate({
+		rules : {
+			email_id : {
+				required : true,
+				email : true,
+				minlength : 3,
+				maxlength : 50
+			}
+		},
+		messages : {
+			email_id : {
+				required : "Email id is required.",
+				email : "Email id is invalid.",
+				minlength : "Minimum length should be 3 characters",
+				maxlength : "Maximum length allowed 50 characters"
+			}
+		},
+		submitHandler: function(form) {
+			var str = $("#forgot").serialize();
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/signup/forgot",
+				data : str,
+				beforeSend : function() {
+					$("#forgot").hide();
+					$("#for_loading").show();
+				},
+				success : function(data) {
+					$("#for_loading").hide();
+					$("#forgot").html(data);
+					$("#forgot").show();
+					return false;
+				}
+			});
+		}
+	});
 	// About_us Functionality
 	$(".edit_aboutus").live("click", function(){
 		cancel_all();

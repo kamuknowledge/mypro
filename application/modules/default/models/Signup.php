@@ -229,5 +229,58 @@ class Default_Model_Signup extends Application_Model_Validation {
 			throw new Exception($e->getMessage());
 		}
 	}
+	
+	public  function forgotPassword(Array $params) {
+		try{
+			$useremail = trim($params['email_id']);
+			$password = trim($params['password']);
+			$action = trim($params['forgot_submit']);
+			
+			$error = 0;
+			
+			if($useremail == '') {				//Validation for user email
+            	$this->error->error_createuser_email = Error_Create_users_email_empty;
+            	$error = 1;
+            	//return false;
+            } else if(!$this->validate_email_dot_underscore($useremail)) {
+            	$params['useremail'] = '';
+            	$this->error->error_createuser_email = Error_Create_users_email;
+            	$error = 1;
+            	//return false;
+            } else if(strlen($useremail) >50) {
+            	$this->error->error_createuser_email = Error_email_field;
+            	$error = 1;
+            } else if(strlen($useremail) < 3) {
+            	$this->error->error_createuser_email = Error_name_field_min;
+            	$error = 1;
+            }
+            
+            if($error == 1) {
+            	$this->error->error_createuser_values = $params;
+            	$error = 0;
+            	return false;
+            }
+          
+            /*
+             * Validation ends here
+             */
+				
+			$outpt = $this->Signupdb->updatePassword($useremail, $password, $action);
+			
+			if($outpt == 1) {
+				$this->session->success = 'New password has been sent to ' . $useremail ." successfully. Please check your email and login again.";
+				return true;
+			} else {
+				$this->error->error_createuser_db_value = $result[1];
+				$this->error->error_createuser_values = $params;
+				$this->error->error = $useremail." not a valid account." ;
+				return false;
+			}
+			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 }
 ?>

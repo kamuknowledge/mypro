@@ -56,6 +56,9 @@ $(document).ready(function(){
 		});*/
 		$('#register_cont').show().fancyBox();
 	});
+	$('#forgot_pwd').live('click',function(){
+		$('#forgot_cont').show().fancyBox();
+	});
 	$('#share').customDrop({containerID:'share-popup',content:'#share-content',right:'-55px'});
 	$('#myaccount').live('click',function(){
 		if(!$('#myac-options').is(':visible')){

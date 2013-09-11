@@ -1,0 +1,30 @@
+<?php
+$this->session = new Zend_Session_Namespace('MyClientPortal');
+$isSignedIn = $this->session->isSignedIn;
+if($isSignedIn!=1){
+?>
+<!-- Forgot Password -->
+<div id="forgot_cont" class="" style="display:none;">
+	<div class="register-form containerbox">
+		<p>GetLinc is the Leading online shopping website in india</p>
+		<!--div class="header">
+			<a href="javascript:void(0)" id="fb_login" ></a>
+			<a href="javascript:void(0)" id="google_login" ></a>
+			<div class="clear"></div>
+		</div>
+		<div class="or"></div-->
+		<div class="register-part">
+			<form name="forgot" id="forgot">
+			<div class="row">
+				<label>Email Id<span class="error_class">*</span></label>
+				<input type="text" name="email_id" id="email_id"/>				
+			</div>
+			<div class="btn-container"><input type="submit" id="forgot_submit" name="forgot_submit" value="Send"></div>
+			</form>
+			<div id="for_loading" style="display:none;"><img src="<?php echo $this->baseUrl('public/default'); ?>/images/ajax-loader.gif" /></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+<!-- end register-->
+<?php }?>

@@ -78,5 +78,21 @@ class Default_Model_Signupdb {
 			throw new Exception($e->getMessage());
 		}
 	}
+	public function updatePassword($useremail, $password, $action){
+		try {
+			$rows = $this->db->fetchAll('SELECT * FROM apmusers WHERE emailid = "'.$useremail.'"');
+			$numRows = sizeof($rows);
+			if($numRows > 0) {
+				$password = hash('sha256',$password);
+				$query = 'UPDATE apmusers SET password = "'.$password.'", updateddatetime = NOW() WHERE emailid = "'.$useremail.'";';
+				$stmt = $this->db->query($query);
+				return 1;
+			}
+			return 0;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 }
 ?>

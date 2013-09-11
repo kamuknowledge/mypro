@@ -103,11 +103,15 @@ class SignupController extends Zend_Controller_Action {
 				if(!$this->signup -> createUser($params)) {
 					echo "Registration Failed! Try Again.";
 				} else {
+					$toemail = $params['email_id'];
+					$mailbody = "Thanks for registration with Getlinc. We will keep you update.";
+					$emailsubject = "Registered with Getlinc.";
+					Application_Model_DataBaseOperations::insertEmailQueue($toemail,$mailbody,$emailsubject);
 					echo $this->session->success;
 					echo "Successfully Registered. Please login with your account.";
 					exit;
 				}
-			}else{			
+			}else{
 				echo "Data not received from Origin Place.";exit;
 			}
 			
@@ -117,6 +121,52 @@ class SignupController extends Zend_Controller_Action {
 			exit;
 		}
 	}
-
+	/**
+     * Purpose: User forgot page 
+     *
+     * Access is public
+     *
+     * @param	
+     * 
+     * @return  
+     */
+	public function forgotAction() {
+		try{
+			$this->view->title = "Forgot Password";
+			$params = $this->_getAllParams();	
+			$this->_helper->layout->setLayout('default/empty_layout');
+			$request = $this->getRequest();
+			$Request_Values = $request->getPost();
+			if ($request->isPost()) {
+				$params["password"] = $this->rand_string(8);
+				if(!$this->signup -> forgotPassword($params)) {
+					echo "Emailid not exist in our system. Please register as a new user.";
+				} else {
+					$toemail = $params['email_id'];
+					$mailbody = "Your password has been auto generted. \n New Password: ".$params["password"];
+					$emailsubject = "Registered with Getlinc.";
+					Application_Model_DataBaseOperations::insertEmailQueue($toemail,$mailbody,$emailsubject);
+					echo $this->session->success;
+					exit;
+				}
+			}else{
+				echo "Data not received from Origin Place.";exit;
+			}
+			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+			exit;
+		}
+	}
+	
+	function rand_string( $length ) {
+		$chars = "abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ123456789";	
+		$size = strlen( $chars );
+		for( $i = 0; $i < $length; $i++ ) {
+			$str .= $chars[ rand( 0, $size - 1 ) ];
+		}
+		return $str;
+	}
 }
 ?>
