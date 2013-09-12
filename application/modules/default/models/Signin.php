@@ -129,4 +129,61 @@ class Default_Model_Signin extends Application_Model_Validation {
 			throw new Exception($e->getMessage());
 		}
 	}
+	
+	public  function changePassword(Array $params) {
+		try{
+			$old_pwd = trim($params['old_pwd']);
+			$new_pwd = trim($params['new_pwd']);
+			$action = trim($params['change_pwd_submit']);
+			
+			$error = 0;
+			
+			if($old_pwd == '') {				//Validation for old password
+            	$this->error->error_old_password = Error_signup_user_password_empty;
+            	$error = 1;
+            } else if(strlen($old_pwd) > 16) {
+            	$this->error->error_old_password = Error_signup_password_field_max;
+            	$error = 1;
+            } else if(strlen($old_pwd) < 8) {
+            	$this->error->error_old_password = Error_signup_password_field_min;
+            	$error = 1;
+            }
+			
+			if($new_pwd == '') {				//Validation for new password
+            	$this->error->error_new_password = Error_signup_user_password_empty;
+            	$error = 1;
+            } else if(strlen($new_pwd) > 16) {
+            	$this->error->error_new_password = Error_signup_password_field_max;
+            	$error = 1;
+            } else if(strlen($new_pwd) < 8) {
+            	$this->error->error_new_password = Error_signup_password_field_min;
+            	$error = 1;
+            }
+            
+            if($error == 1) {
+            	$this->error->error_change_values = $params;
+            	$error = 0;
+            	return false;
+            }
+          
+            /*
+             * Validation ends here
+             */
+				
+			$outpt = $this->signinDb->updatePassword($old_pwd, $new_pwd, $action);
+			
+			if($outpt == 1) {
+				$this->session->success = "New password has been updated successfully.";
+				return true;
+			} else {
+				$this->error->error_change_values = $params;
+				$this->error->error = "Invalid Password." ;
+				return false;
+			}
+			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
 }

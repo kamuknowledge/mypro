@@ -63,12 +63,13 @@ $displayName = $this->session->name;
 									<ul >
 										<li class="top_arrow"></li>
 										<li><a href="<?php echo $this->baseUrl('profile/view/');?>">My profile</a></li>
+										<li><a href="javascript:void(0)" id="change_pwd" name="change_pwd">Change Password</a></li>
 										<li><a href="javascript:void(0)">Settings</a></li>
 										<li><a href="javascript:void(0)">Privacy&nbsp;Options</a></li>
 										<li><a href="<?php echo $this->baseUrl('signin/logout/');?>">Sign Out</a></li>
 									</ul>
 								</div>
-								
+								<?php echo $this->render('default/change_password.phtml'); ?>
 								<?php }?>			
 								<div class="clear"></div> 
 							</div>

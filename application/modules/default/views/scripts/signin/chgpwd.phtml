@@ -1,0 +1,38 @@
+<?php
+$error = $this;
+$this->session = new Zend_Session_Namespace('MyClientPortal');
+$isSignedIn = $this->session->isSignedIn;
+if($isSignedIn==1){
+?>
+	<div class="row">
+		<label>Old Password<span class="error_class">*</span></label>
+		<input type="password" name="old_pwd" id="old_pwd" value="" <?php if($error->error_old_password != '') { echo 'class="error"'; } ?>/>
+		<?php 
+			if($error->error_old_password != '') {
+				echo '<label for="old_pwd" generated="true" class="" style="color:#FF0000;">' .$error->error_old_password . '</label>';
+				$error->error_old_password = '';
+			}
+		?>
+		<?php 
+			if($error->error != '') {
+				echo '<label for="old_pwd" generated="true" class="" style="color:#FF0000;">' .$error->error . '</label>';
+				$error->error = '';
+			}
+		?>
+	</div>
+	<div class="row">
+		<label>New Password<span class="error_class">*</span></label>
+		<input type="password" name="new_pwd" id="new_pwd" value="" <?php if($error->error_new_password != '') { echo 'class="error"'; } ?>/>
+		<?php 
+			if($error->error_new_password != '') {
+				echo '<label for="new_pwd" generated="true" class="" style="color:#FF0000;">' .$error->error_new_password . '</label>';
+				$error->error_new_password = '';
+			}
+		?>
+	</div>
+	<div class="row">
+		<label>Confirm Password<span class="error_class">*</span></label>
+		<input type="password" name="cnf_pwd" id="cnf_pwd" value=""/>				
+	</div>
+	<div class="btn-container"><input type="submit" id="change_pwd_submit" name="change_pwd_submit" value="Change"></div>
+<?php }?>

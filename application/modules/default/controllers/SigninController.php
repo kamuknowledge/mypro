@@ -155,4 +155,37 @@ class SigninController extends Zend_Controller_Action {
 			throw new Exception($e->getMessage());
 		}
 	}	
+	/**
+     * Purpose: User change password page 
+     *
+     * Access is public
+     *
+     * @param	
+     * 
+     * @return  
+     */
+	public function chgpwdAction() {
+		try{
+			$this->view->title = "Change Password";
+			$params = $this->_getAllParams();	
+			$this->_helper->layout->setLayout('default/empty_layout');
+			$request = $this->getRequest();
+			$Request_Values = $request->getPost();
+			if ($request->isPost()) {
+				if(!$this->signin -> changePassword($params)) {
+					
+				} else {
+					echo $this->session->success;
+					exit;
+				}
+			}else{
+				echo "Data not received from Origin Place.";exit;
+			}
+			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+			exit;
+		}
+	}
 }

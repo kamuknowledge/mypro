@@ -47,6 +47,11 @@ class Default_Model_Signindb {
 		$this->error = new Zend_Session_Namespace('MyPortalerror');
 		$this->db=Zend_Registry::get('db');
 		//print_r($this->db);
+		/* Check Login */
+		if($this->session->userid)
+		{
+			$this->userid = $this->session->userid;
+		}
 	}
 	
 	
@@ -73,6 +78,23 @@ class Default_Model_Signindb {
 			$stmt = $this->db->query("CALL SPuserlogin(?, ?, ? , ?)", array($useremail,$password,'5',$action));			
 			return $stmt->fetchAll();
 			
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	public function updatePassword($old_pwd, $new_pwd, $action){
+		try {
+			$old_pwd = hash('sha256',$old_pwd);
+			$rows = $this->db->fetchAll('SELECT * FROM apmusers WHERE userid = "'.$this->userid.'" AND password = "'.$old_pwd.'"');
+			$numRows = sizeof($rows);
+			if($numRows > 0) {
+				$new_pwd = hash('sha256',$new_pwd);
+				$query = 'UPDATE apmusers SET password = "'.$new_pwd.'", updateddatetime = NOW() WHERE userid = "'.$this->userid.'";';
+				$stmt = $this->db->query($query);
+				return 1;
+			}
+			return 0;
 		} catch(Exception $e) {
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

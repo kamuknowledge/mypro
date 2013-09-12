@@ -39,6 +39,10 @@ $(document).ready(function(){
 	$("#form_about_us").submit(function(ev) {
 		ev.preventDefault();
 	});
+	
+	$("#change_pwd_form").submit(function(ev) {
+		ev.preventDefault();
+	});
 		
 	$("#login_user").validate({
 		rules : {
@@ -210,6 +214,51 @@ $(document).ready(function(){
 					$("#reg_loading").hide();
 					$("#registration").html(data);
 					$("#registration").show();
+					return false;
+				}
+			});
+		}
+	});
+	// Change Password
+	$("#change_pwd_form").validate({
+		rules : {
+			old_pwd : {
+				required : true
+			},
+			new_pwd : {
+				required : true
+			},
+			cnf_pwd : {
+				required : true,
+				equalTo : "#new_pwd"
+			}
+		},
+		messages : {
+			old_pwd : {
+				required : "Old password is required."
+			},
+			new_pwd : {
+				required : "New password is required."
+			},
+			cnf_pwd : {
+				required : "Confirm password is required.",
+				equalTo : "Confirm password not matching."
+			}
+		},
+		submitHandler: function(form) {
+			var str = $("#change_pwd_form").serialize();
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/signin/chgpwd",
+				data : str,
+				beforeSend : function() {
+					$("#change_pwd_form").hide();
+					$("#for_loading").show();
+				},
+				success : function(data) {
+					$("#for_loading").hide();
+					$("#change_pwd_form").html(data);
+					$("#change_pwd_form").show();
 					return false;
 				}
 			});

@@ -2,7 +2,7 @@ label.error{
 	border: 0 !important;
 	color:#FF0000;
 	width:100% !important;
-	padding-left:31%;
+	/*padding-left:31%;*/
 }
 .error{
     border:1px solid red !important;

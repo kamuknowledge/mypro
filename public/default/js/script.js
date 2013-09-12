@@ -59,6 +59,9 @@ $(document).ready(function(){
 	$('#forgot_pwd').live('click',function(){
 		$('#forgot_cont').show().fancyBox();
 	});
+	$('#change_pwd').live('click',function(){
+		$('#change_pwd_cont').show().fancyBox();
+	});
 	$('#share').customDrop({containerID:'share-popup',content:'#share-content',right:'-55px'});
 	$('#myaccount').live('click',function(){
 		if(!$('#myac-options').is(':visible')){
