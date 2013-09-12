@@ -6,7 +6,7 @@
 	<ul>
 		<li><input type="text" name="email_id" id="email_id" tabindex="1" value="<?php if(is_array($error->error_loginuser_values)) {echo $error->error_loginuser_values['email_id'];} ?>" <?php if($error->error_user_email != '') { echo 'class="error"'; } ?> />
 		<span>New Customer? <a href="javascript:void(0)" id="signup">Start Here</a></span></li>
-		<li><input type="password" name="password" id="password" tabindex="2" <?php if($error->error_user_password != '' || $error_val) { echo 'class="error"'; } ?> <?php if($error_val) { ?>placeholder="<?php echo $error_val; ?>"<?php } ?>/><span><a href="javascript:void(0)" >Forgot Password ?</a></span></li>
+		<li><input type="password" name="password" id="password" tabindex="2" <?php if($error->error_user_password != '' || $error_val) { echo 'class="error"'; } ?> <?php if($error_val) { ?>placeholder="<?php echo $error_val; ?>"<?php } ?>/><span><a href="javascript:void(0)" id="forgot_pwd">Forgot Password ?</a></span></li>
 		<li class="button"><input type="submit" value="login" tabindex="3"/></li>
 	</ul>
 	<script type="text/javascript">
