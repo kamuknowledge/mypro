@@ -97,6 +97,7 @@ class ProfileController extends Zend_Controller_Action {
 			$UserDetails["profile"] = $this->profiledb->getProfileDetails();
 			$UserDetails["address"] = $this->profiledb->getUserAddress();
 			$UserDetails["education"] = $this->profiledb->getUserEducation();
+			$UserDetails["skills"] = $this->profiledb->getUserSkills();
 			$UserDetails["experiance"] = $this->profiledb->getUserExperiance();
 			$UserDetails["timezones"] = $this->profiledb->getTimezones();
 			//print_r($UserDetails);
@@ -586,6 +587,28 @@ class ProfileController extends Zend_Controller_Action {
 			$this->_helper->layout->setLayout('default/empty_layout');
 			$UserDetails["education"] = $this->profiledb->getUserEducation();
 			$this->view->UserDetails = $UserDetails;
+		} catch (Exception $e){
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		} 
+	}
+	public function addeditskillsetAction() {
+		try {
+			if ($this->getRequest()->isXmlHttpRequest()) {
+				$this->_helper->layout->setLayout('default/empty_layout');
+				$request = $this->getRequest();
+				$Request_Values = $request->getPost();
+				if ($request->isPost()) {
+					$type = $Request_Values["type"];
+					$id = $Request_Values["id"];
+					if($type == "new") {
+						$var = $this->profiledb->createSkillSet($Request_Values);
+					} else {
+						$var = $this->profiledb->editSkillSet($id, $Request_Values);
+					}
+				}
+			}
+			exit;
 		} catch (Exception $e){
 			Application_Model_Logging::lwrite($e->getMessage());
 			throw new Exception($e->getMessage());

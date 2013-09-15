@@ -130,7 +130,26 @@ class Default_Model_Profiledb  {
 				$query = "SELECT ue.* FROM user_education ue WHERE ue.userid = '".$this->userid."' AND ue.statusid = 1";
 				if($id)
 					$query .= " AND ue.education_id = ".$id;
-				$query .= " AND ue.statusid = 1 ORDER BY ue.to_year DESC, ue.to_month DESC;";
+				else
+					$query .= " ORDER BY ue.to_year DESC, ue.to_month DESC;";
+				$stmt = $this->db->query($query);			
+				return $stmt->fetchAll();
+			}
+			return 0;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function getUserSkills($id = "") {
+		try {	
+			if($this->userid) {
+				$query = "SELECT us.* FROM user_skills_set us WHERE us.userid = '".$this->userid."' AND us.statusid = 1";
+				if($id)
+					$query .= " AND us.user_skills_set_id = ".$id;
+				else
+					$query .= " ORDER BY us.last_used DESC;";
 				$stmt = $this->db->query($query);			
 				return $stmt->fetchAll();
 			}
@@ -144,11 +163,11 @@ class Default_Model_Profiledb  {
 	public function getUserExperiance($id = "") {
 		try {	
 			if($this->userid) {
-				$query = "SELECT ue.* FROM user_experience ue WHERE ue.userid = '".$this->userid."'";
+				$query = "SELECT ue.* FROM user_experience ue WHERE ue.userid = '".$this->userid."' AND ue.statusid = 1";
 				if($id)
 					$query .= " AND ue.experience_id = ".$id;
-				$query .= " AND ue.statusid = 1 ORDER BY ue.present_working DESC, ue.to_year DESC, ue.to_month DESC;";
-				//exit;
+				else
+					$query .= " ORDER BY ue.present_working DESC, ue.to_year DESC, ue.to_month DESC;";
 				$stmt = $this->db->query($query);
 				return $stmt->fetchAll();
 			}
@@ -326,6 +345,35 @@ class Default_Model_Profiledb  {
 		try {
 			if($this->userid && $id) {
 				$query = "DELETE FROM user_education WHERE education_id = '".$id."';";
+				$stmt = $this->db->query($query);
+				return 1;
+			}
+			return 0;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function createSkillSet($params) {
+		try {
+			if($this->userid && $params) {
+				$query = "INSERT INTO user_skills_set (userid,user_skill,skill_version,last_used,experience_years,experience_months,createddatetime,updateddatetime,statusid,createdby,lastupdatedby) VALUES ('".$this->userid."','".$params["user_skill"]."','".$params["skill_version"]."','".$params["last_used_val"]."','".$params["experience_years_val"]."','".$params["experience_months_val"]."',NOW(),NOW(),'1','".$this->userid."','".$this->userid."');";
+				$stmt = $this->db->query($query);
+				//lastInsertId
+				return 1;
+			}
+			return 0;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function editSkillSet($id, $params) {
+		try {
+			if($this->userid && $params) {
+				$query = "UPDATE user_skills_set SET user_skill = '".$params["user_skill"]."', skill_version = '".$params["skill_version"]."', last_used = '".$params["last_used_val"]."', experience_years = '".$params["experience_years_val"]."', experience_months = '".$params["experience_months_val"]."', updateddatetime = NOW(), lastupdatedby = '".$this->userid."' WHERE user_skills_set_id = '".$id."' AND userid = '".$this->userid."';";
 				$stmt = $this->db->query($query);
 				return 1;
 			}

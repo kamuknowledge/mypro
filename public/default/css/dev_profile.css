@@ -127,3 +127,18 @@ background: url(../../images/plus_icons.png) no-repeat 0 -26px;
 	text-align: center;
 	border: 1px solid green;
 }
+.all_skills_view table th{
+	font-weight: bold;
+	padding: 10px 0px;
+}
+.all_skills_view table td{
+	padding: 2px;
+}
+.all_skills_view table td input{
+	width: 100%;
+}
+.all_skills_view table td a{
+	color: #1378BB;
+	text-decoration: none;
+	padding: 0px 10px;
+}

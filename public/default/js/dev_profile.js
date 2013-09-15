@@ -379,6 +379,121 @@ $(document).ready(function(){
 			$("#experiance_edit_"+id).show();
 		}
 	});
+	// Skill set Functionality
+	$("#edit_skill_new").live("click", function(){
+		var user_skill = '<input type="text" id="user_skill" name="user_skill" />';
+		var skill_version = '<input type="text" id="skill_version" name="skill_version" />';
+		var last_used = '<select id="last_used"><option value="">Year</option>';
+		for(var i = 2013; i > 1950; i--)
+		last_used += '<option value="'+i+'">'+i+'</option>';
+		last_used += '</select>';
+		var experience_years = '<select id="experience_years"><option value="">Year(s)</option>';
+		for(var i = 0; i < 31; i++)
+		experience_years += '<option value="'+i+'">'+i+'</option>';
+		experience_years += '</select>';
+		var experience_months = '<select id="experience_months"><option value="">Month(s)</option>';
+		for(var i = 0; i < 12; i++)
+		experience_months += '<option value="'+i+'">'+i+'</option>';
+		experience_months += '</select>';
+		var actions = '<a href="javascript:void(0);" id="save_skill_set">Save</a><a href="javascript:void(0);" id="cancel_skill_set">Cancel</a>';
+		$(".skills_views table").append('<tr data-id="new"><td>'+user_skill+'</td><td>'+skill_version+'</td><td>'+last_used+'</td><td>'+experience_years+experience_months+'</td><td>'+actions+'</td></tr>');
+	});
+	$("#edit_skill_old").live("click", function(){
+		var id = $(this).parents("tr").attr("data-id");
+		var elm = $(this).parents("tr");
+		if(id) {
+			var user_skill = '<input type="text" id="user_skill" name="user_skill" value="'+elm.find("#user_skill").val()+'"/>';
+			var skill_version = '<input type="text" id="skill_version" name="skill_version" value="'+elm.find("#skill_version").val()+'"/>';
+			var last_used_val = elm.find("#last_used").val();
+			var last_used = '<select id="last_used"><option value="">Year</option>';
+			for(var i = 2013; i > 1950; i--)
+				last_used += '<option value="'+i+'" '+((last_used_val == i) ? 'selected' : '')+'>'+i+'</option>';
+			last_used += '</select>';
+			var experience_years_val = elm.find("#experience_years").val();
+			var experience_years = '<select id="experience_years"><option value="">Year(s)</option>';
+			for(var i = 0; i < 31; i++)
+				experience_years += '<option value="'+i+'" '+((experience_years_val == i) ? 'selected' : '')+'>'+i+'</option>';
+			experience_years += '</select>';
+			var experience_months_val = elm.find("#experience_months").val();
+			var experience_months = '<select id="experience_months"><option value="">Month(s)</option>';
+			for(var i = 0; i < 12; i++)
+				experience_months += '<option value="'+i+'" '+((experience_months_val == i) ? 'selected' : '')+'>'+i+'</option>';
+			experience_months += '</select>';
+			var actions = '<a href="javascript:void(0);" id="save_skill_set">Save</a><a href="javascript:void(0);" id="cancel_skill_set">Cancel</a>';
+			elm.html('<td>'+user_skill+'</td><td>'+skill_version+'</td><td>'+last_used+'</td><td>'+experience_years+experience_months+'</td><td>'+actions+'</td>');
+		}
+	});
+	$("#save_skill_set").live("click", function(){
+		var id = $(this).parents("tr").attr("data-id");
+		var elm = $(this).parents("tr");
+		if(elm && id) {
+			var user_skill = elm.find("#user_skill").val();
+			var skill_version = elm.find("#skill_version").val();
+			var last_used_val = elm.find("#last_used").val();
+			var experience_years_val = elm.find("#experience_years").val();
+			var experience_months_val = elm.find("#experience_months").val();
+			var type = "edit";
+			if(id == "new") {
+				type = "new";
+			}
+			$.ajax({
+				type : "POST",
+				url : baseUrl+"/profile/addeditskillset",
+				data : "type="+type+"&id="+id+"&user_skill="+user_skill+"&skill_version="+skill_version+"&last_used_val="+last_used_val+"&experience_years_val="+experience_years_val+"&experience_months_val="+experience_months_val,
+				success : function(data) {
+					if(id == "new") {
+						elm.remove();
+						var html = '<td>'+user_skill+'<input type="hidden" id="user_skill" name="user_skill" value="'+user_skill+'" /></td><td>'+skill_version+'<input type="hidden" id="skill_version" name="skill_version" value="'+skill_version+'" /></td><td>'+last_used_val+'<input type="hidden" id="last_used" name="last_used" value="'+last_used_val+'" /></td><td>'+experience_years_val+' year(s) '+experience_months_val+' month(s)<input type="hidden" id="experience_years" name="experience_years" value="'+experience_years_val+'" /><input type="hidden" id="experience_months" name="experience_months" value="'+experience_months_val+'" /></td><td style="text-align:right"><a href="javascript:void(0);" id="edit_skill_old">Edit</a><a href="javascript:void(0);">Delete</a></td>';
+						$(".skills_views table").append('<tr data-id="">'+html+'</tr>');
+					} else {
+						var html = '<td>'+user_skill+'<input type="hidden" id="user_skill" name="user_skill" value="'+user_skill+'" /></td><td>'+skill_version+'<input type="hidden" id="skill_version" name="skill_version" value="'+skill_version+'" /></td><td>'+last_used_val+'<input type="hidden" id="last_used" name="last_used" value="'+last_used_val+'" /></td><td>'+experience_years_val+' year(s) '+experience_months_val+' month(s)<input type="hidden" id="experience_years" name="experience_years" value="'+experience_years_val+'" /><input type="hidden" id="experience_months" name="experience_months" value="'+experience_months_val+'" /></td><td style="text-align:right"><a href="javascript:void(0);" id="edit_skill_old">Edit</a><a href="javascript:void(0);">Delete</a></td>';
+						elm.html(html);
+					}
+					return false;
+				}
+			});
+		}
+	});
+	$("#edit_skill_old").live("click", function(){
+		var id = $(this).parents("tr").attr("data-id");
+		var elm = $(this).parents("tr");
+		if(id) {
+			var user_skill = '<input type="text" id="user_skill" name="user_skill" value="'+elm.find("#user_skill").val()+'"/>';
+			var skill_version = '<input type="text" id="skill_version" name="skill_version" value="'+elm.find("#skill_version").val()+'"/>';
+			var last_used_val = elm.find("#last_used").val();
+			var last_used = '<select id="last_used"><option value="">Year</option>';
+			for(var i = 2013; i > 1950; i--)
+				last_used += '<option value="'+i+'" '+((last_used_val == i) ? 'selected' : '')+'>'+i+'</option>';
+			last_used += '</select>';
+			var experience_years_val = elm.find("#experience_years").val();
+			var experience_years = '<select id="experience_years"><option value="">Year(s)</option>';
+			for(var i = 0; i < 31; i++)
+				experience_years += '<option value="'+i+'" '+((experience_years_val == i) ? 'selected' : '')+'>'+i+'</option>';
+			experience_years += '</select>';
+			var experience_months_val = elm.find("#experience_months").val();
+			var experience_months = '<select id="experience_months"><option value="">Month(s)</option>';
+			for(var i = 0; i < 12; i++)
+				experience_months += '<option value="'+i+'" '+((experience_months_val == i) ? 'selected' : '')+'>'+i+'</option>';
+			experience_months += '</select>';
+			var actions = '<a href="javascript:void(0);" >Save</a><a href="javascript:void(0);" id="cancel_skill_set">Cancel</a>';
+			elm.html('<td>'+user_skill+'</td><td>'+skill_version+'</td><td>'+last_used+'</td><td>'+experience_years+experience_months+'</td><td>'+actions+'</td>');
+		}
+	});
+	$("#cancel_skill_set").live("click", function(){
+		var elm = $(this).parents("tr");
+		var typ = elm.attr("data-id");
+		if(typ == "new") {
+			elm.remove();
+		} else {
+			var user_skill = elm.find("#user_skill").val();
+			var skill_version = elm.find("#skill_version").val();
+			var last_used_val = elm.find("#last_used").val();
+			var experience_years_val = elm.find("#experience_years").val();
+			var experience_months_val = elm.find("#experience_months").val();
+			var html = '<td>'+user_skill+'<input type="hidden" id="user_skill" name="user_skill" value="'+user_skill+'" /></td><td>'+skill_version+'<input type="hidden" id="skill_version" name="skill_version" value="'+skill_version+'" /></td><td>'+last_used_val+'<input type="hidden" id="last_used" name="last_used" value="'+last_used_val+'" /></td><td>'+experience_years_val+' year(s) '+experience_months_val+' month(s)<input type="hidden" id="experience_years" name="experience_years" value="'+experience_years_val+'" /><input type="hidden" id="experience_months" name="experience_months" value="'+experience_months_val+'" /></td><td style="text-align:right"><a href="javascript:void(0);" id="edit_skill_old">Edit</a><a href="javascript:void(0);">Delete</a></td>';
+			elm.html(html);
+		}
+	});
 // Education Functionality
 	$(".edit_education").live("click", function(){
 		var id_str = $(this).attr('id');

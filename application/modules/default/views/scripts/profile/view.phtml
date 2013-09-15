@@ -4,6 +4,7 @@ $profile = $this->UserDetails["profile"][0];
 $address = $this->UserDetails["address"];
 $experiance = $this->UserDetails["experiance"];
 $education = $this->UserDetails["education"];
+$skills = $this->UserDetails["skills"];
 $timezones = $this->UserDetails["timezones"];
 $present_cmp = ($profile["company_name"]) ? $profile["company_name"].($profile["country_name"] ? " - ".$profile["country_name"] : "") : "";
 //$previous_cmp = "";
@@ -200,6 +201,39 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 											<?php } } else { ?>
 										<div class="add_about edit_education edit_education_new edit_education_bar" id="edit_education_new"> <a href="javascript:void(0)"></a>Add Education</div>
 										<?php } ?>
+										</div>
+									
+								</div>
+								<div class="profile_info_block all_skills_view">
+									<div class="header">
+										<h2 class="title_have_image edu">Skill Set</h2>
+										<a href="javascript:void(0);" class="edit_skill_sets edit_skill_new" id="edit_skill_new"><span>+</span>Add Skills</a>
+									</div>
+										<div class="desc skills_views">
+										<?php if(count($skills) > 0 ) { ?>
+											<table style="width:100%;">
+												<tr>
+													<th width="30%">Skill</th>
+													<th width="10%">Version</th>
+													<th width="15%">Last Used</th>
+													<th width="30%">Experiance</th>
+													<th width="15%">&nbsp;</th>
+												</tr>
+											<?php foreach($skills as $key => $value) { ?>
+												<tr id="<?php echo $key; ?>" data-id="<?php echo $value["user_skills_set_id"];?>">
+													<td><?php echo $value["user_skill"]; ?><input type="hidden" id="user_skill" name="user_skill" value="<?php echo $value["user_skill"]; ?>" /></td>
+													<td><?php echo $value["skill_version"]; ?><input type="hidden" id="skill_version" name="skill_version" value="<?php echo $value["skill_version"]; ?>" /></td>
+													<td><?php echo $value["last_used"]; ?><input type="hidden" id="last_used" name="last_used" value="<?php echo $value["last_used"]; ?>" /></td>
+													<td><?php echo $value["experience_years"]." year(s) ".$value["experience_months"]." month(s)"; ?><input type="hidden" id="experience_years" name="experience_years" value="<?php echo $value["experience_years"]; ?>" /><input type="hidden" id="experience_months" name="experience_months" value="<?php echo $value["experience_months"]; ?>" /></td>
+													<td style="text-align:right"><a href="javascript:void(0);" id="edit_skill_old">Edit</a><a href="javascript:void(0);">Delete</a></td>
+												</tr>
+											<?php } ?>
+											</table>
+											<?php
+											} else { ?>
+										<div class="add_about edit_skill edit_skill_new edit_skill_bar" id="edit_education_new"> <a href="javascript:void(0)"></a>Add Skills</div>
+										<?php } ?>
+										<input type="hidden" id="number_count" name="number_count" value="<?php echo count($skills); ?>" />
 										</div>
 									
 								</div>
