@@ -124,6 +124,29 @@ class Wall_Model_Wall extends Application_Model_Validation {
             throw new Exception($e->getMessage());
         }
     }
+	
+	public function Insert_User_Wall($file_name,$username) {
+        try {
+            //echo $file_name."----".$username;exit;
+                $this->walldb = new Wall_Model_Walldb();
+                $result = $this->walldb->Insert_User_Wall($file_name,$username);
+                return $result;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+	public function Get_Upload_Image_Id($id) {
+        try {
+            //echo $file_name."----".$username;exit;
+                $this->walldb = new Wall_Model_Walldb();
+                $result = $this->walldb->Get_Upload_Image_Id($id);
+                return $result;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
 }
 
 ?>

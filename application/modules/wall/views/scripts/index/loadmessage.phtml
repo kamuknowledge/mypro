@@ -34,18 +34,20 @@ if($this->sess_uid==$msg_uid) { ?>
 
 
 <?php
-/* if($uploads)
+if($uploads)
 {
 echo "<div style='margin-top:10px'>";
 $s = explode(",", $uploads);
 foreach($s as $a)
 {
-$newdata=$Wall->Get_Upload_Image_Id($a);
-if($newdata)
-echo "<a href='uploads/".$newdata['image_path']."' rel='facebox'><img src='uploads/".$newdata['image_path']."' class='imgpreview' /></a>";
+//echo $a."<br>";
+//$newdata=$Wall->Get_Upload_Image_Id($a);
+echo $this->action('getuploadimages', 'index', 'wall', array('id'=>$a));
+//if($newdata)
+//echo "<a href='uploads/".$newdata['image_path']."' rel='facebox'><img src='uploads/".$newdata['image_path']."' class='imgpreview' /></a>";
 }
 echo "</div>";
- }*/
+ }
  ?>
 <div class="sttime"><a href='#' class='commentopen' id='<?php echo $msg_id;?>' title='Comment'>Comment </a> | <a href='<?php echo $base_url ?>status/<?php echo $msg_id; ?>' class="timeago" title='<?php echo $mtime; ?>'></a></div> 
 <div id="stexpandbox">

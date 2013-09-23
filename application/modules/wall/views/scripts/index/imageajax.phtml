@@ -1,0 +1,12 @@
+ <?php
+
+if(isset($this->imgdata))
+{
+
+?>
+<img id="<?php echo $this->imgdata['wall_upload_id']?>" class="preview" src="<?php echo $this->baseUrl('public/uploads/wall_images/'). $this->imgdata['image_path'];?>">
+<?php
+}
+
+?>
+

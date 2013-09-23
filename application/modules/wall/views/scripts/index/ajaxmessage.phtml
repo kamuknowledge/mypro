@@ -10,6 +10,7 @@ $message=tolink(htmlcode($this->data['wall_message']));
 $time=strtotime($this->data['createddatetime']);
 $mtime=date("c", $time);
 $uid=$this->data['userid'];
+ $uploads=$data['wall_uploads'];
 $username=$this->data['firstname']."".$this->data['lastname'];
  // User Avatar
  if($this->data['image_path']!='')
@@ -26,7 +27,7 @@ $username=$this->data['firstname']."".$this->data['lastname'];
 <a class="stdelete" href="#" id="<?php echo $msg_id;?>" title='Delete Update'></a>
 <b><a href="<?php echo $base_url.$username; ?>"><?php echo $username;?></a></b> <?php echo clear($message);?>
 <?php
-/*
+
  if($uploads)
 {
 echo "<div style='margin-top:10px'>";
@@ -35,12 +36,13 @@ $uploads=implode(',',array_unique($uploads_array));
 $s = explode(",", $uploads);
 foreach($s as $a)
 {
- $newdata=$Wall->Get_Upload_Image_Id($a);
- if($newdata)
-echo "<img src='uploads/".$newdata['image_path']."' class='imgpreview'/>";
+echo $this->action('getuploadimages', 'index', 'wall', array('id'=>$a));
+ //$newdata=$Wall->Get_Upload_Image_Id($a);
+ //if($newdata)
+//echo "<img src='uploads/".$newdata['image_path']."' class='imgpreview'/>";
 }
 echo "</div>";
- }*/
+ }
   ?>
 <div class="sttime"><a href='#' class='commentopen' id='<?php echo $msg_id;?>' title='Comment'>Comment </a> | <a href='<?php echo $base_url ?>status/<?php echo $msg_id; ?>' class="timeago" title='<?php echo $mtime; ?>'></a>
 	</div> 

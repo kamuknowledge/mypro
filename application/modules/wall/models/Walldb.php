@@ -212,13 +212,13 @@ class Wall_Model_Walldb {
             $uploads_array = explode(',', $uploads);
             $uploads = implode(',', array_unique($uploads_array));
 			//echo "INSERT INTO `user_wall_messages` (wall_message, userid, user_ip,createddatetime,statusid) VALUES ('$update', '$uid', '$ip','$time','1'";
-            $query = $this->db->query("INSERT INTO `user_wall_messages` (wall_message, userid, user_ip,createddatetime,statusid) VALUES ('$update', '$uid', '$ip','$time','1')");
+            $query = $this->db->query("INSERT INTO `user_wall_messages` (wall_message, userid, user_ip,createddatetime,statusid,wall_uploads) VALUES ('$update', '$uid', '$ip','$time','1','$uploads')");
             
            // $newquery = $this->db->query("SELECT M.msg_id, M.uid_fk, M.message, M.created, U.username FROM messages M, users U where M.uid_fk=U.uid and M.uid_fk='$uid' order by M.msg_id desc limit 1 ");
             
             $select =$this->db->select("m.wall_message_id,")
              ->from(array('m' => 'user_wall_messages'),
-                    array('wall_message_id', 'userid','wall_message','createddatetime'))
+                    array('wall_message_id', 'userid','wall_message','createddatetime','wall_uploads'))
              ->joinLeft(array('u' => 'apmusers'),
                     'm.userid = u.userid',array('emailid','firstname','lastname'))
                 ->joinLeft(array('ui' => 'user_images'),
@@ -268,9 +268,9 @@ class Wall_Model_Walldb {
         $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
         if ($image) {
-            $query = $this->db->query("select id,image_path from user_uploads where image_path='$image'");
+            $query = $this->db->query("select id,image_path from user_wall_uploads where image_path='$image'");
         } else {
-            $query = $this->db->query("select id,image_path from user_uploads where uid_fk='$uid' order by id desc ");
+            $query = $this->db->query("select id,image_path from user_wall_uploads where uid_fk='$uid' order by id desc ");
         }
 
         $result = $query->fetch();
@@ -282,7 +282,7 @@ class Wall_Model_Walldb {
     public function Get_Upload_Image_Id($id) {
          $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("select image_path from user_uploads where id='$id'");
+        $query = $this->db->query("select image_path from user_wall_uploads where wall_upload_id='$id'");
         $result = $query->fetch();
 
         return $result;
@@ -424,8 +424,33 @@ class Wall_Model_Walldb {
         }
     }
 	
+	//Insert Update
+    public function Insert_User_Wall($file_name,$username) {
+        $obj = new Application_Model_DataBaseOperations();
+        $this->db = $obj->GetDatabaseConnection();
+        //$update = mysql_real_escape_string($update);
+        $time = date('Y-m-d H:i:s');
+        $ip = $_SERVER['REMOTE_ADDR'];
+        
+            $uploads_array = explode(',', $uploads);
+            $uploads = implode(',', array_unique($uploads_array));
+			//echo "INSERT INTO `user_wall_uploads` (image_path, userid,createddatetime,statusid) VALUES ('$file_name', '$username', '$time','1')";
+            $query = $this->db->query("INSERT INTO `user_wall_uploads` (image_path, userid, createddatetime,statusid) VALUES ('$file_name', '$username', '$time','1')");
+           $id= $this->db->lastInsertId() ;
+            $select =$this->db->select("wall_upload_id,")
+             ->from(array('m' => 'user_wall_uploads'),
+                    array('image_path', 'userid','statusid','createddatetime','wall_upload_id'))
+                 ->where("statusid=?",1)
+                    ->where('userid=?',$username)
+                    ->where('wall_upload_id=?',$id);
+                 //echo $select;
+				 
+        //exit;
+        $selquery=$this->db->query($select);
+        $result = $selquery->fetch();
+        return $result;
 	
-
+	}
 }
 
 ?>

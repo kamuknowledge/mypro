@@ -145,6 +145,26 @@ class Wall_IndexController extends Zend_Controller_Action {
             throw new Exception($e->getMessage());
         }
     }
+	public function getuploadimagesAction() {
+        try {
+
+            if ($this->_request->isXmlHttpRequest()) {
+                
+            }
+			$this->_helper->layout->disableLayout();
+            $id = $this->_getParam('id');
+            	
+            if (isset($id)) {
+                 $uid = $this->session->userid?$this->session->userid:86;
+                $data = $this->wall->Get_Upload_Image_Id($id);
+				//echo "<pre>";print_r($data);
+                $this->view->imgpathdata = $data;
+            }
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
 
     public function loadcommentsAction() {
         try {
@@ -254,21 +274,23 @@ $xyz="       iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAYAAABxLb1rAAADJUlEQVR4nO3UMQEAAAi
     }
 	public function imageajaxAction() {
         try {
-            if ($this->_request->isXmlHttpRequest()) {
-                $this->_helper->layout->disableLayout();
-            }
-            $msg_id = $this->_getParam("msg_id");
-            $comment = $this->_getParam("comment");
-            $second_count = 0;
-            $ip = $_SERVER['REMOTE_ADDR'];
-
-            //$uid=$this->session->userid;
+		             
+			$this->_helper->layout->disableLayout();
             $uid = $this->session->userid?$this->session->userid:86;
-            $cdata = $this->wall->Insert_Comment($uid, $msg_id, $comment, $ip);
-			//echo "<pre>";print_R($cdata);
-            $this->view->cdata = $cdata;
-            $this->view->userid = $this->session->userid;
-            $this->view->msg_id = $msg_id;
+            $upload = new Zend_File_Transfer();                                    
+				
+				//$upload = new Zend_File_Transfer_Adapter_Http();                                
+				$files = $upload->getFileInfo();
+				foreach ($files as $file => $info) {
+					if($upload->isValid($file)){
+						$filename = time().$info['name'];
+						$upload->addFilter('Rename', APPLICATION_PATH.'/../public/uploads/wall_images/'.$filename, 1);
+						$upload->receive($file);
+						$LogoSet = $this->wall->Insert_User_Wall($filename, $uid);
+					}
+				}//echo $filename."----".$uid;exit;
+				//echo "<pre>";print_r($LogoSet);exit;
+		$this->view->imgdata = $LogoSet;
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());

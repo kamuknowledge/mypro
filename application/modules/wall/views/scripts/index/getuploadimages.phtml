@@ -1,0 +1,12 @@
+ <?php
+
+if(isset($this->imgpathdata))
+{
+
+?>
+<a href='<?php echo $this->baseUrl('public/uploads/wall_images/'). $this->imgpathdata['image_path'];?>' rel='facebox'><img id="<?php echo $this->imgpathdata['wall_upload_id']?>" class="imgpreview" src="<?php echo $this->baseUrl('public/uploads/wall_images/'). $this->imgpathdata['image_path'];?>"></a>
+<?php
+}
+
+?>
+
