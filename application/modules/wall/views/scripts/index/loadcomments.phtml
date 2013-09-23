@@ -22,9 +22,10 @@ foreach($this->commentsarray as $cdata)
  {
  $com_id=$cdata['comment_id'];
  $comment=tolink(htmlcode($cdata['wall_comment'] ));
-  $time=$cdata['createddatetime'];
+  $time=strtotime( $cdata['createddatetime']);
 $mtime=date("c", $time);
-   $username=$cdata['emailid'];
+   //$username=$cdata['emailid'];
+   $username=$cdata['firstname']." ".$cdata['lastname'];
   $com_uid=$cdata['userid'];
   $image_path=$cdata['image_path'];
  // User Avatar

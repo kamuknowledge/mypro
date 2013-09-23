@@ -71,7 +71,7 @@ class Wall_IndexController extends Zend_Controller_Action {
 
             $this->view->headLink()->setStylesheet($this->view->baseUrl('public/wall') . '/css/facebox.css');
             $this->view->headLink()->appendStylesheet($this->view->baseUrl('public/wall') . '/css/tipsy.css');
-            $this->view->headLink()->appendStylesheet($this->view->baseUrl('public/wall') . '/css/lightbox.css');
+           // $this->view->headLink()->appendStylesheet($this->view->baseUrl('public/wall') . '/css/lightbox.css');
             $this->view->headLink()->appendStylesheet($this->view->baseUrl('public/wall') . '/css/wall.css');
             // CSS End
             // javascript start
@@ -92,29 +92,32 @@ class Wall_IndexController extends Zend_Controller_Action {
 
     public function loadmessageAction() {
         try {
+		if ($this->_request->isXmlHttpRequest()) {
+                $this->_helper->layout->disableLayout();
+            }
             $lastid = $this->_getParam('lastid', '0');
             $profile_uid = $this->_getParam('userid');
-            $uid = 86;
+            $uid = $this->session->userid?$this->session->userid:86;
             if ($lastid == '')
-                $lastid = 0;
+               $lastid = 0;
 
             if ($profile_uid) {
+			
                 $updatesarray = $this->wall->Updates($profile_uid, $lastid);
                 $total = $this->wall->Total_Updates($profile_uid);
-            } else {
+            } else { 
                 $updatesarray = $this->wall->Friends_Updates($uid, $lastid);
                 $total = $this->wall->Total_Friends_Updates($uid);
             }
-
-
+			//echo sizeof($updatesarray);exit;
             // if ($gravatar)
             //     $session_face = $this->wall->Gravatar($uid);
             // else
             //     $session_face = $this->wall->Profile_Pic($uid);
             $this->view->updatesarray = $updatesarray;
-            $this->view->sess_id = $uid;
-            $this->view->perpage = $this->perpage;
-            $this->view->total = $total;
+            $this->view->sess_uid = $uid;
+		 	$this->view->perpage = $this->perpage;//exit;
+           $this->view->total = $total;
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());
@@ -132,8 +135,9 @@ class Wall_IndexController extends Zend_Controller_Action {
             if (isset($update)) {
                 $update = mysql_real_escape_string($update);
                 $uploads = $uploads;
-                $uid = 86;
+                $uid = $this->session->userid?$this->session->userid:86;
                 $data = $this->wall->Insert_Update($uid, $update, $uploads);
+				//echo "<pre>";print_r($data);
                 $this->view->data = $data;
             }
         } catch (Exception $e) {
@@ -165,12 +169,13 @@ class Wall_IndexController extends Zend_Controller_Action {
                 }
             }
 
-            //print_r($commentsarray);
+           // print_r($commentsarray);
 
             $this->view->comment_count = $comment_count;
             $this->view->commentsarray = $commentsarray;
             //$this->view->userid=$this->session->userid;
-            $this->view->userid = 86;
+            //$this->view->userid = 86;
+            $this->view->userid = $this->session->userid?$this->session->userid:86;
             $this->view->msg_id = $msg_id;
             $this->view->msg_uid = $msg_uid;
         } catch (Exception $e) {
@@ -190,8 +195,9 @@ class Wall_IndexController extends Zend_Controller_Action {
             $ip = $_SERVER['REMOTE_ADDR'];
 
             //$uid=$this->session->userid;
-            $uid = 86;
+            $uid = $this->session->userid?$this->session->userid:86;
             $cdata = $this->wall->Insert_Comment($uid, $msg_id, $comment, $ip);
+			//echo "<pre>";print_R($cdata);
             $this->view->cdata = $cdata;
             $this->view->userid = $this->session->userid;
             $this->view->msg_id = $msg_id;
@@ -206,6 +212,78 @@ class Wall_IndexController extends Zend_Controller_Action {
             $invalid = "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";
 $xyz="       iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAYAAABxLb1rAAADJUlEQVR4nO3UMQEAAAiAMPuX1hgebAm4mAWImu8AgC8GCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkGWAQJYBAlkGCGQZIJBlgECWAQJZBghkGSCQZYBAlgECWQYIZBkgkHVa/ZYGT9KYyQAAAABJRU5ErkJggg==";
             
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+	 public function deletemessageAction() {
+        try {
+
+            if ($this->_request->isXmlHttpRequest()) {
+                $this->_helper->layout->disableLayout();
+            }
+            $msg_id = $this->_getParam('msg_id');
+			$uid = $this->session->userid?$this->session->userid:86;
+            if (isset($msg_id)) {
+                $msg_id = mysql_real_escape_string($msg_id);
+                $this->wall->Delete_Message($uid, $msg_id);
+			}
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+	
+	public function deletecommentAction() {
+        try {
+
+            if ($this->_request->isXmlHttpRequest()) {
+                $this->_helper->layout->disableLayout();
+            }
+            $com_id = $this->_getParam('com_id');
+			$uid = $this->session->userid?$this->session->userid:86;
+            if (isset($com_id)) {
+                $com_id = mysql_real_escape_string($com_id);
+                $this->wall->Delete_Comment($uid, $com_id);
+			}
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+	public function imageajaxAction() {
+        try {
+            if ($this->_request->isXmlHttpRequest()) {
+                $this->_helper->layout->disableLayout();
+            }
+            $msg_id = $this->_getParam("msg_id");
+            $comment = $this->_getParam("comment");
+            $second_count = 0;
+            $ip = $_SERVER['REMOTE_ADDR'];
+
+            //$uid=$this->session->userid;
+            $uid = $this->session->userid?$this->session->userid:86;
+            $cdata = $this->wall->Insert_Comment($uid, $msg_id, $comment, $ip);
+			//echo "<pre>";print_R($cdata);
+            $this->view->cdata = $cdata;
+            $this->view->userid = $this->session->userid;
+            $this->view->msg_id = $msg_id;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+	public function searchfriendAction() {
+        try {
+            if ($this->_request->isXmlHttpRequest()) {
+                $this->_helper->layout->disableLayout();
+            }
+            $searchword = $this->_getParam("searchword");
+            $uid = $this->session->userid?$this->session->userid:86;
+            $userdata = $this->wall->User_Search($searchword);
+			//echo "<pre>";print_R($userdata);exit;
+            $this->view->userdata = $userdata;
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());

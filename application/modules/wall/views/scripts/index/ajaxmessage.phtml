@@ -4,16 +4,16 @@ $data=$this->data;
 //exit;
 if($this->data)
 {
-$msg_id=$data['wall_message_id'];
-$orimessage=$data['wall_message'];
-$message=tolink(htmlcode($data['wall_message']));
-$time=$data['createddatetime'];
+$msg_id=$this->data['wall_message_id'];
+$orimessage=$this->data['wall_message'];
+$message=tolink(htmlcode($this->data['wall_message']));
+$time=strtotime($this->data['createddatetime']);
 $mtime=date("c", $time);
-$uid=$data['userid'];
-$username=$data['firstname']."".$data['lastname'];
+$uid=$this->data['userid'];
+$username=$this->data['firstname']."".$this->data['lastname'];
  // User Avatar
- if($data['image_path']!='')
- $face=$this->baseUrl('public/uploads/user_images/'.$data['image_path']);
+ if($this->data['image_path']!='')
+ $face=$this->baseUrl('public/uploads/user_images/'.$this->data['image_path']);
  else
  $face=$this->baseUrl('public/uploads/user_images/No_Image_Available.jpg');
   // End Avatar
@@ -26,6 +26,7 @@ $username=$data['firstname']."".$data['lastname'];
 <a class="stdelete" href="#" id="<?php echo $msg_id;?>" title='Delete Update'></a>
 <b><a href="<?php echo $base_url.$username; ?>"><?php echo $username;?></a></b> <?php echo clear($message);?>
 <?php
+/*
  if($uploads)
 {
 echo "<div style='margin-top:10px'>";
@@ -39,7 +40,7 @@ foreach($s as $a)
 echo "<img src='uploads/".$newdata['image_path']."' class='imgpreview'/>";
 }
 echo "</div>";
- }
+ }*/
   ?>
 <div class="sttime"><a href='#' class='commentopen' id='<?php echo $msg_id;?>' title='Comment'>Comment </a> | <a href='<?php echo $base_url ?>status/<?php echo $msg_id; ?>' class="timeago" title='<?php echo $mtime; ?>'></a>
 	</div> 

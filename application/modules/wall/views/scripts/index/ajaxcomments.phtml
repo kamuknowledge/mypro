@@ -1,13 +1,14 @@
-<?php 
+<?php
 if($this->cdata)
 {
-    $com_id=$cdata['comment_id'];
- $comment=tolink(htmlcode($cdata['wall_comment'] ));
-  $time=$cdata['createddatetime'];
+    $com_id=$this->cdata['comment_id'];
+ $comment=tolink(htmlcode($this->cdata['wall_comment'] ));
+  $time=strtotime($this->cdata['createddatetime']);
 $mtime=date("c", $time);
-   $username=$cdata['emailid'];
-  $uid=$cdata['userid'];
-  $image_path=$cdata['image_path'];
+   //$username=$this->cdata['emailid'];
+   $username=$this->cdata['firstname']." ".$this->cdata['lastname'];
+  $uid=$this->cdata['userid'];
+  $image_path=$this->cdata['image_path'];
  // User Avatar
  if($image_path=='')
  $cface=$this->baseUrl('public/uploads/user_images/No_Image_Available.jpg');

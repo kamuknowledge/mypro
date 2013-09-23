@@ -1,32 +1,33 @@
 <?php 
-
-echo $this->total,">".$this->perpage;
-if($this->updatesarray)
+if(sizeof($this->updatesarray) >0)
 {
+//echo "if";exit;
 foreach($this->updatesarray as $data)
  {
  $msg_id=$data['wall_message_id'];
  $orimessage=$data['wall_message'];
  $message=tolink(htmlcode($data['wall_message']));
-  $time=$data['createddatetime'];
-$mtime=date("c", $time);
+  $time=strtotime( $data['createddatetime']);//echo date("c");
+ $mtime=date("c", $time);
  $username=$data['firstname']." ".$data['lastname'];
   $uploads=$data['wall_uploads'];
  $msg_uid=$data['userid'];
+
  // User Avatar
-// if($gravatar)
-// $face=$Wall->Gravatar($msg_uid);
-// else
-// $face=$Wall->Profile_Pic($msg_uid);
-  // End Avatar
+if($data['profile_image'] !='')
+$face	=	$this->baseUrl('/public/uploads/user_images/crop_200_200/').$data['profile_image'];
+ else
+  $face	=	$this->baseUrl('/public/default/images/profile_image.png');
+// End Avatar
  ?>
 <div class="stbody" id="stbody<?php echo $msg_id;?>">
 
 <div class="stimg">
-<img src="<?php //echo $face;?>" class='big_face' alt='<?php echo $username; ?>'/>
+<img src="<?php echo $face;?>" class='big_face' alt='<?php echo $username; ?>'/>
 </div> 
 <div class="sttext">
-<?php if($this->sess_uid==$msg_uid) { ?>
+<?php 
+if($this->sess_uid==$msg_uid) { ?>
 <a class="stdelete" href="#" id="<?php echo $msg_id;?>" title="Delete Update"></a>
 <?php } ?>
 <b><a href="<?php echo $this->baseUrl("wall/index/profile/userid/".$msg_uid); ?>"><?php echo $username;?></a></b> <?php echo clear($message);  ?> 

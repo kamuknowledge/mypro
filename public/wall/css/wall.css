@@ -156,7 +156,7 @@ margin-top:5px;
 font-weight:bold;
 float:right;
 cursor:pointer;
-background:url(../icons/trashdull.png);
+background:url(../images/icons/trashdull.png);
 display: none;
 height:20px;
 width:20px;
@@ -166,7 +166,7 @@ display : block;
 }
 .stdelete:hover
 {
-background:url(../icons/trash.png);
+background:url(../images/icons/trash.png);
 }
 #stexpandbox
 {
@@ -224,7 +224,7 @@ font-weight:bold;
 float:right;
 cursor:pointer;
 display:none;
-background:url(../icons/trashdull.png);
+background:url(../images/icons/trashdull.png);
 height:20px;
 width:20px; 
 }
@@ -234,7 +234,7 @@ display:block
 }
 .stcommentdelete:hover
 {
-background:url(../icons/trash.png);
+background:url(../images/icons/trash.png);
 }
 
 .commentupdate

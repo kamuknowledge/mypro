@@ -58,8 +58,9 @@ class Wall_Model_Walldb {
     public function User_Search($searchword) {
          $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $q = mysql_real_escape_string($_POST['searchword']);
-        $query =  $this->db->query("select username,uid from users where username like '%$q%' order by uid LIMIT 5");
+        $q = mysql_real_escape_string($searchword);
+        $query =  $this->db->query("select concat(firstname,' ',lastname) as username,userid,profile_image from apmusers where firstname like '%$q%' OR lastname like '%$q%' order by userid LIMIT 5");
+        //echo "select concat(firstname,' ',lastname) as username,userid from apmusers where firstname like '%$q%' order by userid LIMIT 5";exit;
         //while ($row = mysql_fetch_array($query))
          //   $data[] = $row;
         $data=$query->fetchAll();
@@ -99,15 +100,18 @@ class Wall_Model_Walldb {
         $this->db = $obj->GetDatabaseConnection();
         $morequery = "";
         if ($lastid)
-            $morequery = " and M.wall_message_id<'" . $lastid . "' ";
+            $morequery = " and UM.wall_message_id<'" . $lastid . "' ";
         // More Button End
-
-        $query =  $this->db->query("SELECT DISTINCT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.firstname,U.lastname,M.wall_uploads FROM user_wall_messages M, apmusers U, user_connections F  WHERE U.statusid='1' AND M.userid=U.userid AND  M.userid = F.friend_id AND F.userid='$uid' $morequery order by M.wall_message_id desc limit " . $this->perpage);
-
+//echo "SELECT DISTINCT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.firstname,U.lastname,M.wall_uploads FROM user_wall_messages M, apmusers U, user_connections F  WHERE U.statusid='1' AND M.userid=U.userid AND  M.userid = F.friend_id AND F.userid='$uid' $morequery order by M.wall_message_id desc limit " . $this->perpage;
+       // $query =  $this->db->query("SELECT DISTINCT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.firstname,U.lastname,M.wall_uploads FROM user_wall_messages M, apmusers U, user_connections F  WHERE U.statusid='1' AND M.userid=U.userid AND  M.userid = F.friend_id AND F.userid='$uid' $morequery order by M.wall_message_id desc limit " . $this->perpage);
+        $query =  $this->db->query("SELECT AU.firstname,AU.lastname,AU.profile_image,
+		UM.wall_message_id, UM.userid, UM.wall_message, UM.createddatetime,UM.wall_uploads
+		FROM `user_wall_messages` as UM LEFT JOIN apmusers as AU on AU.userid=UM.userid 
+		LEFT JOIN user_connections UC ON UM.userid = UC.friend_id
+		WHERE UM.statusid='1' AND UM.userid='".$uid."' $morequery order by UM.wall_message_id desc limit " . $this->perpage);
+   
         $data=$query->fetchAll();
-        //while ($row = mysql_fetch_array($query))
-         //   $data[] = $row;
-        return $data;
+		return $data;
     }
 
     //Total Friends Updates   	
@@ -115,8 +119,11 @@ class Wall_Model_Walldb {
 
          $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query =  $this->db->query("SELECT DISTINCT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.emailid,M.wall_uploads FROM user_wall_messages M, apmusers U, user_connections F  WHERE U.statusid='1' AND M.userid=U.userid AND  M.userid = F.friend_id AND F.userid='$uid' order by M.wall_message_id ");
-        $result=$query->fetchAll();
+       // $query =  $this->db->query("SELECT DISTINCT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.emailid,M.wall_uploads FROM user_wall_messages M, apmusers U, user_connections F  WHERE U.statusid='1' AND M.userid=U.userid AND  M.userid = F.friend_id AND F.userid='$uid' order by M.wall_message_id ");
+        $query =  $this->db->query("SELECT * FROM `user_wall_messages` as UM LEFT JOIN apmusers as AU on AU.userid=UM.userid 
+		LEFT JOIN user_connections UC ON UM.userid = UC.friend_id
+		WHERE UM.statusid='1' AND UM.userid='".$uid."' ");
+		$result=$query->fetchAll();
         $data = sizeof($result);
         return $data;
         
@@ -134,7 +141,7 @@ class Wall_Model_Walldb {
              ->from(array('c' => 'user_wall_message_comments'),
                     array('comment_id', 'userid','wall_comment','createddatetime'))
              ->joinLeft(array('u' => 'apmusers'),
-                    'c.userid = u.userid',array('emailid'))
+                    'c.userid = u.userid',array('emailid','firstname','lastname'))
                 ->joinLeft(array('ui' => 'user_images'),
                     'c.userid = ui.userid',array('image_path'))
                 ->where("u.statusid=?",1)
@@ -196,14 +203,15 @@ class Wall_Model_Walldb {
         $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
         $update = mysql_real_escape_string($update);
-        $time = time();
+        $time = date('Y-m-d H:i:s');
         $ip = $_SERVER['REMOTE_ADDR'];
-        $query = $this->db->query("SELECT wall_message_id,wall_message FROM `user_wall_messages` WHERE userid='$uid' order by wall_message_id desc limit 1");
-        $result = $query->fetch($query);
+        //$query = $this->db->query("SELECT wall_message_id,wall_message FROM `user_wall_messages` WHERE userid='$uid' order by wall_message_id desc limit 1");
+        //$result = $query->fetch($query);
 
-        if ($update != $result['message']) {
+        //if ($update != $result['message']) {
             $uploads_array = explode(',', $uploads);
             $uploads = implode(',', array_unique($uploads_array));
+			//echo "INSERT INTO `user_wall_messages` (wall_message, userid, user_ip,createddatetime,statusid) VALUES ('$update', '$uid', '$ip','$time','1'";
             $query = $this->db->query("INSERT INTO `user_wall_messages` (wall_message, userid, user_ip,createddatetime,statusid) VALUES ('$update', '$uid', '$ip','$time','1')");
             
            // $newquery = $this->db->query("SELECT M.msg_id, M.uid_fk, M.message, M.created, U.username FROM messages M, users U where M.uid_fk=U.uid and M.uid_fk='$uid' order by M.msg_id desc limit 1 ");
@@ -225,19 +233,18 @@ class Wall_Model_Walldb {
         
         
             $result = $selquery->fetch();
-return($result);
-            return $result;
-        } else {
+        return $result;
+       /* } else {
             return false;
-        }
+        }*/
     }
 
     //Delete update
-    public function Delete_Update($uid, $msg_id) {
+    public function Delete_Message($uid, $msg_id) {
         $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("DELETE FROM `comments` WHERE msg_id_fk = '$msg_id' and uid_fk='$uid' ");
-        $query = $this->db->query("DELETE FROM `messages` WHERE msg_id = '$msg_id' and uid_fk='$uid'");
+        $query = $this->db->query("DELETE FROM `user_wall_message_comments` WHERE wall_message_id = '$msg_id' and userid='$uid' ");
+        $query = $this->db->query("DELETE FROM `user_wall_messages` WHERE wall_message_id = '$msg_id' and userid='$uid'");
         return true;
     }
 
@@ -288,7 +295,7 @@ return($result);
         $comment = $comment;
  
        
-        $time = time();
+        $time = date('Y-m-d H:i:s');
         $ip = $_SERVER['REMOTE_ADDR'];
         $query = $this->db->query("SELECT comment_id,wall_comment FROM `user_wall_message_comments` WHERE userid='$uid' and wall_message_id='$msg_id' order by comment_id desc limit 1 ");
        
@@ -304,12 +311,12 @@ return($result);
              ->from(array('c' => 'user_wall_message_comments'),
                     array('comment_id', 'userid','wall_comment','createddatetime'))
              ->joinLeft(array('u' => 'apmusers'),
-                    'c.userid = u.userid',array('emailid'))
+                    'c.userid = u.userid',array('emailid','firstname','lastname'))
                 ->joinLeft(array('ui' => 'user_images'),
                     'c.userid = ui.userid',array('image_path'))
                 ->where("u.statusid=?",1)
                     ->where('c.wall_message_id=?',$msg_id)
-                ->order(array('c.comment_id ASC'))
+                ->order(array('c.comment_id DESC'))
                  ->limitPage(0,1);
                 // echo $select;
         //exit;
@@ -318,7 +325,7 @@ return($result);
         //while ($row = mysql_fetch_array($query))
            // $data[] = $row;
         $data=$query->fetch();
-
+		//echo "vvv";print_r($data);
             return $data;
         } else {
             return false;
@@ -333,17 +340,15 @@ return($result);
         $com_id = mysql_real_escape_string($com_id);
 
 
-        $q = $this->db->query("SELECT M.uid_fk FROM comments C, messages M WHERE C.msg_id_fk = M.msg_id AND C.com_id='$com_id'");
+        $q = $this->db->query("SELECT M.userid FROM user_wall_message_comments C, user_wall_messages M WHERE C.wall_message_id = M.wall_message_id AND C.comment_id='$com_id'");
         $d = $q->fetch();
-        $oid = $d['uid_fk'];
+        $oid = $d['userid'];
 
         if ($uid == $oid) {
-
-            $query = $this->db->query("DELETE FROM `comments` WHERE com_id='$com_id'");
+			$query = $this->db->query("DELETE FROM `user_wall_message_comments` WHERE comment_id = '$com_id' ");
             return true;
         } else {
-
-            $query = $this->db->query("DELETE FROM `comments` WHERE uid_fk='$uid' and com_id='$com_id'");
+			$query = $this->db->query("DELETE FROM `user_wall_message_comments` WHERE comment_id = '$com_id' and userid='$uid' ");
             return true;
         }
     }
@@ -418,6 +423,8 @@ return($result);
             return true;
         }
     }
+	
+	
 
 }
 

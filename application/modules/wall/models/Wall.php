@@ -89,6 +89,41 @@ class Wall_Model_Wall extends Application_Model_Validation {
             throw new Exception($e->getMessage());
         }
     }
+	
+	public function Delete_Message($uid, $msg_id) {
+        try {
+           
+                $this->walldb = new Wall_Model_Walldb();
+                $result = $this->walldb->Delete_Message($uid, $msg_id);
+                return $result;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+	public function Delete_Comment($uid, $com_id) {
+        try {
+           
+                $this->walldb = new Wall_Model_Walldb();
+                $result = $this->walldb->Delete_Comment($uid, $com_id);
+                return $result;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+	
+	public function User_Search($searchword) {
+        try {
+           
+                $this->walldb = new Wall_Model_Walldb();
+                $result = $this->walldb->User_Search($searchword);
+                return $result;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
 }
 
 ?>

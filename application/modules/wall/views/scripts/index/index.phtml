@@ -5,6 +5,10 @@
 
 <div id="updateboxarea">
 <h4>What's up?</h4>
+<div id="searchbox">
+Search Friend:<input type="text" class="uiinput" id="searchinput"  />
+<div id="display" ></div>
+</div>
 <textarea name="update" id="update" maxlength="200" ></textarea>
 <br />
 <div id="webcam_container" class='border'>
@@ -22,7 +26,7 @@
 </div>
 </div>
 <div  id="imageupload" class="border">
-<form id="imageform" method="post" enctype="multipart/form-data" action='image_ajax.php'> 
+<form id="imageform" method="post" enctype="multipart/form-data" action='<?php echo $this->baseUrl("wall/index/imageajax"); ?>'> 
 <div id='preview'>
 </div>
 
@@ -48,7 +52,7 @@
 <?php 
 // Loading Messages
 //include('load_messages.php'); 
-echo $this->action('loadmessage', 'index', 'wall', array());
+echo $this->action('loadmessage', 'index', 'wall', array(86));
 ?>
 
 </div>

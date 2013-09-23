@@ -22,7 +22,7 @@ var webcamtotal=2; // Min 2 Max 6 Recommended
 // Update Status
 $(".update_button").click(function() 
 {
-    alert("dhjdfhjd")
+   // alert("dhjdfhjd")
 var updateval = $("#update").val();
 
 var uploadvalues=$("#uploadvalues").val();
@@ -195,7 +195,7 @@ if(confirm("Sure you want to delete this update? There is NO undo!"))
 
 $.ajax({
 type: "POST",
-url: "delete_comment_ajax.php",
+url: baseUrl+"/wall/index/deletecomment",
 data: dataString,
 cache: false,
 beforeSend: function(){$("#stcommentbody"+ID).animate({'backgroundColor':'#fb6c6c'},300);},
@@ -232,7 +232,7 @@ return false;
 $('#photoimg').live('change', function()			
 { 
 var values=$("#uploadvalues").val();
-$("#previeww").html('<img src="icons/loader.gif"/>');
+$("#previeww").html('<img src="images/icons/loader.gif"/>');
 $("#imageform").ajaxForm({target: '#preview'  }).submit();
 
 var X=$('.preview').attr('id');
@@ -249,12 +249,12 @@ $('.stdelete').live("click",function()
 var ID = $(this).attr("id");
 var dataString = 'msg_id='+ ID;
 
-if(confirm("Sure you want to delete this update? There is NO undo!"))
+if(confirm("Sure you want to delete this update? There is No undo!"))
 {
 
 $.ajax({
 type: "POST",
-url: "delete_message_ajax.php",
+url: baseUrl+"/wall/index/deletemessage",
 data: dataString,
 cache: false,
 beforeSend: function(){ $("#stbody"+ID).animate({'backgroundColor':'#fb6c6c'},300);},
@@ -293,10 +293,11 @@ if(ID)
 {
 $.ajax({
 type: "POST",
-url: "moreupdates_ajax.php",
+//url: "moreupdates_ajax.php",
+url: baseUrl+"/wall/index/loadmessage",
 data: "lastid="+ ID, 
 cache: false,
-beforeSend: function(){ $("#more"+ID).html('<img src="icons/ajaxloader.gif" />'); },
+beforeSend: function(){ $("#more"+ID).html('<img src="../public/wall/images/icons/ajaxloader.gif" />'); },
 success: function(html){
 $("div#content").append(html);
 $("#more"+ID).remove();
@@ -321,7 +322,8 @@ if(searchbox.length>0)
 
 $.ajax({
 type: "POST",
-url: "search_ajax.php",
+//url: "search_ajax.php",
+url: baseUrl+"/wall/index/searchfriend",
 data: dataString,
 cache: false,
 success: function(html)
