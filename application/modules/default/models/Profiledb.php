@@ -361,7 +361,7 @@ class Default_Model_Profiledb  {
 				$query = "INSERT INTO user_skills_set (userid,user_skill,skill_version,last_used,experience_years,experience_months,createddatetime,updateddatetime,statusid,createdby,lastupdatedby) VALUES ('".$this->userid."','".$params["user_skill"]."','".$params["skill_version"]."','".$params["last_used_val"]."','".$params["experience_years_val"]."','".$params["experience_months_val"]."',NOW(),NOW(),'1','".$this->userid."','".$this->userid."');";
 				$stmt = $this->db->query($query);
 				//lastInsertId
-				return 1;
+				return $this->db->lastInsertId();
 			}
 			return 0;
 		} catch(Exception $e) {
@@ -373,9 +373,31 @@ class Default_Model_Profiledb  {
 	public function editSkillSet($id, $params) {
 		try {
 			if($this->userid && $params) {
-				$query = "UPDATE user_skills_set SET user_skill = '".$params["user_skill"]."', skill_version = '".$params["skill_version"]."', last_used = '".$params["last_used_val"]."', experience_years = '".$params["experience_years_val"]."', experience_months = '".$params["experience_months_val"]."', updateddatetime = NOW(), lastupdatedby = '".$this->userid."' WHERE user_skills_set_id = '".$id."' AND userid = '".$this->userid."';";
-				$stmt = $this->db->query($query);
-				return 1;
+				$rows = $this->db->fetchAll('SELECT * FROM user_skills_set WHERE userid = "'.$this->userid.'" AND user_skills_set_id = "'.$id.'"');
+				$numRows = sizeof($rows);
+				if($numRows > 0) {
+					$query = "UPDATE user_skills_set SET user_skill = '".$params["user_skill"]."', skill_version = '".$params["skill_version"]."', last_used = '".$params["last_used_val"]."', experience_years = '".$params["experience_years_val"]."', experience_months = '".$params["experience_months_val"]."', updateddatetime = NOW(), lastupdatedby = '".$this->userid."' WHERE user_skills_set_id = '".$id."' AND userid = '".$this->userid."';";
+					$stmt = $this->db->query($query);
+					return 1;
+				}
+			}
+			return 0;
+		} catch(Exception $e) {
+			Application_Model_Logging::lwrite($e->getMessage());
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function deleteSkillSet($id, $params) {
+		try {
+			if($this->userid && $id) {
+				$rows = $this->db->fetchAll('SELECT * FROM user_skills_set WHERE userid = "'.$this->userid.'" AND user_skills_set_id = "'.$id.'"');
+				$numRows = sizeof($rows);
+				if($numRows > 0) {
+					$query = "DELETE FROM user_skills_set WHERE user_skills_set_id = '".$id."' AND userid = '".$this->userid."';";
+					$stmt = $this->db->query($query);
+					return 1;
+				}
 			}
 			return 0;
 		} catch(Exception $e) {

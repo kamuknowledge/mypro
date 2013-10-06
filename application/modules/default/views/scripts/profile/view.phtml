@@ -210,7 +210,7 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 										<a href="javascript:void(0);" class="edit_skill_sets edit_skill_new" id="edit_skill_new"><span>+</span>Add Skills</a>
 									</div>
 										<div class="desc skills_views">
-										<?php if(count($skills) > 0 ) { ?>
+										<?php $display = "style='display:none;'"; if(count($skills) > 0 ) { ?>
 											<table style="width:100%;">
 												<tr>
 													<th width="30%">Skill</th>
@@ -225,17 +225,15 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 													<td><?php echo $value["skill_version"]; ?><input type="hidden" id="skill_version" name="skill_version" value="<?php echo $value["skill_version"]; ?>" /></td>
 													<td><?php echo $value["last_used"]; ?><input type="hidden" id="last_used" name="last_used" value="<?php echo $value["last_used"]; ?>" /></td>
 													<td><?php echo $value["experience_years"]." year(s) ".$value["experience_months"]." month(s)"; ?><input type="hidden" id="experience_years" name="experience_years" value="<?php echo $value["experience_years"]; ?>" /><input type="hidden" id="experience_months" name="experience_months" value="<?php echo $value["experience_months"]; ?>" /></td>
-													<td style="text-align:right"><a href="javascript:void(0);" id="edit_skill_old">Edit</a><a href="javascript:void(0);">Delete</a></td>
+													<td style="text-align:right"><a href="javascript:void(0);" id="edit_skill_old">Edit</a><a href="javascript:void(0);" id="delete_skill_set">Delete</a></td>
 												</tr>
 											<?php } ?>
 											</table>
 											<?php
-											} else { ?>
-										<div class="add_about edit_skill edit_skill_new edit_skill_bar" id="edit_education_new"> <a href="javascript:void(0)"></a>Add Skills</div>
-										<?php } ?>
-										<input type="hidden" id="number_count" name="number_count" value="<?php echo count($skills); ?>" />
+											} else { $display = ""; } ?>
+										<div <?php echo $display; ?> class="add_about edit_skill edit_skill_new edit_skill_bar" id="edit_skill_new"> <a href="javascript:void(0)"></a>Add Skills</div>
 										</div>
-									
+										<input type="hidden" id="number_count" name="number_count" value="<?php echo count($skills); ?>" />
 								</div>
 								<div class="profile_info_block">
 									<div class="header">
@@ -303,3 +301,4 @@ $recent_education = ($profile["degree"]) ? $profile["degree"]." at ".$profile["s
 </div>
 <div class="modal"><!-- Place at bottom of page --></div>
 <div id="member_success_msg" class="member_success_msg" style="display: none;"></div>
+<div id="member_error_msg" class="member_error_msg" style="display: none;"></div>

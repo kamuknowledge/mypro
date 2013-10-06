@@ -601,11 +601,15 @@ class ProfileController extends Zend_Controller_Action {
 				if ($request->isPost()) {
 					$type = $Request_Values["type"];
 					$id = $Request_Values["id"];
+					$var = 0;
 					if($type == "new") {
 						$var = $this->profiledb->createSkillSet($Request_Values);
-					} else {
+					} else if($type == "edit") {
 						$var = $this->profiledb->editSkillSet($id, $Request_Values);
+					} else if($type == "delete") {
+						$var = $this->profiledb->deleteSkillSet($id, $Request_Values);
 					}
+					if($var) echo $var; else echo 0;
 				}
 			}
 			exit;
