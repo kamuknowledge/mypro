@@ -373,6 +373,8 @@ $.post(baseUrl+"/wall/index/webcamimageajax", {type: "data", image: canvas.toDat
 function(data)
  {
  
+ //$("#webcam_preview").prepend(data);
+ //return false;
  if($.trim(data) != "false")
 {
 var dataString = 'webcam='+ 1;
@@ -407,14 +409,14 @@ image.push(data);
 pos+= 4 * 320;
  if (pos >= 4 * 320 * 240)
  {
-$.post("webcam_image_ajax.php", {type: "pixel", image: image.join('|')},
+$.post(baseUrl+"/wall/index/webcamimageajax", {type: "pixel", image: image.join('|')},
 function(data)
  {
  
 var dataString = 'webcam='+ 1;
 $.ajax({
 type: "POST",
-url: "webcam_imageload_ajax.php",
+url: baseUrl+"/wall/index/webcamimageloadajax",
 data: dataString,
 cache: false,
 success: function(html){
@@ -457,6 +459,7 @@ debug: function (type, string) {
 Taking snap
 **/
 function takeSnap(){
+alert('venu');
 //console.log(webcam.getCameraList());
 webcam.capture();
  }

@@ -147,6 +147,7 @@ class Wall_Model_Wall extends Application_Model_Validation {
             throw new Exception($e->getMessage());
         }
     }
+	
 }
 
 ?>
