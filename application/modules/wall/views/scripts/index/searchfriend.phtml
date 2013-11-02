@@ -7,13 +7,13 @@ foreach($this->userdata as $data)
 $uname=$data['username'];
 $uid=$data['userid'];
 // User Avatar
-if($data['profile_image'] !='')
-$face=$this->baseUrl('/public/uploads/user_images/crop_200_200/').$data['profile_image'];
+if($data['image_path'] !='')
+$face=$this->baseUrl('/public/uploads/user_images/crop_200_200/').$data['image_path'];
 else
   $face	=	$this->baseUrl('/public/default/images/profile_image.png');
 ?>
 <div class="display_box" align="left">
-<a href='<?php echo $base_url.$uname ?>' style='display:block'>
+<a href='<?php echo $this->baseUrl("wall/profile/id/").$uid; ?>' style='display:block'>
 <img src="<?php echo $face; ?>?d=mm&s=30" class='search_face'/>
 <?php echo $uname; ?>&nbsp;<br/>
 </a>

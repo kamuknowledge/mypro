@@ -59,7 +59,11 @@ class Wall_Model_Walldb {
          $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
         $q = mysql_real_escape_string($searchword);
-        $query =  $this->db->query("select concat(firstname,' ',lastname) as username,userid,profile_image from apmusers where firstname like '%$q%' OR lastname like '%$q%' order by userid LIMIT 5");
+        $query =  $this->db->query("select concat(AU.firstname,' ',AU.lastname) as username,AU.userid,AU.profile_image,UI.image_path
+				from apmusers AU
+				LEFT JOIN user_images UI ON UI.userid = AU.userid
+	
+		where firstname like '%$q%' OR lastname like '%$q%' order by userid LIMIT 5");
         //echo "select concat(firstname,' ',lastname) as username,userid from apmusers where firstname like '%$q%' order by userid LIMIT 5";exit;
         //while ($row = mysql_fetch_array($query))
          //   $data[] = $row;
@@ -104,11 +108,12 @@ class Wall_Model_Walldb {
         // More Button End
 //echo "SELECT DISTINCT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.firstname,U.lastname,M.wall_uploads FROM user_wall_messages M, apmusers U, user_connections F  WHERE U.statusid='1' AND M.userid=U.userid AND  M.userid = F.friend_id AND F.userid='$uid' $morequery order by M.wall_message_id desc limit " . $this->perpage;
        // $query =  $this->db->query("SELECT DISTINCT M.wall_message_id, M.userid, M.wall_message, M.createddatetime, U.firstname,U.lastname,M.wall_uploads FROM user_wall_messages M, apmusers U, user_connections F  WHERE U.statusid='1' AND M.userid=U.userid AND  M.userid = F.friend_id AND F.userid='$uid' $morequery order by M.wall_message_id desc limit " . $this->perpage);
-        $query =  $this->db->query("SELECT AU.firstname,AU.lastname,AU.profile_image,
+        $query =  $this->db->query("SELECT AU.firstname,AU.lastname,AU.profile_image,UI.image_path,
 		UM.wall_message_id, UM.userid, UM.wall_message, UM.createddatetime,UM.wall_uploads
 		FROM `user_wall_messages` as UM LEFT JOIN apmusers as AU on AU.userid=UM.userid 
 		LEFT JOIN user_connections UC ON UM.userid = UC.friend_id
-		WHERE UM.statusid='1' AND UM.userid='".$uid."' $morequery order by UM.wall_message_id desc limit " . $this->perpage);
+		LEFT JOIN user_images UI ON AU.userid = UI.userid
+		WHERE UM.statusid='1' AND UI.is_primary='1' AND UM.userid='".$uid."' $morequery order by UM.wall_message_id desc limit " . $this->perpage);
    
         $data=$query->fetchAll();
 		return $data;
@@ -145,7 +150,8 @@ class Wall_Model_Walldb {
                 ->joinLeft(array('ui' => 'user_images'),
                     'c.userid = ui.userid',array('image_path'))
                 ->where("u.statusid=?",1)
-                    ->where('c.wall_message_id=?',$msg_id)
+				->where('ui.is_primary',1)
+                ->where('c.wall_message_id=?',$msg_id)
                 ->order(array('c.comment_id ASC'));
                  if($second_count!=0)
                 $select->limit(2,$second_count);
@@ -223,6 +229,7 @@ class Wall_Model_Walldb {
                     'm.userid = u.userid',array('emailid','firstname','lastname'))
                 ->joinLeft(array('ui' => 'user_images'),
                     'm.userid = ui.userid',array('image_path'))
+				->where("ui.is_primary", 1)
                 ->where("u.statusid=?",1)
                     ->where('m.userid=?',$uid)
                 ->order(array('m.wall_message_id DESC'))
@@ -282,7 +289,7 @@ class Wall_Model_Walldb {
     public function Get_Upload_Image_Id($id) {
          $obj = new Application_Model_DataBaseOperations();
         $this->db = $obj->GetDatabaseConnection();
-        $query = $this->db->query("select image_path from user_wall_uploads where wall_upload_id='$id'");
+        $query = $this->db->query("select image_path,wall_upload_id,userid from user_wall_uploads where wall_upload_id='$id'");
         $result = $query->fetch();
 
         return $result;
@@ -437,7 +444,7 @@ class Wall_Model_Walldb {
 			//echo "INSERT INTO `user_wall_uploads` (image_path, userid,createddatetime,statusid) VALUES ('$file_name', '$username', '$time','1')";
             $query = $this->db->query("INSERT INTO `user_wall_uploads` (image_path, userid, createddatetime,statusid) VALUES ('$file_name', '$username', '$time','1')");
            $id= $this->db->lastInsertId() ;
-            $select =$this->db->select("wall_upload_id,")
+           /* $select =$this->db->select("wall_upload_id,")
              ->from(array('m' => 'user_wall_uploads'),
                     array('image_path', 'userid','statusid','createddatetime','wall_upload_id'))
                  ->where("statusid=?",1)
@@ -448,9 +455,11 @@ class Wall_Model_Walldb {
         //exit;
         $selquery=$this->db->query($select);
         $result = $selquery->fetch();
-        return $result;
+        return $result;*/
+		return $id;
 	
 	}
+	
 }
 
 ?>

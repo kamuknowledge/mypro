@@ -294,7 +294,7 @@ class Application_Model_DataBaseOperations  {
 		try {
 			self::SetDatabaseConnection();
 			$default_template = self::getDefaultTemplate();	
-			//print_r($default_template);			
+			//print_r($default_template);		exit;	
 			$search= array("#content","#sitebaseurl");
 			$replace   = array($mailbody,APPLICATION_HOST_PATH);
 			$content=str_replace($search, $replace, $default_template['0']['emailcontent']);			

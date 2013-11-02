@@ -115,6 +115,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		
 		$route = new Zend_Controller_Router_Route('getlinc/ordering-and-tracking/',array('controller' => 'cms','module' => 'default' ,'action' => 'index','id' =>8));
 		$frontController->getRouter()->addRoute('ordering-and-tracking',$route);
+		
+		$route = new Zend_Controller_Router_Route('profile/:id/:username/',array('controller' => 'cms','module' => 'default' ,'action' => 'index'),array('id' => '\d+', 'username' => '\d+'));
+		$frontController->getRouter()->addRoute('ordering-and-tracking',$route);
+			
     }
 
     

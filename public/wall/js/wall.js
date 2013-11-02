@@ -373,11 +373,12 @@ $.post(baseUrl+"/wall/index/webcamimageajax", {type: "data", image: canvas.toDat
 function(data)
  {
  
- //$("#webcam_preview").prepend(data);
- //return false;
+ $("#webcam_preview").prepend(data);
+ return false;
  if($.trim(data) != "false")
 {
-var dataString = 'webcam='+ 1;
+//var dataString = 'webcam='+ 1;
+var dataString = 'webcam='+ data;
 $.ajax({
 type: "POST",
 url: baseUrl+"/wall/index/webcamimageloadajax",
@@ -412,8 +413,11 @@ pos+= 4 * 320;
 $.post(baseUrl+"/wall/index/webcamimageajax", {type: "pixel", image: image.join('|')},
 function(data)
  {
- 
-var dataString = 'webcam='+ 1;
+//console.log('venugopal');
+$("#webcam_preview").prepend(data);
+ return false;
+//var dataString = 'webcam='+ 1;
+var dataString = 'webcam='+ data;
 $.ajax({
 type: "POST",
 url: baseUrl+"/wall/index/webcamimageloadajax",

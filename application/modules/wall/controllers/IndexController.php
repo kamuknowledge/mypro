@@ -109,6 +109,7 @@ class Wall_IndexController extends Zend_Controller_Action {
                 $updatesarray = $this->wall->Friends_Updates($uid, $lastid);
                 $total = $this->wall->Total_Friends_Updates($uid);
             }
+			//echo "<pre>";print_r($updatesarray);exit;
 			//echo sizeof($updatesarray);exit;
             // if ($gravatar)
             //     $session_face = $this->wall->Gravatar($uid);
@@ -118,6 +119,7 @@ class Wall_IndexController extends Zend_Controller_Action {
             $this->view->sess_uid = $uid;
 		 	$this->view->perpage = $this->perpage;//exit;
            $this->view->total = $total;
+		   $this->view->UserProfileImage = $this->session->UserProfileImage;
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());
@@ -140,6 +142,7 @@ class Wall_IndexController extends Zend_Controller_Action {
 				//echo "<pre>";print_r($data);
                 $this->view->data = $data;
             }
+			$this->view->UserProfileImage = $this->session->UserProfileImage;
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());
@@ -189,7 +192,7 @@ class Wall_IndexController extends Zend_Controller_Action {
                 }
             }
 
-           // print_r($commentsarray);
+           //echo "<pre>"; print_r($commentsarray);
 
             $this->view->comment_count = $comment_count;
             $this->view->commentsarray = $commentsarray;
@@ -198,6 +201,9 @@ class Wall_IndexController extends Zend_Controller_Action {
             $this->view->userid = $this->session->userid?$this->session->userid:86;
             $this->view->msg_id = $msg_id;
             $this->view->msg_uid = $msg_uid;
+			/* User profile image*/
+			$this->view->UserProfileImage = $this->session->UserProfileImage;
+			
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());
@@ -221,6 +227,7 @@ class Wall_IndexController extends Zend_Controller_Action {
             $this->view->cdata = $cdata;
             $this->view->userid = $this->session->userid;
             $this->view->msg_id = $msg_id;
+			$this->view->UserProfileImage = $this->session->UserProfileImage;
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());
@@ -284,6 +291,7 @@ $xyz="       iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAYAAABxLb1rAAADJUlEQVR4nO3UMQEAAAi
 				$LogoSet = $this->wall->Insert_User_Wall($filename, $uid);
 				}	
 				$this->view->camdata = $LogoSet;
+				//$this->view->camdata = '';
 		
 		
 			/*
@@ -309,7 +317,23 @@ $xyz="       iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAYAAABxLb1rAAADJUlEQVR4nO3UMQEAAAi
             throw new Exception($e->getMessage());
         }
     }
-	
+	public function webcamimageloadajaxAction() {
+        try {
+		 if ($this->_request->isXmlHttpRequest()) {
+                $this->_helper->layout->disableLayout();
+            }
+			//$params = $this->_getAllParams();
+			$id = $this->_getParam("webcam");
+			$data = $this->wall->Get_Upload_Image_Id($id);
+
+			//echo "<pre>";print_r($params);die();
+			$this->view->camdata = $data;
+			
+			} catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
 	 public function deletemessageAction() {
         try {
 
@@ -353,6 +377,7 @@ $xyz="       iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAYAAABxLb1rAAADJUlEQVR4nO3UMQEAAAi
             $upload = new Zend_File_Transfer();                                    
 				
 				//$upload = new Zend_File_Transfer_Adapter_Http();                                
+				$LogoSet='';
 				$files = $upload->getFileInfo();
 				foreach ($files as $file => $info) {
 					if($upload->isValid($file)){
@@ -363,7 +388,7 @@ $xyz="       iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAYAAABxLb1rAAADJUlEQVR4nO3UMQEAAAi
 					}
 				}//echo $filename."----".$uid;exit;
 				//echo "<pre>";print_r($LogoSet);exit;
-		$this->view->imgdata = $LogoSet;
+				$this->view->imgdata = $LogoSet;
         } catch (Exception $e) {
             Application_Model_Logging::lwrite($e->getMessage());
             throw new Exception($e->getMessage());
@@ -375,6 +400,21 @@ $xyz="       iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAYAAABxLb1rAAADJUlEQVR4nO3UMQEAAAi
                 $this->_helper->layout->disableLayout();
             }
             $searchword = $this->_getParam("searchword");
+            $uid = $this->session->userid?$this->session->userid:86;
+            $userdata = $this->wall->User_Search($searchword);
+			//echo "<pre>";print_R($userdata);exit;
+            $this->view->userdata = $userdata;
+        } catch (Exception $e) {
+            Application_Model_Logging::lwrite($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+	public function profileAction($id) {
+        try {
+            if ($this->_request->isXmlHttpRequest()) {
+                $this->_helper->layout->disableLayout();
+            }
+            echo $id = $this->_getParam("id");die();
             $uid = $this->session->userid?$this->session->userid:86;
             $userdata = $this->wall->User_Search($searchword);
 			//echo "<pre>";print_R($userdata);exit;

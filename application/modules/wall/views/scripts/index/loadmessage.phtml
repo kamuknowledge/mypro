@@ -1,7 +1,7 @@
 <?php 
 if(sizeof($this->updatesarray) >0)
 {
-//echo "if";exit;
+
 foreach($this->updatesarray as $data)
  {
  $msg_id=$data['wall_message_id'];
@@ -14,8 +14,8 @@ foreach($this->updatesarray as $data)
  $msg_uid=$data['userid'];
 
  // User Avatar
-if($data['profile_image'] !='')
-$face	=	$this->baseUrl('/public/uploads/user_images/crop_200_200/').$data['profile_image'];
+if($data['image_path'] !='')
+$face	=	$this->baseUrl('/public/uploads/user_images/crop_200_200/').$data['image_path'];
  else
   $face	=	$this->baseUrl('/public/default/images/profile_image.png');
 // End Avatar
@@ -42,7 +42,9 @@ foreach($s as $a)
 {
 //echo $a."<br>";
 //$newdata=$Wall->Get_Upload_Image_Id($a);
+if($a!=''){
 echo $this->action('getuploadimages', 'index', 'wall', array('id'=>$a));
+}
 //if($newdata)
 //echo "<a href='uploads/".$newdata['image_path']."' rel='facebox'><img src='uploads/".$newdata['image_path']."' class='imgpreview' /></a>";
 }
@@ -70,7 +72,12 @@ echo $this->action('loadcomments', 'index', 'wall', array('x'=>1,'msg_id'=>$msg_
 </div>
 <div class="commentupdate" style='display:none' id='commentbox<?php echo $msg_id;?>'>
 <div class="stcommentimg">
-<img src="<?php echo $session_face;?>" class='small_face'/>
+<?php if($this->UserProfileImage !=''){?>
+<img src="<?php echo $this->baseUrl('/public/uploads/user_images/crop_200_200/').$this->UserProfileImage; ?>" class='small_face'/>
+<?php }else{?>
+<img src="<?php echo $this->baseUrl('/public/default/images/profile_image.png');?>" class='small_face'/>
+<?php }?>
+
 </div> 
 <div class="stcommenttext" >
 <form method="post" action="">

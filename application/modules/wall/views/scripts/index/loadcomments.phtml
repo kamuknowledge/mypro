@@ -2,12 +2,10 @@
 //Srinivas Tamada http://9lessons.info
 //Loading Comments link with load_updates.php 
 // $commentsarray=$Wall->Comments($msg_id,0);
- 
 
- 
 if($this->comment_count>2)
 {
-?>
+?>  
 <div class="comment_ui" id="view<?php echo $this->msg_id; ?>">
 <a href="javascript:void(0)" class="view_comments" id="<?php echo $this->msg_id; ?>" msg_uid="<?php echo $this->msg_uid; ?>" vi='<?php echo $this->comment_count; ?>'>View all <?php echo $this->comment_count; ?> comments</a>
 </div>
@@ -32,7 +30,7 @@ $mtime=date("c", $time);
  if($image_path=='')
  $cface=$this->baseUrl('public/uploads/user_images/No_Image_Available.jpg');
  else
- $cface=$this->baseUrl('public/uploads/user_images/'.$image_path);
+ $cface=$this->baseUrl('public/uploads/user_images/crop_200_200/'.$image_path);
   // End Avatar
  ?>
 <div class="stcommentbody" id="stcommentbody<?php echo $com_id; ?>">
